@@ -37,6 +37,7 @@ public final class CatalogStore {
     }
     private static final String KEY="catalog";
     private static final String FAV="favorites";
+    private static final String CLOUD="cloud_items_v1";
     private static final int MAX_ITEMS=2500;
     private final SharedPreferences prefs;
     public CatalogStore(Context ctx){
@@ -85,7 +86,7 @@ public final class CatalogStore {
     /** Clean only machine-imported Archive titles once; never rewrite user titles. */
     private void repairArchiveTitles(){
         if(prefs.getBoolean("archive_title_clean_v1",false))return;
-        List<Item> existing=load();
+        List<Item> existing=loadLocal();
         List<Item> updated=new ArrayList<>();
         boolean changed=false;
         for(Item item:existing){
@@ -108,7 +109,7 @@ public final class CatalogStore {
         if(newName==null)return false;
         String title=newName.trim().replaceAll("[\\p{Cntrl}]+"," ").trim();
         if(title.length()<2||title.length()>120)return false;
-        List<Item> all=load();
+        List<Item> all=loadLocal();
         boolean changed=false;
         for(int p=0;p<all.size();p++){
             Item item=all.get(p);
@@ -123,19 +124,45 @@ public final class CatalogStore {
         return changed;
     }
 
-    public List<Item> load(){
+    private List<Item> loadFrom(String key){
         ArrayList<Item> result=new ArrayList<>();
         try {
-            JSONArray data=new JSONArray(prefs.getString(KEY,"[]"));
-            for(int i=0;i<data.length();i++){
-                JSONObject j=data.getJSONObject(i);
+            JSONArray data=new JSONArray(prefs.getString(key,"[]"));
+            for(int i=0;i<data.length() && i<MAX_ITEMS;i++){
+                JSONObject j=data.optJSONObject(i);
+                if(j==null)continue;
                 result.add(new Item(j.optString("name"),j.optString("url"),j.optString("tvgId"),j.optString("group"),j.optString("logo"),j.optString("format"),j.optString("genre"),j.optString("provider"),j.optString("description"),j.optString("year")));
             }
         }catch(Exception ignored){}
         return result;
     }
+    private List<Item> loadLocal(){return loadFrom(KEY);}
+    /** Cloud entries are isolated from personal imports, preserving local edits and favorites. */
+    public List<Item> load(){
+        List<Item> result=loadLocal();
+        Set<String> urls=new HashSet<>();
+        for(Item item:result)urls.add(item.url);
+        for(Item item:loadFrom(CLOUD)){
+            if(result.size()>=MAX_ITEMS)break;
+            if(urls.add(item.url))result.add(item);
+        }
+        return result;
+    }
+    /** Atomic refresh: a malformed remote response never erases the previous cache. */
+    public int replaceRemote(List<Item> remote){
+        if(remote==null)throw new IllegalArgumentException("Catálogo ausente");
+        List<Item> accepted=new ArrayList<>();
+        Set<String> urls=new HashSet<>();
+        for(Item item:remote){
+            if(accepted.size()>=MAX_ITEMS)break;
+            if(item!=null && item.url.startsWith("https://") && urls.add(item.url))
+                accepted.add(item);
+        }
+        saveItems(CLOUD,accepted);
+        return accepted.size();
+    }
     public int append(List<M3uPlaylistParser.Channel> channels){
-        List<Item> catalog=load();
+        List<Item> catalog=loadLocal();
         Set<String> urls=new HashSet<>(); for(Item i:catalog)urls.add(i.url);
         int added=0;
         for(M3uPlaylistParser.Channel ch:channels){
@@ -145,7 +172,7 @@ public final class CatalogStore {
         save(catalog); return added;
     }
     public int appendItems(List<Item> incoming){
-        List<Item> stored=load();Set<String> urls=new HashSet<>();
+        List<Item> stored=loadLocal();Set<String> urls=new HashSet<>();
         for(Item item:stored)urls.add(item.url);
         int count=0;
         for(Item item:incoming){
@@ -156,17 +183,19 @@ public final class CatalogStore {
         return count;
     }
     public void addDirect(String name,String url){
-        List<Item> items=load();
+        List<Item> items=loadLocal();
         for(Item i:items)if(i.url.equals(url))return;
         if(items.size()<MAX_ITEMS){items.add(new Item(name,url,"","Vídeos","",M3uPlaylistParser.kind(url)));save(items);}
     }
-    private void save(List<Item> items){
+    private void save(List<Item> items){saveItems(KEY,items);}
+    private void saveItems(String key,List<Item> items){
         JSONArray data=new JSONArray();
         for(Item i:items){
             JSONObject j=new JSONObject();
             try{j.put("name",i.name);j.put("url",i.url);j.put("tvgId",i.tvgId);j.put("group",i.group);j.put("logo",i.logo);j.put("format",i.format);j.put("genre",i.genre);j.put("provider",i.provider);j.put("description",i.description);j.put("year",i.year);data.put(j);}catch(Exception ignored){}
         }
-        prefs.edit().putString(KEY,data.toString()).apply();
+        if(!prefs.edit().putString(key,data.toString()).commit())
+            throw new IllegalStateException("Falha ao salvar catálogo");
     }
     public boolean isFavorite(String url){return prefs.getStringSet(FAV,new HashSet<String>()).contains(url);}
     public void toggleFavorite(String url){
@@ -174,5 +203,5 @@ public final class CatalogStore {
         if(fav.contains(url))fav.remove(url);else fav.add(url);
         prefs.edit().putStringSet(FAV,fav).apply();
     }
-    public void clear(){prefs.edit().remove(KEY).remove(FAV).apply();}
+    public void clear(){prefs.edit().remove(KEY).remove(CLOUD).remove(FAV).apply();}
 }
