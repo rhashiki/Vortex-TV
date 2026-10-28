@@ -15,7 +15,7 @@ class CatalogPaginationAndNames(unittest.TestCase):
         text=(ROOT/'app/src/main/java/os/vortex/tv/MainActivity.java').read_text()
         self.assertIn('open_archive_page_v2',text)
         self.assertIn('open_archive_total_pages_v2',text)
-        self.assertIn('fetchPage(page,userInitiated?40:28)',text)
+        self.assertIn('fetchPage(page,40)',text)
         self.assertIn('Carregar mais filmes livres',text)
     def test_correction_does_not_change_stream_link(self):
         store=(ROOT/'app/src/main/java/os/vortex/tv/CatalogStore.java').read_text()
