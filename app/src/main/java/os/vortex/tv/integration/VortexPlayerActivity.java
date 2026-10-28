@@ -25,6 +25,8 @@ import org.json.JSONObject;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.MimeTypes;
 import androidx.media3.common.PlaybackException;
+import androidx.media3.datasource.HttpDataSource;
+import androidx.media3.common.util.UnstableApi;
 import androidx.media3.common.Player;
 import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.ui.PlayerView;
@@ -111,8 +113,8 @@ public final class VortexPlayerActivity extends Activity {
         player.addListener(new Player.Listener() {
             @Override public void onPlayerError(PlaybackException error) {
                 new AlertDialog.Builder(VortexPlayerActivity.this)
-                    .setTitle("Não foi possível reproduzir")
-                    .setMessage("Fonte indisponível ou incompatível ("+error.getErrorCodeName()+").")
+                    .setTitle("Falha de reprodução • Detalhes")
+                    .setMessage(describePlayerError(error))
                     .setPositiveButton("Abrir em player externo",(dialog,which)->{
                         if(!ExternalMediaRouter.openExternal(VortexPlayerActivity.this,mediaUrl,true))
                             Toast.makeText(VortexPlayerActivity.this,"Nenhum player externo compatível",Toast.LENGTH_LONG).show();
@@ -122,6 +124,39 @@ public final class VortexPlayerActivity extends Activity {
         });
         playSelected();
     }
+
+    /** Exposes precise HTTP status and resource type without leaking URL query credentials. */
+    @UnstableApi
+    private String describePlayerError(PlaybackException error){
+        String code=error.getErrorCodeName();
+        Throwable cause=error;
+        for(int hops=0;cause!=null&&hops<12;cause=cause.getCause(),hops++){
+            if(cause instanceof HttpDataSource.InvalidResponseCodeException){
+                HttpDataSource.InvalidResponseCodeException http=
+                    (HttpDataSource.InvalidResponseCodeException)cause;
+                Uri blocked=http.dataSpec.uri;
+                String host=blocked==null?"desconhecida":blocked.getHost();
+                String path=blocked==null?"":blocked.getPath();
+                String resource=(path!=null&&path.toLowerCase(java.util.Locale.ROOT).endsWith(".m3u8"))
+                    ?"playlist HLS":(path!=null&&(path.toLowerCase(java.util.Locale.ROOT).endsWith(".ts")
+                       ||path.toLowerCase(java.util.Locale.ROOT).endsWith(".m4s")
+                       ||path.toLowerCase(java.util.Locale.ROOT).endsWith(".mp4")))
+                    ?"segmento de vídeo":"recurso remoto";
+                String reason=http.responseCode==403
+                    ?"A origem recusou o acesso (403).":http.responseCode==404
+                    ?"O endereço não existe ou expirou (404).":http.responseCode==429
+                    ?"O servidor limitou as requisições (429).":
+                    "O servidor devolveu uma resposta HTTP inesperada.";
+                return reason+"\nHTTP "+http.responseCode+" • "+resource+
+                    "\nHost: "+(host==null?"desconhecido":host)+
+                    "\nDiagnóstico: "+code+
+                    "\n\nA playlist pode responder normalmente, mas algum segmento pode falhar. Teste outra fonte ou o player externo.";
+            }
+        }
+        return "Não foi possível reproduzir: "+code+
+            ".\nPode haver erro de rede, codec ou indisponibilidade da fonte.";
+    }
+
     private void playSelected() {
         if(player==null || mediaUrl==null)return;
         MediaItem.Builder item=new MediaItem.Builder().setUri(Uri.parse(mediaUrl));

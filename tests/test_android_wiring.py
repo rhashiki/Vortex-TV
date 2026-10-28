@@ -16,6 +16,10 @@ class Wiring(unittest.TestCase):
         self.assertIn('KEYCODE_DPAD_UP',java)
         self.assertIn('KEYCODE_DPAD_DOWN',java)
         self.assertNotIn('yt-dlp',java)
+        self.assertIn('EMBED_ORIGIN="https://vortex-tv-android-build.onrender.com/"',java)
+        self.assertIn('web.loadDataWithBaseURL(EMBED_ORIGIN',java)
+        self.assertNotIn('web.loadDataWithBaseURL("https://www.youtube.com/"',java)
+        self.assertIn('referrerpolicy=',java)
     def test_youtube_channel_directory_is_not_fake_live(self):
         import json
         path=ROOT/'app/src/main/assets/youtube_search_plan.json'

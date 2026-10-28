@@ -682,9 +682,8 @@ public final class MainActivity extends Activity {
                         return;
                     }
                     String[] labels=new String[samples.size()];
-                    for(int i=0;i<samples.size();i++)labels[i]=samples.get(i).name+"  •  HLS";
-                    new AlertDialog.Builder(this).setTitle("Laboratório • Filmes livres")
-                        .setMessage("Fontes abertas com manifesto validado. O vídeo ainda precisa ser testado nesta TV Box.")
+                    for(int i=0;i<samples.size();i++)labels[i]=samples.get(i).name+"  •  Testar reprodução HLS";
+                    new AlertDialog.Builder(this).setTitle("Laboratório • Escolha um filme")
                         .setItems(labels,(dialog,which)->{
                             CatalogStore.Item selected=samples.get(which);
                             new AlertDialog.Builder(this)

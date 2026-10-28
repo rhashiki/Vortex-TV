@@ -39,6 +39,11 @@ class CloudContractTests(unittest.TestCase):
         ui=(ROOT/'app/src/main/java/os/vortex/tv/MainActivity.java').read_text()
         self.assertIn('showCloudLab()',ui)
         self.assertIn('Laboratório: testar filmes livres',ui)
+        self.assertIn('.setTitle("Laboratório • Escolha um filme")',ui)
+        lab=ui[ui.index('new AlertDialog.Builder(this).setTitle("Laboratório • Escolha um filme")'):]
+        lab=lab[:lab.index('}).setNegativeButton("Fechar",null).show();')]
+        self.assertIn('.setItems(labels,',lab)
+        self.assertNotIn('.setMessage("Fontes abertas com manifesto validado',lab)
     def test_no_anonymous_writes(self):
         migration=(ROOT/'supabase/migrations/20261028_vortex_tv_cloud.sql').read_text()
         self.assertEqual(migration.count('enable row level security'),3)

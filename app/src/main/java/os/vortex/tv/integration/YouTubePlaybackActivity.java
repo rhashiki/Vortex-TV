@@ -27,6 +27,9 @@ public final class YouTubePlaybackActivity extends Activity {
     public static final String EXTRA_VIDEO_URL="vortex.youtube.url";
     public static final String EXTRA_LIVE_LIST="vortex.youtube.live_channels";
     public static final String EXTRA_LIVE_INDEX="vortex.youtube.live_index";
+    // Real third-party service origin; never claim youtube.com is the embedding page.
+    // A standard HTTPS referrer allows YouTube to evaluate app embedding permissions.
+    private static final String EMBED_ORIGIN="https://vortex-tv-android-build.onrender.com/";
     private WebView web;
     private TextView info;
     private String videoId;
@@ -90,12 +93,16 @@ public final class YouTubePlaybackActivity extends Activity {
     private void loadVideo(){
         // A real iframe player: YouTube controls, ads, branding and media remain intact.
         // A distinct base URL gives the embedded player a nonempty origin/referrer.
-        String html="<!doctype html><html><head><meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1'></head>"+
+        String html="<!doctype html><html><head><meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1'>"+
+            "<meta name='referrer' content='strict-origin-when-cross-origin'></head>"+
             "<body style='padding:0;margin:0;background:#000;overflow:hidden'>"+
             "<iframe style='position:absolute;inset:0;width:100%;height:100%;border:0' " +
             "src='https://www.youtube-nocookie.com/embed/"+videoId+"?autoplay=1&playsinline=1&rel=0' " +
+            "referrerpolicy='strict-origin-when-cross-origin' "+
             "allow='autoplay;encrypted-media;picture-in-picture' allowfullscreen></iframe></body></html>";
-        web.loadDataWithBaseURL("https://www.youtube.com/",html,"text/html","UTF-8",null);
+        // youtube.com as base URL is not an embedding origin: YouTube may reject it (152-4).
+        // Keeping the official iframe and a truthful third-party origin is required.
+        web.loadDataWithBaseURL(EMBED_ORIGIN,html,"text/html","UTF-8",null);
     }
     private void openExternal(){
         try{startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse("https://www.youtube.com/watch?v="+videoId)));}

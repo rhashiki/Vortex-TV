@@ -8,8 +8,8 @@ android {
         applicationId 'os.vortex.tv'
         minSdk 25
         targetSdk 28
-        versionCode 28
-        versionName '0.2.8-cloud-lab'
+        versionCode 29
+        versionName '0.2.9-player-fixes'
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -18,7 +18,7 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix '.preview26'
-            manifestPlaceholders = [appLabel: 'Vortex TV Cloud (Teste)']
+            manifestPlaceholders = [appLabel: 'Vortex TV (Teste 29)']
         }
         release {
             minifyEnabled false
