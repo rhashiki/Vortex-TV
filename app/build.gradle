@@ -8,8 +8,8 @@ android {
         applicationId 'os.vortex.tv'
         minSdk 25
         targetSdk 28
-        versionCode 24
-        versionName '0.2.4-native-catalog'
+        versionCode 26
+        versionName '0.2.6-youtube-preview'
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -17,8 +17,8 @@ android {
     }
     buildTypes {
         debug {
-            applicationIdSuffix '.preview24'
-            manifestPlaceholders = [appLabel: 'Vortex TV 24 Teste']
+            applicationIdSuffix '.preview26'
+            manifestPlaceholders = [appLabel: 'Vortex TV YouTube Teste']
         }
         release {
             minifyEnabled false
