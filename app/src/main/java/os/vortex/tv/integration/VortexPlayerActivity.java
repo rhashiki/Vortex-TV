@@ -42,7 +42,6 @@ public final class VortexPlayerActivity extends Activity {
     public static final String EXTRA_CHANNEL_INDEX = "vortex.channel_index";
     private static final int LIGHT=0xFFF6F4FF, MUTED=0xFFB7B1CC, PURPLE=0xFFB48AFF;
     private final Handler handler = new Handler(Looper.getMainLooper());
-    private final Runnable hideInfo = () -> { if(channelInfo!=null)channelInfo.setVisibility(View.GONE); };
 
     private JSONArray channels = new JSONArray();
     private int channelIndex;
@@ -53,6 +52,7 @@ public final class VortexPlayerActivity extends Activity {
     private TextView infoNumber;
     private TextView infoTitle;
     private TextView infoProgramme;
+    private final Runnable hideInfo = () -> { if(channelInfo!=null)channelInfo.setVisibility(View.GONE); };
     private Dialog guideDialog;
 
     private int dp(float n) { return (int)(n*getResources().getDisplayMetrics().density + 0.5f); }
