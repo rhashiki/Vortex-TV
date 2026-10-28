@@ -33,3 +33,9 @@
 - A ROM Vortex TV OS **ainda não é uma imagem bootável homologada**. Não houve flash nem teste na RK3229. Os arquivos OEM e APK release precisam ser preparados pelo ambiente de build quando a imagem for montada.
 - Possíveis credenciais dos URLs não foram colocadas no GitHub. O arquivo de acesso em `/system/etc` exige auditoria de permissões/SELinux no firmware final.
 - Os links não foram individualmente validados; o sistema tenta alternativas, mas não garante reprodução quando todas falham.
+
+## Validação final da build Android
+- Render deploy `dep-dbh89rflk1mc73apdu6g`: **LIVE**, commit compilado `9d424a4de35008b2ead64764dc551b24c4a2e78d`.
+- **61 testes automatizados aprovados**; Gradle `assembleDebug` com `BUILD SUCCESSFUL` e verificações estruturais Android/DEX/Media3/M3U/XMLTV aprovadas.
+- Endpoint Supabase nativo: teste com acesso OEM em Vault HTTP 200, 500 fontes, cursor 500 e `has_more=true`; sem acesso HTTP 401.
+- Esta validação NÃO representa boot do Vortex TV OS nem teste do vídeo real na TV Box RK3229.
