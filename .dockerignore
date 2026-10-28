@@ -1,0 +1,11 @@
+.git
+.gradle
+**/build
+*.apk
+*.aab
+*.jks
+*.keystore
+local.properties
+__pycache__
+*.pyc
+preview/
