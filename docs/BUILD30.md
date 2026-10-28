@@ -33,3 +33,12 @@ Data: 28/10/2026. Vortex TV app, separate from Vortex TV OS.
 - Tests include synthetic 33,601-entry streaming parse and channel/movie identity cases; no real URL credentials in tests.
 - APK published at https://vortex-tv-android-build.onrender.com/VortexTV-Android-Debug.apk only when Render LIVE.
 - Device-side audio/video/remote/codec and source availability remain to be tested.
+
+## Build final 0.3.2-failover
+- Commit compilado no Render: 9ffef2e72eb5406daf3855ce9722c14937d16906.
+- Deploy: dep-dbh7nr49v7es73b95810, status LIVE.
+- 57 testes Python aprovados; Java identity 5/5; parser M3U 33,601/33,601 entradas sintéticas; Android Gradle assembleDebug: BUILD SUCCESSFUL; verificador estrutural APK: OK.
+- Artefato: https://vortex-tv-android-build.onrender.com/VortexTV-Android-Debug.apk (HTTP 200, 5,919,005 bytes).
+- SHA-256: 7d5de4ad492f9f821dce3ef07319fc8a1daae0db4e2a9cab77e843f8bc44ef84.
+- O APK não embute as playlists privadas: importar no aparelho a unificada e CANAISJOABE.M3U. Os endereços serão armazenados exclusivamente no SQLite do aparelho.
+- Versão ainda depende de homologação de reprodução em Android 7.1 / RK3229; testes de estrutura não provam que os servidores de terceiros estejam ativos.
