@@ -48,8 +48,10 @@ public final class CatalogStore {
     private static final int MAX_ITEMS=2500;
     private final SharedPreferences prefs;
     private final Map<String,String> bundledQuality=new HashMap<>();
+    private final ImportedSourceStore privateSources;
     public CatalogStore(Context ctx){
         prefs=ctx.getSharedPreferences("vortex_catalog",Context.MODE_PRIVATE);
+        privateSources=new ImportedSourceStore(ctx.getApplicationContext());
         loadBundledQuality(ctx);
         repairLegacyBundledSources();
         repairPublicChannelV4();
@@ -265,7 +267,42 @@ public final class CatalogStore {
                 if(urls.add(item.url))result.add(item);
             }
         }
+        // Show a bounded set of recently imported titles, never 30k media cards in RAM.
+        for(Item item:privateSources.representatives(150)){
+            if(result.size()>=MAX_ITEMS)break;
+            if(urls.add(item.url))result.add(item);
+        }
         return result;
+    }
+    public ImportedSourceStore.ImportResult importPlaylist(java.io.Reader reader,String label)
+        throws java.io.IOException {
+        return privateSources.importM3u(reader,label);
+    }
+    public int importedCount(){return privateSources.count();}
+    public List<Item> searchImported(String phrase,int limit){
+        return privateSources.search(phrase,limit);
+    }
+    public boolean isPrivateImportedUrl(String url){return privateSources.contains(url);}
+    public void recordSourceResult(String url,boolean success){
+        privateSources.recordPlayback(url,success);
+    }
+    public List<String> alternativesFor(Item selected,int max){
+        java.util.LinkedHashSet<String> candidates=new java.util.LinkedHashSet<>();
+        String identity=SourceIdentity.key(selected.name,selected.group,selected.tvgId,
+            selected.format,selected.url);
+        for(String url:privateSources.alternatives(selected,Math.min(max,15))){
+            if(!selected.url.equals(url))candidates.add(url);
+            if(candidates.size()>=max)break;
+        }
+        // Also combine alternate source variants from preexisting local catalogs,
+        // without merging unrelated episodes that share only a display name.
+        for(Item item:loadLocal()){
+            if(candidates.size()>=max)break;
+            if(item.url.equals(selected.url))continue;
+            if(identity.equals(SourceIdentity.key(item.name,item.group,item.tvgId,item.format,item.url)))
+                candidates.add(item.url);
+        }
+        return new ArrayList<>(candidates);
     }
     /** Atomic refresh: a malformed remote response never erases the previous cache. */
     public int replaceRemote(List<Item> remote){

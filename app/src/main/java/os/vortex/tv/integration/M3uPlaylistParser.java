@@ -26,12 +26,22 @@ public final class M3uPlaylistParser {
         }
     }
 
+    public interface SourceSink { void accept(Channel channel); }
     public List<Channel> parse(Reader input) throws IOException {
+        ArrayList<Channel> results=new ArrayList<>();
+        parseToSink(input,results::add);
+        return results;
+    }
+    /**
+     * Streaming parse avoids holding 33k source records in RAM while importing.
+     * M3U URLs stay on-device; no cloud ingestion or debug logging.
+     */
+    public void parseToSink(Reader input,SourceSink sink) throws IOException {
         BufferedReader reader = new BufferedReader(input);
         String header = reader.readLine();
         if (header == null || !header.replace("\uFEFF", "").trim().startsWith("#EXTM3U"))
             throw new IOException("Playlist nao e M3U estendido");
-        ArrayList<Channel> channels = new ArrayList<Channel>();
+        int total=0;
         Map<String,String> attrs = Collections.emptyMap();
         String title = "";
         boolean pending = false;
@@ -63,11 +73,11 @@ public final class M3uPlaylistParser {
             if (!pending) continue;
             pending=false;
             if (!isHttpUrl(line)) continue;
-            if (channels.size() >= MAX_CHANNELS) throw new IOException("Playlist excede limite");
-            channels.add(new Channel(title,line,attr(attrs,"tvg-id"),attr(attrs,"group-title"),
+            if (total >= MAX_CHANNELS) throw new IOException("Playlist excede limite");
+            sink.accept(new Channel(title,line,attr(attrs,"tvg-id"),attr(attrs,"group-title"),
                     attr(attrs,"tvg-logo"),kind(line)));
+            total++;
         }
-        return channels;
     }
     /**
      * Strip IPTV quality/group labels, preserving the broadcaster's actual name.
