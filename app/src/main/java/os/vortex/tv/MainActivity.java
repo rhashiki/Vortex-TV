@@ -410,7 +410,7 @@ public final class MainActivity extends Activity {
                 if(page>totalPages){
                     result="Todas as páginas deste acervo já foram consultadas. Você pode importar outras fontes.";
                 } else {
-                    OpenFilmCatalog.Batch batch=service.fetchPage(page,userInitiated?40:28);
+                    OpenFilmCatalog.Batch batch=service.fetchPage(page,40);
                     int added=catalog.appendItems(batch.items);
                     uiPrefs.edit().putInt("open_archive_page_v2",batch.nextPage)
                         .putInt("open_archive_total_pages_v2",batch.pages).apply();
