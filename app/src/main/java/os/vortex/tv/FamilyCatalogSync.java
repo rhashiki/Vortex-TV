@@ -41,8 +41,17 @@ public final class FamilyCatalogSync {
             if(n>0)remaining-=n;return n;
         }
     }
+    public interface ProgressListener {
+        void onPage(int pages,int scanned,int added,int total);
+    }
     public static Result sync(Context context,CatalogStore catalog,
                               SharedPreferences preferences,String pairingCode)
+        throws Exception {
+        return sync(context,catalog,preferences,pairingCode,null);
+    }
+    public static Result sync(Context context,CatalogStore catalog,
+                              SharedPreferences preferences,String pairingCode,
+                              ProgressListener listener)
         throws Exception {
         if(pairingCode==null || !pairingCode.matches("[A-F0-9]{20}"))
             throw new IOException("Código Vortex Família inválido");
@@ -82,6 +91,7 @@ public final class FamilyCatalogSync {
                 added+=result.added;
                 total=result.total;
                 pages++;
+                if(listener!=null)listener.onPage(pages,scanned,added,total);
                 // Only acknowledge a cursor AFTER the corresponding SQLite transaction commits.
                 cursor=nextCursor;
                 preferences.edit().putLong("family_cursor_v1",cursor).apply();

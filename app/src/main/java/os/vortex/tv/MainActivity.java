@@ -59,6 +59,7 @@ public final class MainActivity extends Activity {
     private String section="Início";
     private int previousCount=-1;
     private final List<GuideChannel> unavailableGuide=new ArrayList<>();
+    private TextView nativeCatalogStatus;
     private String selectedFilmGenre="Todos";
     private static final String[] FILM_GENRES={"Todos","Animação","Aventura","Fantasia","Ficção científica","Terror","Suspense","Romance","Drama","Guerra","LGBT","Documentário","Outros"};
     private static final int POSITIVE=0xFF22CDB7;
@@ -68,6 +69,13 @@ public final class MainActivity extends Activity {
         catalog=new CatalogStore(this);guide=new GuideStore(this);
         uiPrefs=getSharedPreferences("vortex_ui",MODE_PRIVATE);
         String saved=uiPrefs.getString("preferred_mode", "");
+        // OEM mode is always a TV: no first-run dialog for the family.
+        final boolean nativeInstall=!NativeCatalogConfig.readFamilyAccess(
+            getApplicationContext()).isEmpty();
+        if(nativeInstall && saved.isEmpty()){
+            saved="TV";
+            uiPrefs.edit().putString("preferred_mode",saved).apply();
+        }
         tv=saved.isEmpty()?getResources().getConfiguration().smallestScreenWidthDp>=600:"TV".equals(saved);
         try {catalog.appendItems(YoutubeCatalogBridge.loadSeed(this));}
         catch(Exception ex){android.util.Log.w("VortexTV","YouTube seed unavailable",ex);}
@@ -77,7 +85,7 @@ public final class MainActivity extends Activity {
         syncCloud(false);
         syncNetMovies(false);
         syncNativeCatalog(false);
-        if(saved.isEmpty())showModeChooser();
+        if(saved.isEmpty()&&!nativeInstall)showModeChooser();
         // Large Internet Archive imports are now opt-in: automatic discovery
         // flooded the home page with unrelated titles and untested images.
         // The manual "Carregar mais filmes livres" action remains available.
@@ -168,9 +176,12 @@ public final class MainActivity extends Activity {
         scroll.addView(nav);
         if(tv)bar.addView(scroll,new LinearLayout.LayoutParams(0,-1,1));
         else bar.addView(new View(this),new LinearLayout.LayoutParams(0,d(1),1));
-        TextView add=text("⊕  Fontes",tv?14:12,LIGHT,true);add.setPadding(d(12),d(10),d(12),d(10));
+        boolean oem=!NativeCatalogConfig.readFamilyAccess(getApplicationContext()).isEmpty();
+        TextView add=text(oem?"↻  Catálogo":"⊕  Fontes",tv?14:12,LIGHT,true);
+        add.setPadding(d(12),d(10),d(12),d(10));
         add.setBackground(shape(0xFF24243B,9));focusable(add);
-        add.setOnClickListener(v->showSources());bar.addView(add);
+        add.setOnClickListener(v->{if(oem)syncNativeCatalog(true);else showSources();});
+        bar.addView(add);
         return bar;
     }
     private View mobileNavigation(){
@@ -222,9 +233,15 @@ public final class MainActivity extends Activity {
     }
     private void renderHome(){
         hero();
+        nativeCatalogStatus=null;
         if(!NativeCatalogConfig.readFamilyAccess(getApplicationContext()).isEmpty()){
-            body.addView(button("↻ Atualizar catálogo Vortex",false,
-                ()->syncNativeCatalog(true)));
+            int available=catalog.importedCount();
+            String message=nativeCatalogBusy
+                ?"Sincronizando catálogo Vortex • "+available+" fontes no dispositivo"
+                :"Catálogo Vortex • "+available+" fontes disponíveis no dispositivo";
+            nativeCatalogStatus=text(message,tv?14:12,MUTED,false);
+            nativeCatalogStatus.setPadding(d(4),0,0,d(18));
+            body.addView(nativeCatalogStatus);
         }
         if(items.isEmpty()){
             emptyState("Seu catálogo começa com uma fonte", "Importe uma playlist M3U autorizada ou adicione uma URL direta de vídeo. O Vortex TV não inclui catálogos piratas nem conteúdos fictícios.");
@@ -871,13 +888,23 @@ public final class MainActivity extends Activity {
         long last=uiPrefs.getLong("family_last_sync_v1",0L);
         if(!manual&&last>0&&now>=last&&now-last<12L*60L*60L*1000L)return;
         nativeCatalogBusy=true;
+        if(nativeCatalogStatus!=null)
+            nativeCatalogStatus.setText("Sincronizando catálogo Vortex...");
         if(manual)Toast.makeText(this,"Atualizando catálogo...",Toast.LENGTH_SHORT).show();
         new Thread(()->{
             boolean done=false;
             String feedback="";
             try{
                 FamilyCatalogSync.Result result=FamilyCatalogSync.sync(
-                    getApplicationContext(),catalog,uiPrefs,access);
+                    getApplicationContext(),catalog,uiPrefs,access,
+                    (pages,scanned,added,total)->{
+                        if(pages%5!=0)return;
+                        runOnUiThread(()->{
+                            if(!isFinishing()&&nativeCatalogStatus!=null)
+                                nativeCatalogStatus.setText("Sincronizando catálogo Vortex • "+
+                                    total+" fontes no dispositivo");
+                        });
+                    });
                 done=result.completed;
                 feedback="Catálogo atualizado: "+result.total+" fontes; "+
                     result.added+" novas.";

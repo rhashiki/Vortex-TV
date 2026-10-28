@@ -14,8 +14,8 @@ class NativeFirmwareIntegrationTests(unittest.TestCase):
         self.assertIn("applicationId 'os.vortex.tv.stream'",gradle)
         self.assertNotIn("applicationId 'os.vortex.tv'",gradle)
         self.assertIn('android:name="os.vortex.tv.MainActivity"',manifest)
-        self.assertIn("versionCode 33",gradle)
-        self.assertIn("versionName '0.3.3-native-catalog'",gradle)
+        self.assertIn("versionCode 34",gradle)
+        self.assertIn("versionName '0.3.4-native-ux'",gradle)
 
     def test_zero_touch_native_sync(self):
         ui=self.code("app/src/main/java/os/vortex/tv/MainActivity.java")
