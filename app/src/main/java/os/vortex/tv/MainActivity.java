@@ -59,7 +59,7 @@ public final class MainActivity extends Activity {
     private int previousCount=-1;
     private final List<GuideChannel> unavailableGuide=new ArrayList<>();
     private String selectedFilmGenre="Todos";
-    private static final String[] FILM_GENRES={"Todos","Animação","Aventura","Fantasia","Ficção científica","Terror","Suspense","Romance","Drama","Guerra","LGBT","Documentário"};
+    private static final String[] FILM_GENRES={"Todos","Animação","Aventura","Fantasia","Ficção científica","Terror","Suspense","Romance","Drama","Guerra","LGBT","Documentário","Outros"};
     private static final int POSITIVE=0xFF22CDB7;
 
     @Override public void onCreate(Bundle savedInstanceState){
@@ -72,8 +72,8 @@ public final class MainActivity extends Activity {
         loadGuideOnly();
         render();
         if(saved.isEmpty())showModeChooser();
-        if(!uiPrefs.getBoolean("open_archive_discovery_v1",false)) {
-            uiPrefs.edit().putBoolean("open_archive_discovery_v1",true).apply();
+        if(!uiPrefs.getBoolean("open_archive_discovery_v2",false)) {
+            uiPrefs.edit().putBoolean("open_archive_discovery_v2",true).apply();
             loadOpenArchive(false);
         }
     }
@@ -392,7 +392,7 @@ public final class MainActivity extends Activity {
     }
     private void addOpenArchiveAction(){
         LinearLayout actions=row();actions.setPadding(0,d(9),0,d(18));
-        actions.addView(button("✦  Descobrir filmes livres",true,()->loadOpenArchive(true)));
+        actions.addView(button("✦  Carregar mais filmes livres",true,()->loadOpenArchive(true)));
         TextView info=text("  Creative Commons / domínio público • Internet Archive",tv?12:10,MUTED,false);
         if(tv)actions.addView(info);body.addView(actions);
     }
@@ -405,9 +405,18 @@ public final class MainActivity extends Activity {
             String result;
             try{
                 OpenFilmCatalog service=new OpenFilmCatalog();
-                List<CatalogStore.Item> found=service.fetch(16);
-                int added=catalog.appendItems(found);
-                result="Filmes disponíveis encontrados: "+found.size()+" • Novos: "+added;
+                int page=uiPrefs.getInt("open_archive_page_v2",1);
+                int totalPages=uiPrefs.getInt("open_archive_total_pages_v2",Integer.MAX_VALUE);
+                if(page>totalPages){
+                    result="Todas as páginas deste acervo já foram consultadas. Você pode importar outras fontes.";
+                } else {
+                    OpenFilmCatalog.Batch batch=service.fetchPage(page,userInitiated?40:28);
+                    int added=catalog.appendItems(batch.items);
+                    uiPrefs.edit().putInt("open_archive_page_v2",batch.nextPage)
+                        .putInt("open_archive_total_pages_v2",batch.pages).apply();
+                    result="Página "+page+"/"+batch.pages+" • "+batch.items.size()
+                        +" filmes elegíveis encontrados • "+added+" adicionados.";
+                }
             }catch(Exception ex){result="Acervo indisponível no momento: "+ex.getMessage();}
             final String message=result;
             discovering=false;
