@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import os.vortex.tv.ImportedSourceStore;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.MimeTypes;
 import androidx.media3.common.PlaybackException;
@@ -53,6 +54,14 @@ public final class VortexPlayerActivity extends Activity {
     private String mediaUrl;
     private final java.util.ArrayList<String> backupUrls=new java.util.ArrayList<>();
     private final java.util.HashSet<String> attempted=new java.util.HashSet<>();
+    private ImportedSourceStore history;
+    private TextView signalMessage;
+    private int generation=0;
+    private static final long STARTUP_TIMEOUT_MS=12000;
+    private static final long REBUFFER_TIMEOUT_MS=18000;
+    private Runnable pendingTimeout;
+    private boolean hasReadyPlayback=false;
+    private String lastFailure="Fonte indisponível";
     private LinearLayout channelInfo;
     private TextView infoNumber;
     private TextView infoTitle;
@@ -75,13 +84,17 @@ public final class VortexPlayerActivity extends Activity {
 
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
+        history=new ImportedSourceStore(getApplicationContext());
         mediaUrl=getIntent().getStringExtra(EXTRA_MEDIA_URL);
         try {
-            JSONArray fallbackData=new JSONArray(getIntent().getStringExtra(EXTRA_MEDIA_FALLBACKS_JSON));
-            for(int i=0;i<fallbackData.length()&&i<3;i++){
-                String candidate=fallbackData.optString(i,"");
-                if(candidate.startsWith("https://")&&!candidate.equals(mediaUrl)
-                    &&M3uPlaylistParser.isHttpUrl(candidate))backupUrls.add(candidate);
+            String raw=getIntent().getStringExtra(EXTRA_MEDIA_FALLBACKS_JSON);
+            if(raw!=null){
+                JSONArray fallbackData=new JSONArray(raw);
+                for(int i=0;i<fallbackData.length()&&i<15;i++){
+                    String candidate=fallbackData.optString(i,"");
+                    if(M3uPlaylistParser.isHttpUrl(candidate)&&!candidate.equals(mediaUrl)
+                        &&!backupUrls.contains(candidate))backupUrls.add(candidate);
+                }
             }
         }catch(Exception ignored){}
         try {
@@ -113,6 +126,13 @@ public final class VortexPlayerActivity extends Activity {
         infoParams.leftMargin=dp(16);infoParams.topMargin=dp(16);
         screen.addView(channelInfo,infoParams);
         channelInfo.setVisibility(View.GONE);
+        signalMessage=label("Buscando sinal...",15,LIGHT,true);
+        signalMessage.setGravity(Gravity.CENTER);
+        signalMessage.setPadding(dp(16),dp(12),dp(16),dp(12));
+        signalMessage.setBackground(shape(0xD0141421,14));
+        FrameLayout.LayoutParams signalParams=new FrameLayout.LayoutParams(
+            -2,-2,Gravity.CENTER);
+        screen.addView(signalMessage,signalParams);
         setContentView(screen);
         if(channels.length()>0)channelInfo.post(this::showChannelInfo);
     }
@@ -123,15 +143,21 @@ public final class VortexPlayerActivity extends Activity {
         playerView.setPlayer(player);
         player.addListener(new Player.Listener() {
             @Override public void onPlayerError(PlaybackException error) {
-                if(tryAlternative())return;
-                new AlertDialog.Builder(VortexPlayerActivity.this)
-                    .setTitle("Falha de reprodução • Detalhes")
-                    .setMessage(describePlayerError(error))
-                    .setPositiveButton("Abrir em player externo",(dialog,which)->{
-                        if(!ExternalMediaRouter.openExternal(VortexPlayerActivity.this,mediaUrl,true))
-                            Toast.makeText(VortexPlayerActivity.this,"Nenhum player externo compatível",Toast.LENGTH_LONG).show();
-                    })
-                    .setNegativeButton("Fechar",null).show();
+                lastFailure=describePlayerError(error);
+                sourceFailure();
+            }
+            @Override public void onPlaybackStateChanged(int state){
+                if(state==Player.STATE_READY){
+                    clearTimeout();
+                    if(history!=null)history.recordPlayback(mediaUrl,true);
+                    hasReadyPlayback=true;
+                    if(signalMessage!=null)signalMessage.setVisibility(View.GONE);
+                }else if(state==Player.STATE_BUFFERING){
+                    scheduleTimeout(hasReadyPlayback?REBUFFER_TIMEOUT_MS:STARTUP_TIMEOUT_MS);
+                }else if(state==Player.STATE_ENDED&&channels.length()>0){
+                    lastFailure="A transmissão ao vivo foi interrompida.";
+                    sourceFailure();
+                }
             }
         });
         playSelected();
@@ -169,26 +195,88 @@ public final class VortexPlayerActivity extends Activity {
             ".\nPode haver erro de rede, codec ou indisponibilidade da fonte.";
     }
 
+    private void clearTimeout(){
+        if(pendingTimeout!=null){
+            handler.removeCallbacks(pendingTimeout);
+            pendingTimeout=null;
+        }
+    }
+    private void scheduleTimeout(long delay){
+        clearTimeout();
+        final int current=generation;
+        final String expected=mediaUrl;
+        pendingTimeout=()->{
+            if(player==null||current!=generation||!expected.equals(mediaUrl))return;
+            if(player.getPlaybackState()==Player.STATE_READY)return;
+            lastFailure="O servidor não iniciou o vídeo no tempo permitido ("+(delay/1000)+" s).";
+            sourceFailure();
+        };
+        handler.postDelayed(pendingTimeout,delay);
+    }
+    private void sourceFailure(){
+        clearTimeout();
+        if(history!=null)history.recordPlayback(mediaUrl,false);
+        if(tryAlternative())return;
+        if(signalMessage!=null)signalMessage.setText("Nenhuma fonte reproduzível");
+        new AlertDialog.Builder(this)
+            .setTitle("Fontes indisponíveis")
+            .setMessage("Todas as "+attempted.size()+" fontes cadastradas para este título "
+                +"falharam ou não iniciaram a reprodução.\n\nÚltimo erro: "+lastFailure)
+            .setPositiveButton("Abrir no player externo",(dialog,which)->{
+                if(!ExternalMediaRouter.openExternal(this,mediaUrl,true))
+                    Toast.makeText(this,"Nenhum player externo compatível",Toast.LENGTH_LONG).show();
+            })
+            .setNegativeButton("Fechar",null).show();
+    }
     private boolean tryAlternative(){
         while(!backupUrls.isEmpty()){
             String next=backupUrls.remove(0);
             if(attempted.contains(next))continue;
             mediaUrl=next;
-            Toast.makeText(this,"Fonte indisponível; tentando alternativa...",Toast.LENGTH_SHORT).show();
+            if(signalMessage!=null){
+                signalMessage.setText("Tentando fonte alternativa • "+(attempted.size()+1));
+                signalMessage.setVisibility(View.VISIBLE);
+            }
             playSelected();
             return true;
         }
         return false;
     }
+    private void loadChannelSource(JSONObject data){
+        if(data==null)return;
+        backupUrls.clear();
+        attempted.clear();
+        String next=data.optString("url","");
+        if(M3uPlaylistParser.isHttpUrl(next))mediaUrl=next;
+        JSONArray variants=data.optJSONArray("alternatives");
+        if(variants!=null){
+            for(int i=0;i<variants.length()&&i<15;i++){
+                String url=variants.optString(i,"");
+                if(M3uPlaylistParser.isHttpUrl(url)&&!url.equals(mediaUrl)
+                    &&!backupUrls.contains(url))backupUrls.add(url);
+            }
+        }
+    }
     private void playSelected() {
         if(player==null || mediaUrl==null)return;
+        generation++;
+        clearTimeout();
+        hasReadyPlayback=false;
         attempted.add(mediaUrl);
+        if(signalMessage!=null){
+            signalMessage.setText("Buscando sinal • fonte "+attempted.size()+
+                "/"+(attempted.size()+backupUrls.size()));
+            signalMessage.setVisibility(View.VISIBLE);
+        }
         MediaItem.Builder item=new MediaItem.Builder().setUri(Uri.parse(mediaUrl));
         String format=M3uPlaylistParser.kind(mediaUrl);
         if("hls".equals(format))item.setMimeType(MimeTypes.APPLICATION_M3U8);
         if("dash".equals(format))item.setMimeType(MimeTypes.APPLICATION_MPD);
         player.stop();
-        player.setMediaItem(item.build());player.prepare();player.play();
+        player.setMediaItem(item.build());
+        player.prepare();
+        player.play();
+        scheduleTimeout(STARTUP_TIMEOUT_MS);
     }
     private void showChannelInfo() {
         if(channels.length()==0 || channelInfo==null)return;
@@ -222,7 +310,7 @@ public final class VortexPlayerActivity extends Activity {
             if(candidate==null)continue;
             String target=candidate.optString("url","");
             if(!M3uPlaylistParser.isHttpUrl(target))continue;
-            mediaUrl=target;playSelected();showChannelInfo();return;
+            loadChannelSource(candidate);playSelected();showChannelInfo();return;
         }
         Toast.makeText(this,"Nenhuma transmissão disponível",Toast.LENGTH_SHORT).show();
     }
@@ -230,7 +318,7 @@ public final class VortexPlayerActivity extends Activity {
         if(position<0 || position>=channels.length())return;
         JSONObject c=channels.optJSONObject(position);
         if(c==null || !M3uPlaylistParser.isHttpUrl(c.optString("url","")))return;
-        channelIndex=position;mediaUrl=c.optString("url");
+        channelIndex=position;loadChannelSource(c);
         if(guideDialog!=null)guideDialog.dismiss();
         playSelected();showChannelInfo();
     }
@@ -297,9 +385,15 @@ public final class VortexPlayerActivity extends Activity {
     }
     @Override protected void onStop() {
         handler.removeCallbacks(hideInfo);
+        clearTimeout();
         if(guideDialog!=null){guideDialog.dismiss();guideDialog=null;}
         if(player!=null){player.release();player=null;}
         if(playerView!=null)playerView.setPlayer(null);
         super.onStop();
+    }
+    @Override protected void onDestroy(){
+        clearTimeout();
+        if(history!=null){history.close();history=null;}
+        super.onDestroy();
     }
 }
