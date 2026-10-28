@@ -1,27 +1,448 @@
 {
   "schema": 1,
-  "source_note": "Candidatos de longas localizados com links individuais em XTOR Movies (28/10/2026) e canais oficiais do YouTube. A página de origem declara provedores; vídeos não foram testados no Android Vortex nem verificados hoje via YouTube Data API. O status NÃO É PLAYBACK_OK.",
+  "source_note": "49 referências de longas com links individuais identificadas no YouTube via canais oficiais e índice XTOR em 28/10/2026. Direitos e disponibilidade de cada vídeo precisam ser verificados; nenhum foi homologado no Android Vortex.",
   "generated_at": "2026-10-28",
   "items": [
-    {"name":"O Dia da Múmia", "video_id":"DUAyQ8yxg38", "year":"2014", "genre":"Terror", "provider":"NetMovies", "status":"REFERENCIA_OFICIAL_NAO_TESTADA", "evidence_url":"https://www.youtube.com/watch?v=DUAyQ8yxg38"},
-    {"name":"Deu a Louca nos Bichos", "video_id":"96FxHNVeBuw", "year":"2010", "genre":"Comédia", "provider":"NetMovies", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"},
-    {"name":"13: O Jogador", "video_id":"mddlgdWmR5A", "year":"2005", "genre":"Drama", "provider":"NetMovies", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"},
-    {"name":"Pulse", "video_id":"UTjsObdUXsA", "year":"2006", "genre":"Terror", "provider":"NetMovies", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"},
-    {"name":"Turbulência 3", "video_id":"iy97dWMzdqs", "year":"2001", "genre":"Ação", "provider":"NetMovies", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"},
-    {"name":"Hydra — Caçada na Ilha Mortal", "video_id":"I8hZQQTKCCk", "year":"2009", "genre":"Ação", "provider":"Film&Clips", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"},
-    {"name":"Icarus — Máquina de Guerra", "video_id":"VY8_MUu0mZI", "year":"", "genre":"Ação", "provider":"Film&Clips", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"},
-    {"name":"Cleanskin: Jogo de Interesses", "video_id":"3ii_xC8IwIo", "year":"2012", "genre":"Ação", "provider":"Filmelier TV", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"},
-    {"name":"Imortais", "video_id":"5Au2Mboodro", "year":"2011", "genre":"Fantasia", "provider":"Filmelier TV", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"},
-    {"name":"O Jantar", "video_id":"ql0KpNclw5g", "year":"2017", "genre":"Suspense", "provider":"Filmelier TV", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"},
-    {"name":"Você Acredita?", "video_id":"Am4z8DjmzjM", "year":"2015", "genre":"Drama", "provider":"Filmelier TV", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"},
-    {"name":"Meu Maior Amigo", "video_id":"Qgsq_z5NvxQ", "year":"2010", "genre":"Comédia", "provider":"Filmelier TV", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"},
-    {"name":"Tina e Téo: A Pedra Encantada", "video_id":"FNqyrhPi5Sk", "year":"2019", "genre":"Animação", "provider":"Filmelier TV", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"},
-    {"name":"Spartacus", "video_id":"HfQoBFovpG8", "year":"", "genre":"Clássicos", "provider":"NetMovies", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"},
-    {"name":"O Grito", "video_id":"F7HugXwPblI", "year":"", "genre":"Terror", "provider":"NetMovies", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"},
-    {"name":"Super-Herói: O Filme", "video_id":"zlmWuf84vO0", "year":"", "genre":"Comédia", "provider":"NetMovies", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"},
-    {"name":"Os 13 Pecados", "video_id":"g2Ok4XIeuFA", "year":"", "genre":"Terror", "provider":"NetMovies", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"},
-    {"name":"Nerve: Um Jogo Sem Regras", "video_id":"E70P8G6rsjU", "year":"", "genre":"Suspense", "provider":"NetMovies", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"},
-    {"name":"A Lady e o Lobo: O Bicho tá Solto", "video_id":"L7Lxs31hCDE", "year":"", "genre":"Animação", "provider":"NetMovies", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"},
-    {"name":"A Loja Mágica de Brinquedos", "video_id":"0iqCcyC52Ts", "year":"", "genre":"Família", "provider":"NetMovies", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"}
+    {
+      "name": "O Dia da Múmia",
+      "video_id": "DUAyQ8yxg38",
+      "year": "2014",
+      "genre": "Terror",
+      "provider": "NetMovies",
+      "status": "REFERENCIA_OFICIAL_NAO_TESTADA",
+      "evidence_url": "https://www.youtube.com/watch?v=DUAyQ8yxg38"
+    },
+    {
+      "name": "Deu a Louca nos Bichos",
+      "video_id": "96FxHNVeBuw",
+      "year": "2010",
+      "genre": "Comédia",
+      "provider": "NetMovies",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "13: O Jogador",
+      "video_id": "mddlgdWmR5A",
+      "year": "2005",
+      "genre": "Drama",
+      "provider": "NetMovies",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "Pulse",
+      "video_id": "UTjsObdUXsA",
+      "year": "2006",
+      "genre": "Terror",
+      "provider": "NetMovies",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "Turbulência 3",
+      "video_id": "iy97dWMzdqs",
+      "year": "2001",
+      "genre": "Ação",
+      "provider": "NetMovies",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "Hydra — Caçada na Ilha Mortal",
+      "video_id": "I8hZQQTKCCk",
+      "year": "2009",
+      "genre": "Ação",
+      "provider": "Film&Clips",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "Icarus — Máquina de Guerra",
+      "video_id": "VY8_MUu0mZI",
+      "year": "",
+      "genre": "Ação",
+      "provider": "Film&Clips",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "Cleanskin: Jogo de Interesses",
+      "video_id": "3ii_xC8IwIo",
+      "year": "2012",
+      "genre": "Ação",
+      "provider": "Filmelier TV",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "Imortais",
+      "video_id": "5Au2Mboodro",
+      "year": "2011",
+      "genre": "Fantasia",
+      "provider": "Filmelier TV",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "O Jantar",
+      "video_id": "ql0KpNclw5g",
+      "year": "2017",
+      "genre": "Suspense",
+      "provider": "Filmelier TV",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "Você Acredita?",
+      "video_id": "Am4z8DjmzjM",
+      "year": "2015",
+      "genre": "Drama",
+      "provider": "Filmelier TV",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "Meu Maior Amigo",
+      "video_id": "Qgsq_z5NvxQ",
+      "year": "2010",
+      "genre": "Comédia",
+      "provider": "Filmelier TV",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "Tina e Téo: A Pedra Encantada",
+      "video_id": "FNqyrhPi5Sk",
+      "year": "2019",
+      "genre": "Animação",
+      "provider": "Filmelier TV",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "Spartacus",
+      "video_id": "HfQoBFovpG8",
+      "year": "",
+      "genre": "Clássicos",
+      "provider": "NetMovies",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "O Grito",
+      "video_id": "F7HugXwPblI",
+      "year": "",
+      "genre": "Terror",
+      "provider": "NetMovies",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "Super-Herói: O Filme",
+      "video_id": "zlmWuf84vO0",
+      "year": "",
+      "genre": "Comédia",
+      "provider": "NetMovies",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "Os 13 Pecados",
+      "video_id": "g2Ok4XIeuFA",
+      "year": "",
+      "genre": "Terror",
+      "provider": "NetMovies",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "Nerve: Um Jogo Sem Regras",
+      "video_id": "E70P8G6rsjU",
+      "year": "",
+      "genre": "Suspense",
+      "provider": "NetMovies",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "A Lady e o Lobo: O Bicho tá Solto",
+      "video_id": "L7Lxs31hCDE",
+      "year": "",
+      "genre": "Animação",
+      "provider": "NetMovies",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "A Loja Mágica de Brinquedos",
+      "video_id": "0iqCcyC52Ts",
+      "year": "",
+      "genre": "Família",
+      "provider": "NetMovies",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "No Vale das Sombras",
+      "video_id": "2UElOgFxCXM",
+      "year": "",
+      "genre": "Drama",
+      "provider": "NetMovies",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "Traffik — Liberdade Roubada",
+      "video_id": "A0gHytcvDhg",
+      "year": "",
+      "genre": "Suspense",
+      "provider": "NetMovies",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "Vingança",
+      "video_id": "HLfom4m9nUA",
+      "year": "",
+      "genre": "Ação",
+      "provider": "NetMovies",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "O Grande Desafio",
+      "video_id": "-yegf_nuVjQ",
+      "year": "",
+      "genre": "Drama",
+      "provider": "NetMovies",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "O Nevoeiro",
+      "video_id": "6EhJtEl228c",
+      "year": "",
+      "genre": "Terror",
+      "provider": "NetMovies",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "Violação de Privacidade",
+      "video_id": "Riu757mxqns",
+      "year": "",
+      "genre": "Suspense",
+      "provider": "NetMovies",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "Earthstorm",
+      "video_id": "N2KGA9IsfaE",
+      "year": "",
+      "genre": "Ficção científica",
+      "provider": "Film&Clips",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "Trumbo: Lista Negra",
+      "video_id": "kifnnKALtYk",
+      "year": "2015",
+      "genre": "Drama",
+      "provider": "Filmelier TV",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "Uma Voz Contra o Poder",
+      "video_id": "0uKHQjIc6wE",
+      "year": "2020",
+      "genre": "Drama",
+      "provider": "Filmelier TV",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "O Último Amor de Casanova",
+      "video_id": "La-qsrq6W2w",
+      "year": "2019",
+      "genre": "Romance",
+      "provider": "Filmelier TV",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "O Que Fazer?",
+      "video_id": "f-2PU9gIv84",
+      "year": "2014",
+      "genre": "Comédia",
+      "provider": "Filmelier TV",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "Uma Jornada Inesquecível",
+      "video_id": "LACgQUb_WS8",
+      "year": "2015",
+      "genre": "Drama",
+      "provider": "Filmelier TV",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "Ficaremos Bem",
+      "video_id": "kCxKA60YZ_E",
+      "year": "2019",
+      "genre": "Drama",
+      "provider": "Filmelier TV",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "Onde Fica o Paraíso",
+      "video_id": "jE5fMh62uP0",
+      "year": "2020",
+      "genre": "Drama",
+      "provider": "Filmelier TV",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "Tudo em Família",
+      "video_id": "tJ0tVvn3NS0",
+      "year": "2013",
+      "genre": "Comédia",
+      "provider": "Filmelier TV",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "A Vida em Espera",
+      "video_id": "brVMtxkr6jY",
+      "year": "2016",
+      "genre": "Suspense",
+      "provider": "Filmelier TV",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "Filha de Deus",
+      "video_id": "1-WbIkAEn6s",
+      "year": "2016",
+      "genre": "Drama",
+      "provider": "Filmelier TV",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "A Viagem",
+      "video_id": "Eo_sb6uckus",
+      "year": "",
+      "genre": "Ficção científica",
+      "provider": "Filmelier TV",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "Office Royale",
+      "video_id": "mdu2UwDjAkw",
+      "year": "",
+      "genre": "Drama",
+      "provider": "Sato Company",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "Coração de Campeão",
+      "video_id": "AsjZ3nKTsFY",
+      "year": "2023",
+      "genre": "Drama",
+      "provider": "NetMovies",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "A Última Vingança",
+      "video_id": "BIzrDqwwZBQ",
+      "year": "2023",
+      "genre": "Suspense",
+      "provider": "Filmelier TV",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "O Desafio de Marguerite",
+      "video_id": "yg8I3rqV_Ds",
+      "year": "2023",
+      "genre": "Drama",
+      "provider": "Filmelier TV",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "Segredos de Guerra",
+      "video_id": "Tksn__fNp4o",
+      "year": "2021",
+      "genre": "Drama",
+      "provider": "Filmelier TV",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "Totalmente Trocados",
+      "video_id": "Yd1iMz1_614",
+      "year": "2020",
+      "genre": "Comédia",
+      "provider": "NetMovies",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "Astro Kid",
+      "video_id": "pe8UY_4DjTE",
+      "year": "2019",
+      "genre": "Animação",
+      "provider": "Filmelier TV",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "Por um Corredor Escuro",
+      "video_id": "RWIWQvc_crw",
+      "year": "2018",
+      "genre": "Suspense",
+      "provider": "NetMovies",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "O Jovem Viking",
+      "video_id": "nXSZWEsUjQs",
+      "year": "2018",
+      "genre": "Aventura",
+      "provider": "Filmelier TV",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "Nurse: A Enfermeira Assassina",
+      "video_id": "eGUBEA1nRk4",
+      "year": "",
+      "genre": "Terror",
+      "provider": "NetMovies",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "Os Mercenários 2",
+      "video_id": "jBUaAHxS9NQ",
+      "year": "2012",
+      "genre": "Ação",
+      "provider": "Adrenalina Pura TV BR",
+      "status": "REFERENCIA_XTOR_NAO_TESTADA",
+      "evidence_url": "https://www.xtor.com.br/"
+    }
   ]
 }
