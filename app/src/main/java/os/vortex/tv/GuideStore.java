@@ -20,7 +20,13 @@ public final class GuideStore {
             if(list==null){list=new JSONArray();byChannel.put(p.channelId,list);}
             if(list.length()>=24)continue;
             JSONObject o=new JSONObject();
-            try{o.put("start",p.start);o.put("stop",p.stop);o.put("title",p.title);o.put("desc",p.description);list.put(o);}catch(Exception ignored){}
+            try{o.put("start",p.start);o.put("stop",p.stop);o.put("title",p.title);o.put("desc",p.description);list.put(o);
+                if(p.displayName!=null&&!p.displayName.isEmpty()&&!p.displayName.equals(p.channelId)){
+                    JSONArray alias=byChannel.get(p.displayName);
+                    if(alias==null){alias=new JSONArray();byChannel.put(p.displayName,alias);}
+                    if(alias.length()<24)alias.put(o);
+                }
+            }catch(Exception ignored){}
         }
         JSONObject data=new JSONObject();
         try{for(Map.Entry<String,JSONArray> e:byChannel.entrySet())data.put(e.getKey(),e.getValue());}catch(Exception ignored){}

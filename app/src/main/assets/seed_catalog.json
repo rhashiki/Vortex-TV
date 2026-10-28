@@ -213,7 +213,11 @@
     "group": "Filmes • Animação",
     "logo": "https://storage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg",
     "format": "file",
-    "status": "not_verified"
+    "status": "not_verified",
+    "provider": "Blender Foundation · Open Movie",
+    "year": "2008",
+    "genre": "Animação",
+    "description": "Curta-metragem aberto produzido pela Blender Foundation. Reprodução externa sujeita à disponibilidade do servidor."
   },
   {
     "name": "Sintel",
@@ -222,7 +226,11 @@
     "group": "Filmes • Fantasia",
     "logo": "https://storage.googleapis.com/gtv-videos-bucket/sample/images/Sintel.jpg",
     "format": "file",
-    "status": "not_verified"
+    "status": "not_verified",
+    "provider": "Blender Foundation · Open Movie",
+    "year": "2010",
+    "genre": "Fantasia",
+    "description": "Curta-metragem aberto produzido pela Blender Foundation. Reprodução externa sujeita à disponibilidade do servidor."
   },
   {
     "name": "Tears of Steel",
@@ -231,7 +239,11 @@
     "group": "Filmes • Ficção científica",
     "logo": "https://storage.googleapis.com/gtv-videos-bucket/sample/images/TearsOfSteel.jpg",
     "format": "file",
-    "status": "not_verified"
+    "status": "not_verified",
+    "provider": "Blender Foundation · Open Movie",
+    "year": "2012",
+    "genre": "Ficção científica",
+    "description": "Curta-metragem aberto produzido pela Blender Foundation. Reprodução externa sujeita à disponibilidade do servidor."
   },
   {
     "name": "Elephants Dream",
@@ -240,6 +252,10 @@
     "group": "Filmes • Animação",
     "logo": "https://storage.googleapis.com/gtv-videos-bucket/sample/images/ElephantsDream.jpg",
     "format": "file",
-    "status": "not_verified"
+    "status": "not_verified",
+    "provider": "Blender Foundation · Open Movie",
+    "year": "2006",
+    "genre": "Animação",
+    "description": "Curta-metragem aberto produzido pela Blender Foundation. Reprodução externa sujeita à disponibilidade do servidor."
   }
 ]
