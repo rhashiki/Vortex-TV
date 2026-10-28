@@ -36,6 +36,12 @@ ENV PATH="/opt/gradle-8.11.1/bin:${PATH}"
 WORKDIR /project
 COPY . .
 RUN python3 -m unittest discover -s tests -p 'test_*.py'
+# Pure Java identity checks run without any network or real IPTV credentials.
+RUN mkdir -p /tmp/vortex-smoke && \
+    javac -d /tmp/vortex-smoke \
+      app/src/main/java/os/vortex/tv/SourceIdentity.java \
+      app/src/test/java/os/vortex/tv/SourceIdentitySmokeTest.java && \
+    java -cp /tmp/vortex-smoke os.vortex.tv.SourceIdentitySmokeTest
 RUN gradle --no-daemon --max-workers=2 -Dorg.gradle.jvmargs="-Xmx1536m -Dfile.encoding=UTF-8" :app:assembleDebug
 RUN python3 tools/verify_apk.py app/build/outputs/apk/debug/app-debug.apk
 
