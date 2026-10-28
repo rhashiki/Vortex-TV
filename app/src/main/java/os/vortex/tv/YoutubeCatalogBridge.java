@@ -13,6 +13,28 @@ import java.util.List;
 
 /** YouTube metadata -> Vortex entries. No extraction of protected media. */
 public final class YoutubeCatalogBridge {
+    public static final class YoutubeChannel {
+        public final String name,url,category,status;
+        public YoutubeChannel(String name,String url,String category,String status){
+            this.name=name;this.url=url;this.category=category;this.status=status;
+        }
+    }
+    public static List<YoutubeChannel> loadChannelDirectory(Context context)throws Exception{
+        try(InputStream in=context.getAssets().open("youtube_search_plan.json")){
+            JSONObject plan=readJson(in,128_000);
+            JSONArray array=plan.optJSONArray("live_channels_to_discover");
+            List<YoutubeChannel> channels=new ArrayList<>();
+            if(array==null)return channels;
+            for(int n=0;n<array.length();n++){
+                JSONObject x=array.optJSONObject(n);if(x==null)continue;
+                String url=x.optString("url","");
+                if(!url.startsWith("https://www.youtube.com/"))continue;
+                channels.add(new YoutubeChannel(x.optString("name",""),url,
+                    x.optString("category","Canais"),x.optString("status","NÃO VALIDADO")));
+            }
+            return channels;
+        }
+    }
     private static final String INDEX_URL="https://raw.githubusercontent.com/rhashiki/Vortex-TV/main/catalog/youtube/index.json";
     private YoutubeCatalogBridge(){}
     public static List<CatalogStore.Item> loadSeed(Context c) throws Exception {
