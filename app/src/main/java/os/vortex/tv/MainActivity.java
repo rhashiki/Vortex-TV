@@ -410,9 +410,7 @@ public final class MainActivity extends Activity {
     }
     private String epgNow(String tvgId){
         if(tvgId==null||tvgId.isEmpty())return "Programação não informada";
-        JSONArray entries=guide.get(tvgId);
-        if(entries==null||entries.length()==0)return "Programação não informada";
-        JSONObject p=entries.optJSONObject(0);return p==null?"Programação não informada":p.optString("title","Programação não informada");
+        return guide.now(tvgId);
     }
     private void renderLiveGuide(){
         heading("TV ao vivo", "Guia vertical • ↑/↓ troca de canais no player • ←/→ abre a lista");
