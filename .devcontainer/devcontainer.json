@@ -1,0 +1,10 @@
+{
+  "name": "Vortex TV - Android native",
+  "image": "mcr.microsoft.com/devcontainers/java:1-17-bookworm",
+  "customizations": {
+    "vscode": {
+      "extensions": ["vscjava.vscode-java-pack"]
+    }
+  },
+  "postCreateCommand": "echo 'Vortex TV: execute bash tools/setup_codespaces.sh para instalar SDK e Gradle. Nenhum GitHub Actions e utilizado.'"
+}
