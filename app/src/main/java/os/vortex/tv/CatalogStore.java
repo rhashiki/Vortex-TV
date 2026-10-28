@@ -44,6 +44,7 @@ public final class CatalogStore {
     private static final String KEY="catalog";
     private static final String FAV="favorites";
     private static final String CLOUD="cloud_items_v1";
+    private static final String OFFICIAL_YOUTUBE="official_netmovies_v1";
     private static final int MAX_ITEMS=2500;
     private final SharedPreferences prefs;
     private final Map<String,String> bundledQuality=new HashMap<>();
@@ -227,9 +228,11 @@ public final class CatalogStore {
         List<Item> result=loadLocal();
         Set<String> urls=new HashSet<>();
         for(Item item:result)urls.add(item.url);
-        for(Item item:loadFrom(CLOUD)){
-            if(result.size()>=MAX_ITEMS)break;
-            if(urls.add(item.url))result.add(item);
+        for(String layer:new String[]{CLOUD,OFFICIAL_YOUTUBE}){
+            for(Item item:loadFrom(layer)){
+                if(result.size()>=MAX_ITEMS)break;
+                if(urls.add(item.url))result.add(item);
+            }
         }
         return result;
     }
@@ -245,6 +248,30 @@ public final class CatalogStore {
         }
         saveItems(CLOUD,accepted);
         return accepted.size();
+    }
+    /**
+     * Rolling official YouTube cache, bounded to 150 recent titles.
+     * Never deletes user imports or favorites and never treats metadata as playback proof.
+     */
+    public synchronized int mergeOfficialMovies(List<Item> incoming){
+        if(incoming==null)throw new IllegalArgumentException("Feed ausente");
+        if(incoming.isEmpty())return 0; // Transient empty feed must not clear the cache.
+        List<Item> existing=loadFrom(OFFICIAL_YOUTUBE);
+        ArrayList<Item> merged=new ArrayList<>();
+        Set<String> seen=new HashSet<>();
+        int newCount=0;
+        for(Item item:incoming){
+            if(item==null || !item.url.matches("https://www\\.youtube\\.com/watch\\?v=[A-Za-z0-9_-]{11}"))
+                continue;
+            if(seen.add(item.url)){merged.add(item);newCount++;}
+            if(merged.size()>=150)break;
+        }
+        for(Item item:existing){
+            if(merged.size()>=150)break;
+            if(seen.add(item.url))merged.add(item);
+        }
+        if(!merged.isEmpty())saveItems(OFFICIAL_YOUTUBE,merged);
+        return newCount;
     }
     public int append(List<M3uPlaylistParser.Channel> channels){
         List<Item> catalog=loadLocal();
@@ -288,5 +315,5 @@ public final class CatalogStore {
         if(fav.contains(url))fav.remove(url);else fav.add(url);
         prefs.edit().putStringSet(FAV,fav).apply();
     }
-    public void clear(){prefs.edit().remove(KEY).remove(CLOUD).remove(FAV).apply();}
+    public void clear(){prefs.edit().remove(KEY).remove(CLOUD).remove(OFFICIAL_YOUTUBE).remove(FAV).apply();}
 }

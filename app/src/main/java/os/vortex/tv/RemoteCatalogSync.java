@@ -96,6 +96,54 @@ public final class RemoteCatalogSync {
         }finally{conn.disconnect();}
     }
 
+    /**
+     * Fetch current licensed-channel metadata (not media). A recent RSS entry
+     * remains a candidate: YouTube may still reject embedding in the device.
+     */
+    public static Result refreshOfficialMovies(Context context,CatalogStore store) throws Exception {
+        JSONObject config=new JSONObject(read(context.getAssets().open("cloud_config.json"),8192));
+        String endpoint=config.optString("official_movies_url","");
+        if(!allowedEndpoint(endpoint) || !endpoint.endsWith("/vortex-netmovies-feed"))
+            throw new IllegalArgumentException("Feed oficial Vortex inválido");
+        HttpURLConnection conn=(HttpURLConnection)new URL(endpoint).openConnection();
+        conn.setConnectTimeout(7000);conn.setReadTimeout(12000);
+        conn.setInstanceFollowRedirects(false);
+        conn.setRequestProperty("Accept","application/json");
+        try {
+            int status=conn.getResponseCode();
+            if(status!=200)throw new IllegalStateException("Feed HTTP "+status);
+            if(conn.getContentLengthLong()>MAX_BYTES)throw new IllegalArgumentException("Feed acima do limite");
+            JSONObject payload=new JSONObject(read(conn.getInputStream(),MAX_BYTES));
+            if(payload.optInt("version",-1)!=1
+                ||!"NetMovies".equals(payload.optString("provider"))
+                ||!"UCK5RRQ3TdwAbbCWrtnXsN3Q".equals(payload.optString("channel_id")))
+                throw new IllegalStateException("Origem do feed não reconhecida");
+            JSONArray list=payload.optJSONArray("items");
+            if(list==null||list.length()>25)throw new IllegalStateException("Feed malformado");
+            List<CatalogStore.Item> titles=new ArrayList<>();
+            Set<String> urls=new HashSet<>();
+            for(int i=0;i<list.length();i++){
+                JSONObject row=list.optJSONObject(i);if(row==null)continue;
+                String id=row.optString("video_id","");
+                String url="https://www.youtube.com/watch?v="+id;
+                String title=row.optString("name","").trim();
+                if(!id.matches("[A-Za-z0-9_-]{11}")||title.length()<3
+                    ||title.length()>120||!urls.add(url)
+                    ||!"youtube-movie".equals(row.optString("format")))continue;
+                String genre=row.optString("genre","Outros");
+                if(genre.length()>40)genre="Outros";
+                String year=row.optString("year","");
+                if(!year.matches("(19|20)\\d{2}"))year="";
+                titles.add(new CatalogStore.Item(title,url,"","Filmes • "+genre,
+                    "https://i.ytimg.com/vi/"+id+"/hqdefault.jpg",
+                    "youtube-movie",genre,"NetMovies • YouTube oficial",
+                    "Publicado pelo canal oficial NetMovies. A reprodução pode ser restringida pelo YouTube.",
+                    year));
+            }
+            return new Result(list.length(),store.mergeOfficialMovies(titles));
+        }finally{conn.disconnect();}
+    }
+
     public static Result refresh(Context context,CatalogStore store) throws Exception {
         JSONObject config=new JSONObject(read(context.getAssets().open("cloud_config.json"),8192));
         String endpoint=config.optString("catalog_url","");

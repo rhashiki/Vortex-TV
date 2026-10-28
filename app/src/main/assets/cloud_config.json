@@ -1,4 +1,5 @@
 {
   "version": 1,
-  "catalog_url": "https://nozbyjbtxbgchvkdpnrp.supabase.co/functions/v1/vortex-catalog"
+  "catalog_url": "https://nozbyjbtxbgchvkdpnrp.supabase.co/functions/v1/vortex-catalog",
+  "official_movies_url": "https://nozbyjbtxbgchvkdpnrp.supabase.co/functions/v1/vortex-netmovies-feed"
 }

@@ -75,6 +75,7 @@ public final class MainActivity extends Activity {
         loadGuideOnly();
         render();
         syncCloud(false);
+        syncNetMovies(false);
         if(saved.isEmpty())showModeChooser();
         // Large Internet Archive imports are now opt-in: automatic discovery
         // flooded the home page with unrelated titles and untested images.
@@ -225,6 +226,12 @@ public final class MainActivity extends Activity {
             return;
         }
         rowOf("Cinema conhecido • Filmes em canais oficiais",featuredMovies(),1);
+        ArrayList<CatalogStore.Item> latestOfficial=new ArrayList<>();
+        for(CatalogStore.Item it:items)
+            if(it.provider.startsWith("NetMovies • YouTube oficial")
+                &&!CatalogStore.deadYouTubeReference(it))
+                latestOfficial.add(it);
+        rowOf("Novidades NetMovies • Filmes gratuitos",latestOfficial,1);
         ArrayList<CatalogStore.Item> youtubeFilms=new ArrayList<>();
         ArrayList<CatalogStore.Item> archiveFilms=new ArrayList<>();
         ArrayList<CatalogStore.Item> openMovies=new ArrayList<>();
@@ -315,7 +322,7 @@ public final class MainActivity extends Activity {
         heading("YouTube", "Filmes dublados e transmissões oficiais • indexação em expansão");
         TextView disclaimer=text("Os vídeos e lives são hospedados pelo YouTube. Disponibilidade, anúncios e direitos pertencem às fontes; ainda exigem teste no dispositivo.",tv?13:11,MUTED,false);
         disclaimer.setPadding(0,d(12),0,d(12));body.addView(disclaimer);
-        body.addView(button("↻ Atualizar índice YouTube",false,()->refreshYouTubeIndex()));
+        body.addView(button("↻ Buscar novidades NetMovies",false,()->syncNetMovies(true)));
         ArrayList<CatalogStore.Item> movies=new ArrayList<>();
         ArrayList<CatalogStore.Item> documentaries=new ArrayList<>();
         ArrayList<CatalogStore.Item> live=new ArrayList<>();
@@ -754,20 +761,56 @@ public final class MainActivity extends Activity {
         }
         startActivity(intent);
     }
+    private volatile boolean officialSyncBusy=false;
+    private void syncNetMovies(boolean manual){
+        if(officialSyncBusy)return;
+        long now=System.currentTimeMillis();
+        long previous=uiPrefs.getLong("netmovies_last_success_v1",0L);
+        if(!manual && previous>0L && now>=previous && now-previous<6L*60L*60L*1000L)
+            return;
+        officialSyncBusy=true;
+        if(manual)Toast.makeText(this,"Buscando novidades oficiais...",Toast.LENGTH_SHORT).show();
+        new Thread(()->{
+            String message="";
+            boolean ok=false;
+            try {
+                RemoteCatalogSync.Result result=RemoteCatalogSync.refreshOfficialMovies(
+                    getApplicationContext(),catalog);
+                message="NetMovies: "+result.received+" títulos recentes • "+result.accepted+" sincronizados.";
+                ok=true;
+            }catch(Exception ex){
+                message="Feed NetMovies indisponível: "+ex.getMessage();
+                android.util.Log.w("VortexTV","Official movie sync failed",ex);
+            }finally{
+                final boolean success=ok;
+                final String feedback=message;
+                runOnUiThread(()->{
+                    officialSyncBusy=false;
+                    if(success){
+                        uiPrefs.edit().putLong("netmovies_last_success_v1",
+                            System.currentTimeMillis()).apply();
+                        items=catalog.load();render();
+                    }
+                    if(manual)Toast.makeText(this,feedback,Toast.LENGTH_LONG).show();
+                });
+            }
+        },"Vortex-NetMovies-Feed").start();
+    }
     private void showSources(){
         new AlertDialog.Builder(this).setTitle("Gerenciar fontes")
-            .setItems(new String[]{"Sincronizar catálogo Vortex Cloud","Laboratório: testar filmes livres","Importar arquivo M3U","Importar playlist HTTPS","Adicionar vídeo HTTPS","Importar EPG XMLTV","Atualizar EPG por URL","Descobrir filmes abertos","Atualizar índice YouTube","Escolher modo TV/Smartphone","Limpar catálogo local"},(d,which)->{
+            .setItems(new String[]{"Sincronizar catálogo Vortex Cloud","Laboratório: testar filmes livres","Atualizar filmes NetMovies","Importar arquivo M3U","Importar playlist HTTPS","Adicionar vídeo HTTPS","Importar EPG XMLTV","Atualizar EPG por URL","Descobrir filmes abertos","Atualizar índice YouTube","Escolher modo TV/Smartphone","Limpar catálogo local"},(d,which)->{
                 if(which==0)syncCloud(true);
                 if(which==1)showCloudLab();
-                if(which==2)openFile(PICK_M3U);
-                if(which==3)importRemote();
-                if(which==4)addDirect();
-                if(which==5)openFile(PICK_EPG);
-                if(which==6)importRemoteGuide();
-                if(which==7)loadOpenArchive(true);
-                if(which==8)refreshYouTubeIndex();
-                if(which==9)showModeChooser();
-                if(which==10)new AlertDialog.Builder(this).setTitle("Apagar o catálogo?")
+                if(which==2)syncNetMovies(true);
+                if(which==3)openFile(PICK_M3U);
+                if(which==4)importRemote();
+                if(which==5)addDirect();
+                if(which==6)openFile(PICK_EPG);
+                if(which==7)importRemoteGuide();
+                if(which==8)loadOpenArchive(true);
+                if(which==9)refreshYouTubeIndex();
+                if(which==10)showModeChooser();
+                if(which==11)new AlertDialog.Builder(this).setTitle("Apagar o catálogo?")
                     .setMessage("Remove sua lista de conteúdo e favoritos somente deste dispositivo.")
                     .setPositiveButton("Apagar",(d2,w)->{catalog.clear();items=catalog.load();render();})
                     .setNegativeButton("Cancelar",null).show();
