@@ -45,7 +45,12 @@ public final class SourceIdentity {
             return "episode|"+g+"|"+title;
         }
         boolean tv=g.contains("CANAIS")||g.contains("TV")||g.contains("AO VIVO")
-            ||g.contains("LIVE")||g.contains("NOTICIAS")||g.contains("ESPORTES");
+            ||g.contains("LIVE")||g.contains("NOTICIAS")||g.contains("ESPORTES")
+            ||g.startsWith("REDE ");
+        // IPTV linear TS URLs are often labelled as format='auto', while
+        // backup HLS URLs have format='hls'. Both must resolve to one service.
+        if(url!=null&&(url.toLowerCase(Locale.ROOT).matches(".*\\.ts(?:[?].*)?$")
+            ||url.toLowerCase(Locale.ROOT).contains("/live/")))tv=true;
         boolean videoOnDemand=g.contains("FILME")||g.contains("SERIE")
             ||g.contains("SERIADO")||g.contains("ON DEMAND")||g.contains("VOD")
             ||g.contains("TEMPORADA")||g.contains("ANIME");
