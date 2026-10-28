@@ -20,6 +20,17 @@
     "last_audit": "2026-10-28"
   },
   {
+    "name": "TV Brasil Internacional",
+    "url": "https://tvbrasilinternacional-stream.ebc.com.br/index.m3u8",
+    "tvgId": "TVBrasilInternacional.br",
+    "group": "Abertos Brasil",
+    "logo": "https://raw.githubusercontent.com/LITUATUI/M3UPT/main/logos/TVBrasilInternacional.br.png",
+    "format": "hls",
+    "status": "server_segment_ok",
+    "last_audit": "2026-10-28",
+    "provider": "EBC • TV Brasil Internacional"
+  },
+  {
     "name": "NBR",
     "url": "https://nbr-stream.ebc.com.br/index.m3u8",
     "tvgId": "",
@@ -42,9 +53,9 @@
   {
     "name": "TV Câmara",
     "url": "https://stream3.camara.gov.br/tv1/manifest.m3u8",
-    "tvgId": "",
+    "tvgId": "TVCamara.br",
     "group": "Legislativo",
-    "logo": "",
+    "logo": "https://raw.githubusercontent.com/LITUATUI/M3UPT/main/logos/TVCamara.br.png",
     "format": "hls",
     "status": "server_segment_ok",
     "last_audit": "2026-10-28"
@@ -71,13 +82,24 @@
   },
   {
     "name": "TV Cultura (SP)",
-    "url": "https://cultura-live.cdn.nextplay.com.br/cultura/index.m3u8",
-    "tvgId": "",
+    "url": "https://player-tvcultura.stream.uol.com.br/live/tvcultura.m3u8",
+    "tvgId": "TVCultura.br",
     "group": "Cultura",
-    "logo": "",
+    "logo": "https://raw.githubusercontent.com/LITUATUI/M3UPT/main/logos/TVCultura.br.png",
     "format": "hls",
-    "status": "server_unavailable",
+    "status": "server_segment_ok",
     "last_audit": "2026-10-28"
+  },
+  {
+    "name": "Rede Brasil",
+    "url": "https://redebrasil.nuvemplay.live/hls/stream.m3u8",
+    "tvgId": "RedeBrasil.br",
+    "group": "Abertos Brasil",
+    "logo": "https://raw.githubusercontent.com/LITUATUI/M3UPT/main/logos/RedeBrasil.br.png",
+    "format": "hls",
+    "status": "server_segment_ok",
+    "last_audit": "2026-10-28",
+    "provider": "Rede Brasil"
   },
   {
     "name": "TV Univesp",
@@ -202,11 +224,11 @@
   {
     "name": "CNN Brasil",
     "url": "https://d25usgadhphvwi.cloudfront.net/hls/main.m3u8",
-    "tvgId": "",
+    "tvgId": "CNNBrasil.br",
     "group": "Notícias",
-    "logo": "",
+    "logo": "https://raw.githubusercontent.com/LITUATUI/M3UPT/main/logos/CNNBrasil.br.png",
     "format": "hls",
-    "status": "server_unavailable",
+    "status": "server_segment_ok",
     "last_audit": "2026-10-28"
   },
   {

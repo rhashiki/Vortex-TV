@@ -52,6 +52,7 @@ public final class CatalogStore {
         prefs=ctx.getSharedPreferences("vortex_catalog",Context.MODE_PRIVATE);
         loadBundledQuality(ctx);
         repairLegacyBundledSources();
+        repairPublicChannelV4();
         initializeSeeds(ctx);
         repairArchiveTitles();
     }
@@ -106,8 +107,37 @@ public final class CatalogStore {
         prefs.edit().putBoolean("repair_demo_v3",true).apply();
     }
 
+    /** Correct a broken bundled TV Cultura origin without touching user imports. */
+    private void repairPublicChannelV4(){
+        if(prefs.getBoolean("repair_public_channel_v4",false))return;
+        String old="https://cultura-live.cdn.nextplay.com.br/cultura/index.m3u8";
+        String newer="https://player-tvcultura.stream.uol.com.br/live/tvcultura.m3u8";
+        List<Item> local=loadLocal();
+        ArrayList<Item> changed=new ArrayList<>();
+        Set<String> fav=new HashSet<>(prefs.getStringSet(FAV,new HashSet<String>()));
+        boolean modified=false;
+        for(Item item:local){
+            if(old.equals(item.url)&&"TV Cultura (SP)".equals(item.name)){
+                item=new Item(item.name,newer,"TVCultura.br",item.group,
+                    "https://raw.githubusercontent.com/LITUATUI/M3UPT/main/logos/TVCultura.br.png",
+                    "hls",item.genre,item.provider,item.description,item.year);
+                if(fav.remove(old))fav.add(newer);
+                modified=true;
+            }
+            changed.add(item);
+        }
+        if(modified){
+            ArrayList<Item> unique=new ArrayList<>();
+            Set<String> seen=new HashSet<>();
+            for(Item item:changed)if(seen.add(item.url))unique.add(item);
+            save(unique);
+            prefs.edit().putStringSet(FAV,fav).apply();
+        }
+        prefs.edit().putBoolean("repair_public_channel_v4",true).apply();
+    }
+
     private void initializeSeeds(Context ctx) {
-        if(prefs.getBoolean("seed_v3",false)) return;
+        if(prefs.getBoolean("seed_v4",false)) return;
         try(java.io.InputStream stream=ctx.getAssets().open("seed_catalog.json")) {
             java.io.ByteArrayOutputStream out=new java.io.ByteArrayOutputStream();
             byte[] bytes=new byte[8192];int n;
@@ -139,7 +169,8 @@ public final class CatalogStore {
                 }
             }
             prefs.edit().putString(KEY,existing.toString()).putBoolean("seed_v1",true)
-                .putBoolean("seed_v2",true).putBoolean("seed_v3",true).apply();
+                .putBoolean("seed_v2",true).putBoolean("seed_v3",true)
+                .putBoolean("seed_v4",true).apply();
         } catch(Exception e) {
             // Never overwrite an existing catalog on failed seed read.
             android.util.Log.w("VortexTV","Bundled catalog unavailable",e);

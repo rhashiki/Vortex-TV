@@ -4,8 +4,8 @@ ROOT=Path(__file__).resolve().parents[1]
 class ContentQuality(unittest.TestCase):
     def test_channel_audit_visible_and_bad_sources_hidden(self):
         seeds=json.loads((ROOT/'app/src/main/assets/seed_catalog.json').read_text())
-        self.assertEqual([x['name'] for x in seeds if x.get('status')=='server_segment_ok'],['TV Brasil','Canal Gov','TV Câmara'])
-        self.assertEqual(sum(x.get('status')=='server_unavailable' for x in seeds),19)
+        self.assertEqual([x['name'] for x in seeds if x.get('status')=='server_segment_ok'],['TV Brasil','Canal Gov','TV Brasil Internacional','TV Câmara','TV Cultura (SP)','Rede Brasil','CNN Brasil'])
+        self.assertEqual(sum(x.get('status')=='server_unavailable' for x in seeds),17)
         ui=(ROOT/'app/src/main/java/os/vortex/tv/MainActivity.java').read_text()
         for token in ('liveCandidates(true)','liveCandidates(false)','FONTES EM MANUTENÇÃO','Testar mesmo assim'):
             self.assertIn(token,ui)
