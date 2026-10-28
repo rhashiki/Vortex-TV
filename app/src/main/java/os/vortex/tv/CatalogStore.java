@@ -60,8 +60,8 @@ public final class CatalogStore {
                 if(known.add(url)){existing.put(item);continue;}
                 // Upgrade metadata of earlier bundled titles without replacing
                 // users' stream URLs or their stored favorites.
-                for(int n=0;n<existing.length();n++){
-                    JSONObject old=existing.optJSONObject(n);
+                for(int entryIndex=0;entryIndex<existing.length();entryIndex++){
+                    JSONObject old=existing.optJSONObject(entryIndex);
                     if(old!=null&&url.equals(old.optString("url"))){
                         for(String field:new String[]{"genre","provider","description","year"}){
                             if(old.optString(field).isEmpty()&&!item.optString(field).isEmpty())
