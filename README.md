@@ -1,6 +1,6 @@
 # Vortex TV — aplicativo Android (não Vortex TV OS)
 
-> **Backend ativo (28/10/2026):** Vortex TV Cloud criado no Supabase (`nozbyjbtxbgchvkdpnrp`, sa-east-1), três tabelas protegidas por RLS e Edge Function somente leitura `vortex-catalog`. O Android versão 0.2.7 usa esse endpoint HTTPS; mídia não é hospedada nem retransmitida. Ainda não existem streams do catálogo Cloud com `playback_ok` homologado na TV Box. Leia [VORTEX_TV_CLOUD.md](docs/VORTEX_TV_CLOUD.md).
+> **Build 26 (28/10/2026):** Backend Supabase Vortex TV Cloud ativo, 11 fontes candidatas, verificação HLS e descoberta institucional periódica. APK de teste Android 0.2.8-cloud-lab compilado pelo Render (33 testes Python aprovados). Sem playback homologado na RK3229. [Relatório Build 26](docs/BUILD26.md).
 
 
 ## PLANO DE CATÁLOGOS · 28/10/2026
@@ -16,7 +16,7 @@
 
 **Atenção:** estar em um catálogo, aparecer no GitHub ou ter uma URL de stream não comprova direitos de uso, vídeo funcional, áudio, legenda ou reprodução no Android 7.1. Metadados PT-BR e capas ficam separados da autorização de vídeo. A experiência alvo é cinematográfica, familiar à Netflix, mas com identidade Vortex; no player TV, ↑/↓ alternam canais e ←/→ abrem guia vertical.
 
-**Estado de execução:** a Build 25 é um conjunto de inventários e contratos, **não um novo APK nem a integração dos catálogos**. As Builds 26–34 são planejamento. Há um APK de teste compilado pelo Render em https://vortex-tv-android-build.onrender.com/VortexTV-Android-Debug.apk, sem homologação de catálogo externo.
+**Estado de execução:** Build 25 = backend Cloud e sincronização; Build 26 = monitoramento periódico, importação restrita, laboratório e APK compilado. Builds 27–34 seguem planejamento. Há um APK de teste compilado pelo Render em https://vortex-tv-android-build.onrender.com/VortexTV-Android-Debug.apk, sem homologação de catálogo externo.
 
 **Política:** nunca GitHub Actions. Builds e validações por Render/ambiente local independente. Não confundir com o firmware Vortex TV OS.
 
