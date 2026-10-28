@@ -504,7 +504,12 @@ public final class MainActivity extends Activity {
                 if(!channel.isLive() || !channel.url.startsWith("https://"))continue;
                 if(channel.url.equals(i.url))selected=playable.length();
                 JSONObject entry=new JSONObject();
-                try {entry.put("name",channel.name);entry.put("url",channel.url);}catch(Exception ignored){}
+                try {
+                    entry.put("name",channel.name);
+                    entry.put("url",channel.url);
+                    entry.put("number",playable.length()+1);
+                    entry.put("programme",epgNow(channel.tvgId.isEmpty()?channel.name:channel.tvgId));
+                }catch(Exception ignored){}
                 playable.put(entry);
             }
             intent.putExtra(VortexPlayerActivity.EXTRA_CHANNELS_JSON,playable.toString());
