@@ -40,6 +40,7 @@ public final class CatalogStore {
     public CatalogStore(Context ctx){
         prefs=ctx.getSharedPreferences("vortex_catalog",Context.MODE_PRIVATE);
         initializeSeeds(ctx);
+        repairArchiveTitles();
     }
     private void initializeSeeds(Context ctx) {
         if(prefs.getBoolean("seed_v2",false)) return;
@@ -79,6 +80,47 @@ public final class CatalogStore {
             android.util.Log.w("VortexTV","Bundled catalog unavailable",e);
         }
     }
+    /** Clean only machine-imported Archive titles once; never rewrite user titles. */
+    private void repairArchiveTitles(){
+        if(prefs.getBoolean("archive_title_clean_v1",false))return;
+        List<Item> existing=load();
+        List<Item> updated=new ArrayList<>();
+        boolean changed=false;
+        for(Item item:existing){
+            if(item.provider.startsWith("Internet Archive")){
+                String clean=OpenFilmCatalog.cleanTitle(item.name);
+                if(!clean.isEmpty()&&!clean.equals(item.name)){
+                    item=new Item(clean,item.url,item.tvgId,item.group,item.logo,item.format,
+                        item.genre,item.provider,item.description,item.year);
+                    changed=true;
+                }
+            }
+            updated.add(item);
+        }
+        if(changed)save(updated);
+        prefs.edit().putBoolean("archive_title_clean_v1",true).apply();
+    }
+
+    /** Persist a corrected display title without changing the underlying media URL. */
+    public boolean rename(String url,String newName){
+        if(newName==null)return false;
+        String title=newName.trim().replaceAll("[\\p{Cntrl}]+"," ").trim();
+        if(title.length()<2||title.length()>120)return false;
+        List<Item> all=load();
+        boolean changed=false;
+        for(int p=0;p<all.size();p++){
+            Item item=all.get(p);
+            if(item.url.equals(url)){
+                all.set(p,new Item(title,item.url,item.tvgId,item.group,item.logo,item.format,
+                    item.genre,item.provider,item.description,item.year));
+                changed=true;
+                break;
+            }
+        }
+        if(changed)save(all);
+        return changed;
+    }
+
     public List<Item> load(){
         ArrayList<Item> result=new ArrayList<>();
         try {
