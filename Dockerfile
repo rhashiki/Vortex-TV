@@ -5,7 +5,7 @@ FROM eclipse-temurin:17-jdk-jammy AS android-build
 ENV DEBIAN_FRONTEND=noninteractive \
     ANDROID_HOME=/opt/android-sdk \
     ANDROID_SDK_ROOT=/opt/android-sdk \
-    GRADLE_VERSION=8.9
+    GRADLE_VERSION=8.11.1
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
       ca-certificates curl unzip python3 && rm -rf /var/lib/apt/lists/*
@@ -23,7 +23,7 @@ RUN set -eux; \
 RUN set -eux; \
     (yes || true) | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --sdk_root="$ANDROID_HOME" --licenses >/tmp/licenses.log; \
     "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --sdk_root="$ANDROID_HOME" \
-      "platforms;android-35" "build-tools;35.0.0" "platform-tools"
+      "platforms;android-36" "build-tools;36.0.0" "platform-tools"
 
 RUN set -eux; \
     curl -fL --retry 4 --connect-timeout 30 \
@@ -31,7 +31,7 @@ RUN set -eux; \
       -o /tmp/gradle.zip; \
     unzip -q /tmp/gradle.zip -d /opt; \
     rm /tmp/gradle.zip
-ENV PATH="/opt/gradle-8.9/bin:${PATH}"
+ENV PATH="/opt/gradle-8.11.1/bin:${PATH}"
 
 WORKDIR /project
 COPY . .
