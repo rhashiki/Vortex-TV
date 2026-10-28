@@ -12,6 +12,7 @@ class CloudContractTests(unittest.TestCase):
         self.assertIsInstance(payload['items'],list)
         self.assertTrue(config['catalog_url'].startswith('https://'))
         self.assertEqual(config['version'],1)
+        self.assertEqual(config['catalog_url'], 'https://nozbyjbtxbgchvkdpnrp.supabase.co/functions/v1/vortex-catalog')
     def test_remote_gate_and_separation(self):
         sync=(ROOT/'app/src/main/java/os/vortex/tv/RemoteCatalogSync.java').read_text()
         store=(ROOT/'app/src/main/java/os/vortex/tv/CatalogStore.java').read_text()

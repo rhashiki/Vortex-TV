@@ -1,62 +1,60 @@
-# Vortex TV Cloud — integração sem retransmissão
+# Vortex TV Cloud — backend dedicado, sem retransmissão
 
-## Estado 28/10/2026
-A organização Supabase **Vortex** está no plano Free, e a criação do projeto
-"Vortex TV Cloud" (sa-east-1) foi cotada em USD 0/mês, mas **bloqueada**
-pelo limite de 2 projetos gratuitos ativos no titular. Não altere ou pause
-os projetos Vortex Cafe sem aprovação explícita. Não existe backend Supabase
-implantado para o Vortex TV nesta entrega.
+**Estado em 28/10/2026: projeto criado, banco implantado e função publicada.**
 
-## Funciona antes do Supabase
-O Android carrega o arquivo HTTPS em \`app/src/main/assets/cloud_config.json\`.
-A URL atual aponta para \`catalog/cloud/catalog.json\` deste repositório. O
-arquivo inicia vazio por segurança: nenhuma fonte não testada é apresentada
-como validada. O aplicativo guarda o catálogo remoto separadamente das
-listas locais/favoritos e sincroniza automaticamente (intervalo de 6 horas)
-ou através de **Fontes → Sincronizar catálogo Vortex Cloud**.
+- Organização: Vortex (plano Free)
+- Projeto: Vortex TV Cloud, região sa-east-1
+- Ref: `nozbyjbtxbgchvkdpnrp`
+- API somente leitura: https://nozbyjbtxbgchvkdpnrp.supabase.co/functions/v1/vortex-catalog
+- Migração: `20261028_vortex_tv_cloud.sql`
+- Função: `supabase/functions/vortex-catalog/index.ts`
+- Aplicativo: Android 7.1+ / Media3, config em `app/src/main/assets/cloud_config.json`
 
-Contrato JSON:
-\`\`\`json
-{
-  "version": 1,
-  "updated_at": "2026-10-28T00:00:00Z",
-  "items": [
-    {
-      "name": "Exemplo de canal já homologado",
-      "url": "https://provedor-autorizado.example/live.m3u8",
-      "group": "Abertos",
-      "format": "hls",
-      "status": "playback_ok",
-      "rights_status": "authorized"
-    }
-  ]
-}
-\`\`\`
-O exemplo acima é ilustrativo, NÃO corresponde a uma fonte real. Apenas
-\`playback_ok\` + \`authorized\` podem entrar na biblioteca remota.
-HTTP 200 e manifesto válido NÃO equivalem à reprodução confirmada.
+## Funcionamento
+O APK chama **GET** ao endpoint, sem login. O backend consulta apenas fontes
+`enabled=true`, `rights_status=authorized` e
+`validation_status=playback_ok`. A função entrega JSON v1:
 
-## Quando houver projeto dedicado no Supabase
-1. Criar um projeto exclusivamente para Vortex TV Cloud, região sa-east-1.
-2. Executar \`supabase/migrations/20261028_vortex_tv_cloud.sql\` no projeto novo.
-3. Publicar \`supabase/functions/vortex-catalog/index.ts\` como Edge Function
-   \`vortex-catalog\` com JWT verification desativada (somente GET público;
-   não há escrita anônima nas tabelas).
-4. Cadastrar mídias e fontes autorizadas. Só marcar \`playback_ok\` após
-   testar vídeo e áudio no Android 7.1 / RK3229. Um verificador HTTP/manifesto
-   pode elevar o máximo para \`manifest_ok\`, nunca para \`playback_ok\`.
-5. Testar \`https://<project-ref>.supabase.co/functions/v1/vortex-catalog\`
-   e confirmar JSON v1, nenhuma origem privada e nenhuma URL sem autorização.
-6. Trocar apenas \`catalog_url\` no \`cloud_config.json\` e compilar nova
-   versão do app. Não colocar \`service_role\` ou chaves secretas no APK.
-7. Revisar Security Advisor/RLS antes de habilitar o endpoint.
+```json
+{"version":1,"updated_at":"2026-10-28T00:00:00Z","items":[]}
+```
 
-## Limitações e segurança
-- O Supabase distribui **metadados e URLs**, NÃO vídeo. O Media3 acessa as
-  fontes diretamente, sem proxy, transcodificação ou armazenamento de vídeo.
-- O endpoint é público (sem login) por decisão do produto para uma TV Box;
-  **não inserir URLs privadas ou tokens**. Para dados privados, será preciso
-  autenticação ou mecanismo de acesso diferente.
-- O feed de referência permanece vazio até haver testes de reprodução e
-  direitos de uso. Não garante ESPN, AXN, Universal ou qualquer canal pago.
-- Nunca usar GitHub Actions. Tests/compilação em ambiente independente.
+Este resultado vazio é esperado até que existam fontes homologadas.
+O aplicativo mantém cache separado das fontes que a família importou
+manualmente, e atualiza o catálogo Cloud ao abrir (máximo a cada 6 horas
+após sucesso) ou manualmente pelo menu Fontes.
+O player faz requisições **diretas** ao provedor autorizado, não ao Supabase.
+
+## Segurança
+- Tabelas com RLS ativado; nenhuma política aberta para `anon` ou
+  `authenticated`, e privilégios de tabela revogados.
+- A função responde publicamente a GET, não aceita escrita ou parâmetros
+  que permitam consultar tabelas arbitrárias.
+- A Edge Function usa `SUPABASE_SECRET_KEYS` (chave default) somente em
+  ambiente de servidor, com fallback para chave service_role legado.
+- **Nunca adicionar links privados, tokens, credenciais, DRM bypass ou
+  dados sensíveis** ao feed público, mesmo que o uso principal seja doméstico.
+- HTTP OK e manifesto válido não implicam `playback_ok`: só homologar
+  após confirmar imagem e áudio no dispositivo alvo.
+- Nenhum APK de terceiros ou DEX remoto é carregado.
+- Não há proxy, hospedagem ou retransmissão de vídeos.
+
+## Pendências
+1. Verificar resposta HTTP da Edge Function publicamente. A implantação está
+   ativa, mas este ambiente de execução pode não conseguir consultar a URL
+   externamente devido às restrições de rede.
+2. Rodar build Android via Render para o novo endpoint e verificar APK.
+3. Homologar fontes autorizadas com testes em uma RK3229 Android 7.1 real;
+   só depois habilitar entradas no banco.
+4. Acrescentar um indexador agendado de fontes públicas que faça verificação
+   de HTTP/manifesto sem elevar automaticamente para `playback_ok`.
+5. Verificar os avisos de segurança e desempenho após popular o banco.
+   Avisos de RLS sem policy e índices não usados são esperados neste
+   banco privado e inicialmente vazio.
+
+## Estado das versões
+As compilações do APK de teste não são homologações em campo. O frontend
+continua distinguindo Vortex TV (app) do projeto Vortex TV OS (firmware).
+
+**Política permanente:** nenhum GitHub Actions; Gradle/Render e testes
+independentes.

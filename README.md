@@ -1,5 +1,8 @@
 # Vortex TV — aplicativo Android (não Vortex TV OS)
 
+> **Backend ativo (28/10/2026):** Vortex TV Cloud criado no Supabase (`nozbyjbtxbgchvkdpnrp`, sa-east-1), três tabelas protegidas por RLS e Edge Function somente leitura `vortex-catalog`. O Android versão 0.2.7 usa esse endpoint HTTPS; mídia não é hospedada nem retransmitida. Ainda não existem streams do catálogo Cloud com `playback_ok` homologado na TV Box. Leia [VORTEX_TV_CLOUD.md](docs/VORTEX_TV_CLOUD.md).
+
+
 ## PLANO DE CATÁLOGOS · 28/10/2026
 
 **Ponto único de continuidade:** [Plano mestre das Builds 25–34](docs/PLANO_MESTRE_BUILDS_25_A_34.md)
