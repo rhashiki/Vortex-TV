@@ -10,6 +10,8 @@
         android:label="${appLabel}"
         android:usesCleartextTraffic="false"
         android:theme="@style/AppTheme">
+        <activity android:name="os.vortex.tv.integration.YouTubePlaybackActivity"
+            android:exported="false" android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
         <activity android:name="os.vortex.tv.integration.VortexPlayerActivity"
             android:exported="false" android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
         <activity android:name=".MainActivity"

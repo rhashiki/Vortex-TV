@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "source_note": "Candidatos de longas localizados com links individuais em XTOR Movies (28/10/2026) e canais oficiais do YouTube. A página de origem declara provedores; vídeos não foram testados no Android Vortex nem verificados hoje via YouTube Data API. O status NÃO É PLAYBACK_OK.",
+  "generated_at": "2026-10-28",
+  "items": [
+    {"name":"O Dia da Múmia", "video_id":"DUAyQ8yxg38", "year":"2014", "genre":"Terror", "provider":"NetMovies", "status":"REFERENCIA_OFICIAL_NAO_TESTADA", "evidence_url":"https://www.youtube.com/watch?v=DUAyQ8yxg38"},
+    {"name":"Deu a Louca nos Bichos", "video_id":"96FxHNVeBuw", "year":"2010", "genre":"Comédia", "provider":"NetMovies", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"},
+    {"name":"13: O Jogador", "video_id":"mddlgdWmR5A", "year":"2005", "genre":"Drama", "provider":"NetMovies", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"},
+    {"name":"Pulse", "video_id":"UTjsObdUXsA", "year":"2006", "genre":"Terror", "provider":"NetMovies", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"},
+    {"name":"Turbulência 3", "video_id":"iy97dWMzdqs", "year":"2001", "genre":"Ação", "provider":"NetMovies", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"},
+    {"name":"Hydra — Caçada na Ilha Mortal", "video_id":"I8hZQQTKCCk", "year":"2009", "genre":"Ação", "provider":"Film&Clips", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"},
+    {"name":"Icarus — Máquina de Guerra", "video_id":"VY8_MUu0mZI", "year":"", "genre":"Ação", "provider":"Film&Clips", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"},
+    {"name":"Cleanskin: Jogo de Interesses", "video_id":"3ii_xC8IwIo", "year":"2012", "genre":"Ação", "provider":"Filmelier TV", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"},
+    {"name":"Imortais", "video_id":"5Au2Mboodro", "year":"2011", "genre":"Fantasia", "provider":"Filmelier TV", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"},
+    {"name":"O Jantar", "video_id":"ql0KpNclw5g", "year":"2017", "genre":"Suspense", "provider":"Filmelier TV", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"},
+    {"name":"Você Acredita?", "video_id":"Am4z8DjmzjM", "year":"2015", "genre":"Drama", "provider":"Filmelier TV", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"},
+    {"name":"Meu Maior Amigo", "video_id":"Qgsq_z5NvxQ", "year":"2010", "genre":"Comédia", "provider":"Filmelier TV", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"},
+    {"name":"Tina e Téo: A Pedra Encantada", "video_id":"FNqyrhPi5Sk", "year":"2019", "genre":"Animação", "provider":"Filmelier TV", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"},
+    {"name":"Spartacus", "video_id":"HfQoBFovpG8", "year":"", "genre":"Clássicos", "provider":"NetMovies", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"},
+    {"name":"O Grito", "video_id":"F7HugXwPblI", "year":"", "genre":"Terror", "provider":"NetMovies", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"},
+    {"name":"Super-Herói: O Filme", "video_id":"zlmWuf84vO0", "year":"", "genre":"Comédia", "provider":"NetMovies", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"},
+    {"name":"Os 13 Pecados", "video_id":"g2Ok4XIeuFA", "year":"", "genre":"Terror", "provider":"NetMovies", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"},
+    {"name":"Nerve: Um Jogo Sem Regras", "video_id":"E70P8G6rsjU", "year":"", "genre":"Suspense", "provider":"NetMovies", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"},
+    {"name":"A Lady e o Lobo: O Bicho tá Solto", "video_id":"L7Lxs31hCDE", "year":"", "genre":"Animação", "provider":"NetMovies", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"},
+    {"name":"A Loja Mágica de Brinquedos", "video_id":"0iqCcyC52Ts", "year":"", "genre":"Família", "provider":"NetMovies", "status":"REFERENCIA_XTOR_NAO_TESTADA", "evidence_url":"https://www.xtor.com.br/"}
+  ]
+}

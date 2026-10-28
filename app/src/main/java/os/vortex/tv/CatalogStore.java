@@ -22,11 +22,13 @@ public final class CatalogStore {
             this.name=name;this.url=url;this.tvgId=tvgId;this.group=group;this.logo=logo;this.format=format;
             this.genre=genre;this.provider=provider;this.description=description;this.year=year;
         }
-        public boolean isFilm() {return !isLive() && (group.toLowerCase().matches(".*(filme|movie|cinema|vod).*?") || "Filmes".equalsIgnoreCase(provider));}
+        public boolean isFilm() {return "youtube-movie".equals(format) || (!isLive() && (group.toLowerCase().matches(".*(filme|movie|cinema|vod).*?") || "Filmes".equalsIgnoreCase(provider)));}
         public boolean isSeries(){ return !isLive() && group.toLowerCase().matches(".*(série|serie|series|temporada).*?"); }
-        public boolean isDoc(){ return !isLive() && group.toLowerCase().matches(".*(document|nature|história|historia).*?"); }
+        public boolean isDoc(){ return "youtube-doc".equals(format) || (!isLive() && group.toLowerCase().matches(".*(document|nature|história|historia).*?")); }
         public boolean isVideo(){return group.equalsIgnoreCase("Vídeos");}
         public boolean isLive(){
+            if("youtube-live".equals(format))return true;
+            if("youtube-movie".equals(format)||"youtube-doc".equals(format))return false;
             if("hls".equals(format) || "dash".equals(format))return true;
             if("Vídeos".equalsIgnoreCase(group))return false;
             if("file".equals(format) || "Filmes".equalsIgnoreCase(provider))return false;

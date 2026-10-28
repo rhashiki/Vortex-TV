@@ -39,6 +39,7 @@ import java.util.Locale;
 import os.vortex.tv.integration.M3uPlaylistParser;
 import os.vortex.tv.integration.XmltvGuideParser;
 import os.vortex.tv.integration.VortexPlayerActivity;
+import os.vortex.tv.integration.YouTubePlaybackActivity;
 
 /**
  * Vortex TV streaming app, distinct from Vortex TV OS.
@@ -68,6 +69,8 @@ public final class MainActivity extends Activity {
         uiPrefs=getSharedPreferences("vortex_ui",MODE_PRIVATE);
         String saved=uiPrefs.getString("preferred_mode", "");
         tv=saved.isEmpty()?getResources().getConfiguration().smallestScreenWidthDp>=600:"TV".equals(saved);
+        try {catalog.appendItems(YoutubeCatalogBridge.loadSeed(this));}
+        catch(Exception ex){android.util.Log.w("VortexTV","YouTube seed unavailable",ex);}
         items=catalog.load();
         loadGuideOnly();
         render();
@@ -138,6 +141,7 @@ public final class MainActivity extends Activity {
         else if("Minha lista".equals(section))renderFavorites();
         else if("TV ao vivo".equals(section))renderLiveGuide();
         else if("Filmes".equals(section))renderFilms();
+        else if("YouTube".equals(section))renderYouTube();
         else if("Séries".equals(section))renderFiltered("Séries",2);
         else if("Documentários".equals(section))renderFiltered("Documentários",3);
         else renderHome();
@@ -153,7 +157,7 @@ public final class MainActivity extends Activity {
         brandParams.leftMargin=d(8);bar.addView(brand,brandParams);
         HorizontalScrollView scroll=new HorizontalScrollView(this);scroll.setHorizontalScrollBarEnabled(false);
         LinearLayout nav=row();nav.setPadding(d(tv?32:14),0,0,0);
-        String[] sections={"Início","TV ao vivo","Filmes","Séries","Documentários","Minha lista","Buscar"};
+        String[] sections={"Início","TV ao vivo","Filmes","YouTube","Séries","Documentários","Minha lista","Buscar"};
         for(String s:sections){
             TextView t=text(s,tv?14:12,s.equals(section)?LIGHT:MUTED,s.equals(section));
             t.setPadding(d(tv?13:9),d(12),d(tv?13:9),d(12));
@@ -170,8 +174,8 @@ public final class MainActivity extends Activity {
     private View mobileNavigation(){
         LinearLayout bottom=row();bottom.setPadding(d(4),d(3),d(4),d(3));
         bottom.setBackground(shape(0xFF13131D,0));
-        String[] destinations={"Início","TV ao vivo","Filmes","Séries","Buscar"};
-        String[] labels={"⌂\nInício","▣\nTV","▤\nFilmes","▥\nSéries","⌕\nBuscar"};
+        String[] destinations={"Início","TV ao vivo","Filmes","YouTube","Séries","Buscar"};
+        String[] labels={"⌂\nInício","▣\nTV","▤\nFilmes","▶\nYouTube","▥\nSéries","⌕\nBuscar"};
         for(int n=0;n<destinations.length;n++){
             final String destination=destinations[n];
             boolean active=destination.equals(section);
@@ -191,6 +195,9 @@ public final class MainActivity extends Activity {
             emptyState("Seu catálogo começa com uma fonte", "Importe uma playlist M3U autorizada ou adicione uma URL direta de vídeo. O Vortex TV não inclui catálogos piratas nem conteúdos fictícios.");
             return;
         }
+        ArrayList<CatalogStore.Item> youtubeFilms=new ArrayList<>();
+        for(CatalogStore.Item it:items)if("youtube-movie".equals(it.format))youtubeFilms.add(it);
+        rowOf("Filmes completos no YouTube • Referências externas",youtubeFilms,1);
         rowOf("Filmes e curtas para assistir",filter(1),1);
         addOpenArchiveAction();
         rowOf("Ao vivo agora",filter(0),0);
@@ -259,6 +266,41 @@ public final class MainActivity extends Activity {
         else rowOf(title,group,type==0?0:1);
     }
 
+    private void renderYouTube(){
+        heading("YouTube", "Filmes dublados e transmissões oficiais • indexação em expansão");
+        TextView disclaimer=text("Os vídeos e lives são hospedados pelo YouTube. Disponibilidade, anúncios e direitos pertencem às fontes; ainda exigem teste no dispositivo.",tv?13:11,MUTED,false);
+        disclaimer.setPadding(0,d(12),0,d(12));body.addView(disclaimer);
+        body.addView(button("↻ Atualizar índice YouTube",false,()->refreshYouTubeIndex()));
+        ArrayList<CatalogStore.Item> movies=new ArrayList<>();
+        ArrayList<CatalogStore.Item> documentaries=new ArrayList<>();
+        ArrayList<CatalogStore.Item> live=new ArrayList<>();
+        ArrayList<CatalogStore.Item> year90=new ArrayList<>(),year00=new ArrayList<>(),year10=new ArrayList<>();
+        for(CatalogStore.Item item:items){
+            if("youtube-movie".equals(item.format)){
+                movies.add(item);
+                int year=0;try{year=Integer.parseInt(item.year);}catch(Exception ignored){}
+                if(year>=1990&&year<=1999)year90.add(item);
+                else if(year>=2000&&year<=2009)year00.add(item);
+                else if(year>=2010&&year<=2019)year10.add(item);
+            }else if("youtube-doc".equals(item.format))documentaries.add(item);
+            else if("youtube-live".equals(item.format))live.add(item);
+        }
+        rowOf("Clássicos dos anos 90",year90,1);
+        rowOf("Clássicos dos anos 2000",year00,1);
+        rowOf("Clássicos dos anos 2010",year10,1);
+        rowOf("Filmes completos em canais do YouTube",movies,1);
+        rowOf("Documentários",documentaries,1);
+        rowOf("TV ao vivo no YouTube • Confirmada pelo índice",live,0);
+        if(movies.isEmpty()&&documentaries.isEmpty()&&live.isEmpty())
+            emptyState("Índice YouTube ainda vazio","O catálogo oficial depende de coleta e validação. Importe ou atualize um índice habilitado.");
+    }
+    private void refreshYouTubeIndex(){
+        runTask(()->{
+            List<CatalogStore.Item> from=YoutubeCatalogBridge.fetchIndex();
+            int count=catalog.appendItems(from);
+            return "YouTube • "+from.size()+" referências no índice • "+count+" novas";
+        },true);
+    }
     private void renderFilms(){
         heading("Filmes", "Catálogo por gênero • Imagens e fontes reais • Obras abertas e importadas");
         addOpenArchiveAction();
@@ -534,6 +576,23 @@ public final class MainActivity extends Activity {
             .setNegativeButton("Cancelar",null).show();
     }
     private void play(CatalogStore.Item i){
+        if(i.format.startsWith("youtube-")){
+            Intent yt=new Intent(this,YouTubePlaybackActivity.class);
+            yt.putExtra(YouTubePlaybackActivity.EXTRA_VIDEO_URL,i.url);
+            if("youtube-live".equals(i.format)){
+                JSONArray channels=new JSONArray();int selected=0;
+                for(CatalogStore.Item channel:items){
+                    if(!"youtube-live".equals(channel.format))continue;
+                    if(i.url.equals(channel.url))selected=channels.length();
+                    JSONObject v=new JSONObject();
+                    try{v.put("name",channel.name);v.put("url",channel.url);}catch(Exception ignored){}
+                    channels.put(v);
+                }
+                yt.putExtra(YouTubePlaybackActivity.EXTRA_LIVE_LIST,channels.toString());
+                yt.putExtra(YouTubePlaybackActivity.EXTRA_LIVE_INDEX,selected);
+            }
+            startActivity(yt);return;
+        }
         if(!i.url.startsWith("https://")){
             new AlertDialog.Builder(this).setTitle("Fonte HTTP sem criptografia")
                 .setMessage("A reprodução por HTTP pode expor seu tráfego. Esta versão de desenvolvimento utiliza HTTPS. Importe uma fonte HTTPS válida.")
@@ -562,15 +621,16 @@ public final class MainActivity extends Activity {
     }
     private void showSources(){
         new AlertDialog.Builder(this).setTitle("Gerenciar fontes")
-            .setItems(new String[]{"Importar arquivo M3U","Importar playlist HTTPS","Adicionar vídeo HTTPS","Importar EPG XMLTV","Atualizar EPG por URL","Descobrir filmes abertos","Escolher modo TV/Smartphone","Limpar catálogo local"},(d,which)->{
+            .setItems(new String[]{"Importar arquivo M3U","Importar playlist HTTPS","Adicionar vídeo HTTPS","Importar EPG XMLTV","Atualizar EPG por URL","Descobrir filmes abertos","Atualizar índice YouTube","Escolher modo TV/Smartphone","Limpar catálogo local"},(d,which)->{
                 if(which==0)openFile(PICK_M3U);
                 if(which==1)importRemote();
                 if(which==2)addDirect();
                 if(which==3)openFile(PICK_EPG);
                 if(which==4)importRemoteGuide();
                 if(which==5)loadOpenArchive(true);
-                if(which==6)showModeChooser();
-                if(which==7)new AlertDialog.Builder(this).setTitle("Apagar o catálogo?")
+                if(which==6)refreshYouTubeIndex();
+                if(which==7)showModeChooser();
+                if(which==8)new AlertDialog.Builder(this).setTitle("Apagar o catálogo?")
                     .setMessage("Remove sua lista de conteúdo e favoritos somente deste dispositivo.")
                     .setPositiveButton("Apagar",(d2,w)->{catalog.clear();items=catalog.load();render();})
                     .setNegativeButton("Cancelar",null).show();

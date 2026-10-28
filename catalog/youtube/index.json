@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "generated_at": null,
+  "origin": "YouTube Data API v3",
+  "is_exhaustive": false,
+  "status": "AGUARDANDO_CREDENCIAL_YOUTUBE_DATA_API",
+  "candidate_count": 0,
+  "search_calls": 0,
+  "items": [],
+  "queries": [],
+  "note": "A API real ainda não foi executada: não há YOUTUBE_API_KEY conectado. Nunca simular um resultado nem um canal ao vivo. O APK inclui separadamente 20 referências externas de filmes na seed_referencias.json, sem validação atual."
+}
