@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "checked_at": "2026-10-28",
+  "notes": "Alternativa cadastrada somente no laboratório de teste. Manifesto HTTP 200; segmentos e reprodução/áudio no dispositivo não homologados.",
+  "items": [
+    {
+      "name": "Big Buck Bunny (CDN alternativa)",
+      "media_url": "https://cdn.jwplayer.com/manifests/pZxWPRg4.m3u8",
+      "format": "hls",
+      "provider": "JW Player · Blender Foundation",
+      "rights_status": "authorized",
+      "validation_status": "manifest_ok",
+      "enabled": false,
+      "probe_enabled": true,
+      "provenance_url": "https://peach.blender.org/about/"
+    }
+  ]
+}
