@@ -74,6 +74,7 @@ public final class MainActivity extends Activity {
         items=catalog.load();
         loadGuideOnly();
         render();
+        syncCloud(false);
         if(saved.isEmpty())showModeChooser();
         if(!uiPrefs.getBoolean("open_archive_discovery_v2",false)) {
             uiPrefs.edit().putBoolean("open_archive_discovery_v2",true).apply();
@@ -648,20 +649,54 @@ public final class MainActivity extends Activity {
     }
     private void showSources(){
         new AlertDialog.Builder(this).setTitle("Gerenciar fontes")
-            .setItems(new String[]{"Importar arquivo M3U","Importar playlist HTTPS","Adicionar vídeo HTTPS","Importar EPG XMLTV","Atualizar EPG por URL","Descobrir filmes abertos","Atualizar índice YouTube","Escolher modo TV/Smartphone","Limpar catálogo local"},(d,which)->{
-                if(which==0)openFile(PICK_M3U);
-                if(which==1)importRemote();
-                if(which==2)addDirect();
-                if(which==3)openFile(PICK_EPG);
-                if(which==4)importRemoteGuide();
-                if(which==5)loadOpenArchive(true);
-                if(which==6)refreshYouTubeIndex();
-                if(which==7)showModeChooser();
-                if(which==8)new AlertDialog.Builder(this).setTitle("Apagar o catálogo?")
+            .setItems(new String[]{"Sincronizar catálogo Vortex Cloud","Importar arquivo M3U","Importar playlist HTTPS","Adicionar vídeo HTTPS","Importar EPG XMLTV","Atualizar EPG por URL","Descobrir filmes abertos","Atualizar índice YouTube","Escolher modo TV/Smartphone","Limpar catálogo local"},(d,which)->{
+                if(which==0)syncCloud(true);
+                if(which==1)openFile(PICK_M3U);
+                if(which==2)importRemote();
+                if(which==3)addDirect();
+                if(which==4)openFile(PICK_EPG);
+                if(which==5)importRemoteGuide();
+                if(which==6)loadOpenArchive(true);
+                if(which==7)refreshYouTubeIndex();
+                if(which==8)showModeChooser();
+                if(which==9)new AlertDialog.Builder(this).setTitle("Apagar o catálogo?")
                     .setMessage("Remove sua lista de conteúdo e favoritos somente deste dispositivo.")
                     .setPositiveButton("Apagar",(d2,w)->{catalog.clear();items=catalog.load();render();})
                     .setNegativeButton("Cancelar",null).show();
             }).show();
+    }
+    /** No blocking network calls on the Android UI thread. Keep previous cache on error. */
+    private volatile boolean cloudSyncBusy=false;
+    private void syncCloud(boolean manual){
+        if(cloudSyncBusy)return;
+        long now=System.currentTimeMillis();
+        long last=uiPrefs.getLong("cloud_last_success",0L);
+        if(!manual && last>0L && now>=last && now-last<6L*60L*60L*1000L)return;
+        cloudSyncBusy=true;
+        if(manual)Toast.makeText(this,"Sincronizando catálogo...",Toast.LENGTH_SHORT).show();
+        new Thread(()->{
+            String notice="";
+            boolean success=false;
+            try {
+                RemoteCatalogSync.Result result=RemoteCatalogSync.refresh(getApplicationContext(),catalog);
+                notice="Catálogo atualizado: "+result.accepted+" entradas disponíveis";
+                success=true;
+            } catch(Exception error) {
+                notice="Falha na sincronização: "+error.getMessage();
+                android.util.Log.w("VortexTV","Cloud refresh unavailable",error);
+            } finally {
+                final String feedback=notice;
+                final boolean ok=success;
+                runOnUiThread(()->{
+                    cloudSyncBusy=false;
+                    if(ok){
+                        uiPrefs.edit().putLong("cloud_last_success",System.currentTimeMillis()).apply();
+                        items=catalog.load();render();
+                    }
+                    if(manual)Toast.makeText(this,feedback,Toast.LENGTH_LONG).show();
+                });
+            }
+        },"VortexCloud-Sync").start();
     }
     private void openFile(int request){
         Intent intent=new Intent(Intent.ACTION_OPEN_DOCUMENT);
