@@ -50,3 +50,9 @@ Auditados 53 YouTube IDs via i.ytimg.com HEAD: 50 HTTP 200 e 3 HTTP 404 (O Dia d
 2. Testar na TV Box RK3229 Ethernet/Android 7.1 (imagem, áudio, D-Pad, consumo de RAM).
 3. Integrar diagnóstico periódico de segmentos à lista disponibilizada no APK; o monitoramento de manifestos não equivale a reprodução.
 4. Converter build debug em APK release assinado com certificado estável.
+
+## Publicação final verificada
+- Render deploy `dep-dbh7bb59fdbs7385ras0`: LIVE em 28/10/2026 22:24:40 UTC, commit `3839e9c6c84aebeeaf38a8ba3833b36b92bea293`.
+- Testes Python: 51 aprovados. Gradle `assembleDebug`: BUILD SUCCESSFUL. Verificador de APK: manifesto, recursos, DEX, Media3, parser M3U, XMLTV presentes.
+- URL do APK testada em 28/10/2026: HTTP 200, `Content-Length: 5909001`, SHA256 `51e3865c6114337d4b9d2a97d206fb76a38cbcfe7342ad91180c780f8752db46`.
+- Este resultado comprova compilação/distribuição. Não comprova que todas as fontes reproduzem na TV Box RK3229.
