@@ -291,8 +291,37 @@ public final class MainActivity extends Activity {
         rowOf("Filmes completos em canais do YouTube",movies,1);
         rowOf("Documentários",documentaries,1);
         rowOf("TV ao vivo no YouTube • Confirmada pelo índice",live,0);
+        renderYouTubeChannelDirectory();
         if(movies.isEmpty()&&documentaries.isEmpty()&&live.isEmpty())
             emptyState("Índice YouTube ainda vazio","O catálogo oficial depende de coleta e validação. Importe ou atualize um índice habilitado.");
+    }
+    private void renderYouTubeChannelDirectory(){
+        List<YoutubeCatalogBridge.YoutubeChannel> channels;
+        try{channels=YoutubeCatalogBridge.loadChannelDirectory(this);}
+        catch(Exception ex){android.util.Log.w("VortexTV","Canal YouTube directory unavailable",ex);return;}
+        TextView title=text("Canais oficiais para acompanhar",tv?23:19,LIGHT,true);
+        title.setPadding(0,d(20),0,d(8));body.addView(title);
+        TextView note=text("Acesso ao canal no YouTube. Estes links não confirmam uma live ativa agora.",tv?13:11,MUTED,false);
+        note.setPadding(0,0,0,d(14));body.addView(note);
+        for(YoutubeCatalogBridge.YoutubeChannel channel:channels){
+            LinearLayout line=row();line.setPadding(d(16),d(12),d(15),d(12));
+            GradientDrawable bg=shape(PANEL,11);bg.setStroke(d(1),BORDER);line.setBackground(bg);
+            TextView symbol=text("▶",tv?20:17,0xFFB5A0FF,true);
+            line.addView(symbol,new LinearLayout.LayoutParams(d(tv?58:42),-2));
+            LinearLayout col=column();
+            TextView name=text(channel.name,tv?17:15,LIGHT,true);col.addView(name);
+            TextView category=text(channel.category+"  •  Live não verificada",tv?12:11,MUTED,false);
+            col.addView(category);
+            line.addView(col,new LinearLayout.LayoutParams(0,-2,1));
+            TextView action=text("ABRIR ↗",tv?12:10,PURPLE,true);line.addView(action);
+            focusable(line);
+            line.setOnClickListener(v->{
+                try{startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse(channel.url)));}
+                catch(Exception ex){Toast.makeText(this,"Não foi possível abrir o canal",Toast.LENGTH_LONG).show();}
+            });
+            LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(-1,-2);
+            params.bottomMargin=d(6);body.addView(line,params);
+        }
     }
     private void refreshYouTubeIndex(){
         runTask(()->{
