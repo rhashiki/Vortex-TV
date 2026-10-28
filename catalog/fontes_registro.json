@@ -2,7 +2,7 @@
   "project": "Vortex TV (Android app, not Vortex TV OS)",
   "audit_date": "2026-10-28",
   "policy": "Registros de metadados e fontes; nenhuma disponibilidade/autorizações inferidas de URLs",
-  "total_sources": 51,
+  "total_sources": 60,
   "sources": [
     {
       "id": "IPTV_ORG_BR",
@@ -691,6 +691,123 @@
       "status": "REPO_FOUND",
       "phase": "B31",
       "notes": "Não incorporar funcionalidades de remoção de DRM"
+    },
+    {
+      "id": "YOUTUBE_DATA_API",
+      "name": "YouTube Data API v3",
+      "types": [
+        "canal",
+        "filme",
+        "documentário",
+        "série"
+      ],
+      "role": "Busca oficial (live/eventType + filmes longos) e metadados",
+      "url": "https://developers.google.com/youtube/data",
+      "status": "API_KEY_REQUIRED",
+      "phase": "B27+B30",
+      "notes": "53 consultas configuradas, quota 100 search/list por dia; nenhuma coleta remota realizada até haver credencial"
+    },
+    {
+      "id": "YOUTUBE_BR_LIVE",
+      "name": "YouTube · emissoras brasileiras",
+      "types": [
+        "canal",
+        "epg"
+      ],
+      "role": "Monitorar lives públicas e checar estado atual",
+      "url": "https://www.youtube.com",
+      "status": "CHANNEL_REFERENCES_ONLY",
+      "phase": "B27",
+      "notes": "12 emissoras/órgãos listados, sem prova de transmissão ativa em 28/10/2026"
+    },
+    {
+      "id": "YOUTUBE_NETMOVIES",
+      "name": "NetMovies no YouTube",
+      "types": [
+        "filme",
+        "série"
+      ],
+      "role": "Catálogo oficial de filmes completos licenciados",
+      "url": "https://www.youtube.com/channel/UCK5RRQ3TdwAbbCWrtnXsN3Q",
+      "status": "OFFICIAL_CHANNEL_IDENTIFIED",
+      "phase": "B30",
+      "notes": "Vídeos particulares precisam de verificação atual"
+    },
+    {
+      "id": "YOUTUBE_NETMOVIES_CLASSICOS",
+      "name": "NetMovies Clássicos",
+      "types": [
+        "filme"
+      ],
+      "role": "Cinema clássico em canal verificado",
+      "url": "https://www.youtube.com/channel/UCklg72s4SymWVrriqiUgXhw",
+      "status": "OFFICIAL_CHANNEL_IDENTIFIED",
+      "phase": "B30",
+      "notes": "Declara filmes licenciados e dublados; prioridade 90s/2000s/2010s"
+    },
+    {
+      "id": "YOUTUBE_ADRENALINA_PURA",
+      "name": "Adrenalina Pura TV BR",
+      "types": [
+        "filme"
+      ],
+      "role": "Canal oficial Sofá Digital com filmes licenciados",
+      "url": "https://www.youtube.com/channel/UCWFovw8iyHBezTmaEWEV0RA",
+      "status": "OFFICIAL_CHANNEL_IDENTIFIED",
+      "phase": "B30",
+      "notes": "Ação, terror, suspense; confirmação por vídeo"
+    },
+    {
+      "id": "YOUTUBE_FILMELIER",
+      "name": "Filmelier TV BR",
+      "types": [
+        "filme",
+        "documentário"
+      ],
+      "role": "Canal de filmes completos",
+      "url": "https://www.youtube.com/channel/UCCRmnBThm-dlqovUoeftVzg",
+      "status": "CHANNEL_IDENTIFIED",
+      "phase": "B30",
+      "notes": "Referenciado por Filmow; verificar vídeo a vídeo"
+    },
+    {
+      "id": "YOUTUBE_FILMCLIPS",
+      "name": "Film&Clips",
+      "types": [
+        "filme",
+        "documentário"
+      ],
+      "role": "Filmes publicados por distribuidor",
+      "url": "https://www.youtube.com/results?search_query=Film%26Clips+film+full",
+      "status": "REVIEW_CHANNEL_ID",
+      "phase": "B30",
+      "notes": "Identificador canal pendente"
+    },
+    {
+      "id": "YOUTUBE_SATO",
+      "name": "Sato Company",
+      "types": [
+        "filme",
+        "documentário",
+        "anime"
+      ],
+      "role": "Distribuidora brasileira com presença YouTube",
+      "url": "https://www.youtube.com/results?search_query=Sato+Company+filme+completo",
+      "status": "REVIEW_CHANNEL_ID",
+      "phase": "B30",
+      "notes": "Validar identidade e catálogo"
+    },
+    {
+      "id": "YT_FILMS_XTOR_REFERENCE",
+      "name": "XTOR Movies · índice de links YouTube",
+      "types": [
+        "filme"
+      ],
+      "role": "Referência externa de links e rótulos de filmes",
+      "url": "https://www.xtor.com.br/",
+      "status": "UNVERIFIED_EXTERNAL_REFERENCE",
+      "phase": "B30",
+      "notes": "49 títulos indicados em seed Vortex; verificação atual de embed, direitos/ano e playback pendente"
     }
   ]
 }
