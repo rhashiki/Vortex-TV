@@ -48,7 +48,7 @@ public final class VortexPlayerActivity extends Activity {
             @Override public void onPlayerError(PlaybackException error) {
                 new AlertDialog.Builder(VortexPlayerActivity.this)
                     .setTitle("Não foi possível reproduzir")
-                    .setMessage("Fonte indisponível ou incompatível ("+error.errorCodeName+").")
+                    .setMessage("Fonte indisponível ou incompatível ("+error.getErrorCodeName()+").")
                     .setPositiveButton("Abrir em player externo",(dialog,which)->{
                         if(!ExternalMediaRouter.openExternal(VortexPlayerActivity.this,mediaUrl,true))
                             Toast.makeText(VortexPlayerActivity.this,"Nenhum player externo compatível",Toast.LENGTH_LONG).show();
