@@ -15,7 +15,16 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    buildTypes { release { minifyEnabled false } }
+    buildTypes {
+        debug {
+            applicationIdSuffix '.beta24'
+            manifestPlaceholders = [appLabel: 'Vortex TV 24 Beta']
+        }
+        release {
+            minifyEnabled false
+            manifestPlaceholders = [appLabel: 'Vortex TV']
+        }
+    }
 }
 
 dependencies {
