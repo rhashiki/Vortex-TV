@@ -8,8 +8,8 @@ android {
         applicationId 'os.vortex.tv'
         minSdk 25
         targetSdk 28
-        versionCode 27
-        versionName '0.2.7-cloud'
+        versionCode 28
+        versionName '0.2.8-cloud-lab'
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

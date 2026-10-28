@@ -51,6 +51,51 @@ public final class RemoteCatalogSync {
         }catch(Exception e){return false;}
     }
 
+
+    /** Fetches open-license, manifest-verified samples for manual testing only.
+     * Never persists candidates or calls them PLAYBACK_OK automatically.
+     */
+    public static List<CatalogStore.Item> fetchLab(Context context) throws Exception {
+        JSONObject config=new JSONObject(read(context.getAssets().open("cloud_config.json"),8192));
+        String endpoint=config.optString("catalog_url","");
+        if(!allowedEndpoint(endpoint))throw new IllegalArgumentException("Endpoint Vortex Cloud inválido");
+        String address=endpoint+(endpoint.contains("?")?"&":"?")+"lab=1";
+        HttpURLConnection conn=(HttpURLConnection)new URL(address).openConnection();
+        conn.setConnectTimeout(7000);
+        conn.setReadTimeout(12000);
+        conn.setInstanceFollowRedirects(false);
+        conn.setRequestProperty("Accept","application/json");
+        try {
+            if(conn.getResponseCode()!=200)throw new IllegalStateException("HTTP "+conn.getResponseCode());
+            if(conn.getContentLengthLong()>MAX_BYTES)throw new IllegalArgumentException("Resposta muito grande");
+            JSONObject payload=new JSONObject(read(conn.getInputStream(),MAX_BYTES));
+            if(payload.optInt("version",-1)!=1)throw new IllegalStateException("Contrato incompatível");
+            JSONArray entries=payload.optJSONArray("test_items");
+            if(entries==null || entries.length()>100)throw new IllegalStateException("Laboratório indisponível");
+            List<CatalogStore.Item> samples=new ArrayList<>();
+            Set<String> seen=new HashSet<>();
+            for(int i=0;i<entries.length();i++){
+                JSONObject j=entries.optJSONObject(i);if(j==null)continue;
+                if(!"manifest_ok".equals(j.optString("status"))
+                    ||!"authorized".equals(j.optString("rights_status")))continue;
+                String url=j.optString("url","").trim();
+                String name=j.optString("name","").trim();
+                if(url.length()>2048||name.length()<2||name.length()>120
+                    ||!url.startsWith("https://")||!seen.add(url))continue;
+                try {
+                    URI uri=new URI(url);
+                    if(uri.getHost()==null||uri.getUserInfo()!=null)continue;
+                }catch(Exception ignored){continue;}
+                samples.add(new CatalogStore.Item(
+                    name,url,j.optString("tvgId",""),j.optString("group",""),
+                    j.optString("logo",""),j.optString("format","auto"),
+                    j.optString("genre",""),j.optString("provider","Blender Foundation"),
+                    j.optString("description",""),j.optString("year","")));
+            }
+            return samples;
+        }finally{conn.disconnect();}
+    }
+
     public static Result refresh(Context context,CatalogStore store) throws Exception {
         JSONObject config=new JSONObject(read(context.getAssets().open("cloud_config.json"),8192));
         String endpoint=config.optString("catalog_url","");

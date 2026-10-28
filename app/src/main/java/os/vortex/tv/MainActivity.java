@@ -649,22 +649,64 @@ public final class MainActivity extends Activity {
     }
     private void showSources(){
         new AlertDialog.Builder(this).setTitle("Gerenciar fontes")
-            .setItems(new String[]{"Sincronizar catálogo Vortex Cloud","Importar arquivo M3U","Importar playlist HTTPS","Adicionar vídeo HTTPS","Importar EPG XMLTV","Atualizar EPG por URL","Descobrir filmes abertos","Atualizar índice YouTube","Escolher modo TV/Smartphone","Limpar catálogo local"},(d,which)->{
+            .setItems(new String[]{"Sincronizar catálogo Vortex Cloud","Laboratório: testar filmes livres","Importar arquivo M3U","Importar playlist HTTPS","Adicionar vídeo HTTPS","Importar EPG XMLTV","Atualizar EPG por URL","Descobrir filmes abertos","Atualizar índice YouTube","Escolher modo TV/Smartphone","Limpar catálogo local"},(d,which)->{
                 if(which==0)syncCloud(true);
-                if(which==1)openFile(PICK_M3U);
-                if(which==2)importRemote();
-                if(which==3)addDirect();
-                if(which==4)openFile(PICK_EPG);
-                if(which==5)importRemoteGuide();
-                if(which==6)loadOpenArchive(true);
-                if(which==7)refreshYouTubeIndex();
-                if(which==8)showModeChooser();
-                if(which==9)new AlertDialog.Builder(this).setTitle("Apagar o catálogo?")
+                if(which==1)showCloudLab();
+                if(which==2)openFile(PICK_M3U);
+                if(which==3)importRemote();
+                if(which==4)addDirect();
+                if(which==5)openFile(PICK_EPG);
+                if(which==6)importRemoteGuide();
+                if(which==7)loadOpenArchive(true);
+                if(which==8)refreshYouTubeIndex();
+                if(which==9)showModeChooser();
+                if(which==10)new AlertDialog.Builder(this).setTitle("Apagar o catálogo?")
                     .setMessage("Remove sua lista de conteúdo e favoritos somente deste dispositivo.")
                     .setPositiveButton("Apagar",(d2,w)->{catalog.clear();items=catalog.load();render();})
                     .setNegativeButton("Cancelar",null).show();
             }).show();
     }
+
+    /** Separate lab navigation: no sample is added to production favorites or live guide. */
+    private void showCloudLab(){
+        Toast.makeText(this,"Consultando testes de vídeo...",Toast.LENGTH_SHORT).show();
+        new Thread(()->{
+            try {
+                final List<CatalogStore.Item> samples=RemoteCatalogSync.fetchLab(getApplicationContext());
+                runOnUiThread(()->{
+                    if(isFinishing())return;
+                    if(samples.isEmpty()){
+                        new AlertDialog.Builder(this).setTitle("Laboratório Vortex Cloud")
+                            .setMessage("Nenhuma fonte de teste disponível neste momento.")
+                            .setPositiveButton("Fechar",null).show();
+                        return;
+                    }
+                    String[] labels=new String[samples.size()];
+                    for(int i=0;i<samples.size();i++)labels[i]=samples.get(i).name+"  •  HLS";
+                    new AlertDialog.Builder(this).setTitle("Laboratório • Filmes livres")
+                        .setMessage("Fontes abertas com manifesto validado. O vídeo ainda precisa ser testado nesta TV Box.")
+                        .setItems(labels,(dialog,which)->{
+                            CatalogStore.Item selected=samples.get(which);
+                            new AlertDialog.Builder(this)
+                                .setTitle("Testar: "+selected.name)
+                                .setMessage("A URL respondeu no servidor, mas imagem e áudio ainda não foram homologados no dispositivo. Iniciar teste?")
+                                .setPositiveButton("Testar vídeo",(confirm,choice)->{
+                                    Intent video=new Intent(this,VortexPlayerActivity.class);
+                                    video.putExtra(VortexPlayerActivity.EXTRA_MEDIA_URL,selected.url);
+                                    startActivity(video);
+                                })
+                                .setNegativeButton("Cancelar",null).show();
+                        }).setNegativeButton("Fechar",null).show();
+                });
+            } catch(Exception ex) {
+                android.util.Log.w("VortexTV","Cloud lab unavailable",ex);
+                runOnUiThread(()->{
+                    if(!isFinishing())Toast.makeText(this,"Laboratório indisponível: "+ex.getMessage(),Toast.LENGTH_LONG).show();
+                });
+            }
+        },"VortexCloud-Lab").start();
+    }
+
     /** No blocking network calls on the Android UI thread. Keep previous cache on error. */
     private volatile boolean cloudSyncBusy=false;
     private void syncCloud(boolean manual){

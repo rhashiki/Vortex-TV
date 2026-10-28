@@ -25,8 +25,11 @@ Deno.serve(async (request: Request) => {
   if (!secret) secret = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
   if (!base || !secret) return json({ error: "Configuração indisponível" }, 503);
   const select = "media_url,format,provider,validation_status,rights_status,media:vortex_media(display_name,kind,category,tvg_id,poster_url,description,release_year)";
-  const path = "/rest/v1/vortex_sources?select=" + encodeURIComponent(select)
-    + "&enabled=eq.true&validation_status=eq.playback_ok&rights_status=eq.authorized&order=priority.asc&limit=500";
+  const lab = new URL(request.url).searchParams.get("lab") === "1";
+  const filters = lab
+    ? "&validation_status=eq.manifest_ok&rights_status=eq.authorized&order=priority.asc&limit=30"
+    : "&enabled=eq.true&validation_status=eq.playback_ok&rights_status=eq.authorized&order=priority.asc&limit=500";
+  const path = "/rest/v1/vortex_sources?select=" + encodeURIComponent(select) + filters;
   try {
     const headers: Record<string, string> = { "apikey": secret, "accept": "application/json" };
     if (isLegacy) headers["authorization"] = "Bearer " + secret;
@@ -39,7 +42,9 @@ Deno.serve(async (request: Request) => {
     if (!Array.isArray(rows)) return json({ error: "Resposta inválida" }, 503);
     const items = rows.flatMap((record: any) => {
       if (!record || typeof record.media_url !== "string" || !record.media_url.startsWith("https://")) return [];
-      if (record.validation_status !== "playback_ok" || record.rights_status !== "authorized") return [];
+      if (record.rights_status !== "authorized") return [];
+      if (lab && record.validation_status !== "manifest_ok") return [];
+      if (!lab && record.validation_status !== "playback_ok") return [];
       const media = record.media;
       if (!media || typeof media.display_name !== "string") return [];
       return [{
@@ -52,11 +57,16 @@ Deno.serve(async (request: Request) => {
         year: media.release_year || "",
         format: record.format || "auto",
         provider: record.provider || "Vortex TV Cloud",
-        status: "playback_ok",
+        status: record.validation_status,
         rights_status: "authorized"
       }];
     });
-    return json({ version: 1, updated_at: new Date().toISOString(), items });
+    return json({
+      version: 1,
+      updated_at: new Date().toISOString(),
+      items: lab ? [] : items,
+      ...(lab ? { test_items: items, warning: "Manifesto verificado; reprodução não homologada no aparelho" } : {})
+    });
   } catch (e) {
     console.error("Vortex catalog error", String(e));
     return json({ error: "Catálogo temporariamente indisponível" }, 503);

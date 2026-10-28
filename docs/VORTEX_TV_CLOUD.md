@@ -58,3 +58,13 @@ continua distinguindo Vortex TV (app) do projeto Vortex TV OS (firmware).
 
 **Política permanente:** nenhum GitHub Actions; Gradle/Render e testes
 independentes.
+
+## Build 26 — inspeção agendada e laboratório de reprodução
+
+- SQL de inspeção em `supabase/migrations/20261028_vortex_manifest_checks.sql`.
+- 9 fontes candidatas iniciais catalogadas em `catalog/cloud/curated_sources.json`.
+- Cron de manifesto a cada 6 h; resultados coletados a cada 2 min.
+- Diretório brasileiro IPTV-org consultado uma vez por dia, com filtro estrito por `tvg-id` institucional e hostname HTTPS oficial. Links de IP e canais pagos não são importados.
+- 2 novas fontes descobertas no primeiro ciclo: Canal Gov e TV Câmara 2; ambas permanecem `unknown`/`source_found` até verificação de fonte e direitos.
+- API `?lab=1` retorna **apenas** fontes CC autorizadas com `manifest_ok`, separadas do catálogo publicado. O APK disponibiliza **Fontes → Laboratório: testar filmes livres**; não altera favoritos nem sinaliza o conteúdo como reproduzido.
+- Canais oficiais com direitos de integração ainda indeterminados permanecem candidatos não publicados. Nenhuma entrada foi marcada `playback_ok` sem teste físico.
