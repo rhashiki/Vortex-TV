@@ -517,7 +517,21 @@ public final class MainActivity extends Activity {
         new AlertDialog.Builder(this).setTitle(i.name).setMessage(summary)
             .setPositiveButton("▶ Assistir",(d,w)->play(i))
             .setNeutralButton(catalog.isFavorite(i.url)?"★ Remover":"☆ Minha lista",(d,w)->{catalog.toggleFavorite(i.url);render();})
-            .setNegativeButton("Voltar",null).show();
+            .setNegativeButton("✎ Corrigir título",(dialog,which)->showTitleCorrection(i)).show();
+    }
+    private void showTitleCorrection(CatalogStore.Item item){
+        EditText field=new EditText(this);
+        field.setSingleLine(true);field.setText(item.name);field.selectAll();
+        field.setPadding(d(20),d(16),d(20),d(16));
+        new AlertDialog.Builder(this).setTitle("Corrigir título")
+            .setMessage("Altera apenas o nome exibido no Vortex TV. O link do vídeo não muda.")
+            .setView(field)
+            .setPositiveButton("Salvar",(dialog,which)->{
+                if(catalog.rename(item.url,field.getText().toString())){
+                    items=catalog.load();render();
+                }else Toast.makeText(this,"Informe um título válido",Toast.LENGTH_SHORT).show();
+            })
+            .setNegativeButton("Cancelar",null).show();
     }
     private void play(CatalogStore.Item i){
         if(!i.url.startsWith("https://")){
