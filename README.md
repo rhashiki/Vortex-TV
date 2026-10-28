@@ -1,3 +1,28 @@
+# Vortex TV — aplicativo Android (não Vortex TV OS)
+
+## PLANO DE CATÁLOGOS · 28/10/2026
+
+**Ponto único de continuidade:** [Plano mestre das Builds 25–34](docs/PLANO_MESTRE_BUILDS_25_A_34.md)
+
+**Inventários versionados:**
+- [51 fontes e repositórios categorizados](catalog/fontes_registro.json), com status real e build responsável;
+- [643 entradas de listas brasileiras IPTV](catalog/inventario/iptv_brasil_referencias.csv) — 452 Brasil + 165 Pluto BR + 3 Samsung BR + 23 IPTV-com; **referências não testadas**, inclusive duplicatas;
+- [83 canais atuais e quatro curtas](catalog/inventario/itens_atuais_apk.csv) — 23 canais com URL não homologada, 60 emissoras premium sem fonte, todos os 83 sem ícones declarados;
+- [52 títulos nominalmente observados](catalog/inventario/titulos_identificados_amostra.csv), **nenhum com reprodução comprovada na auditoria**;
+- Análise anterior adicional: 371 animes com metadados, 1.895 URLs de APKs (a maioria técnicas), 357 referências de provedores. Planilha-mãe completa na Biblioteca ChatGPT `/Vortex TV/Planejamento`.
+
+**Atenção:** estar em um catálogo, aparecer no GitHub ou ter uma URL de stream não comprova direitos de uso, vídeo funcional, áudio, legenda ou reprodução no Android 7.1. Metadados PT-BR e capas ficam separados da autorização de vídeo. A experiência alvo é cinematográfica, familiar à Netflix, mas com identidade Vortex; no player TV, ↑/↓ alternam canais e ←/→ abrem guia vertical.
+
+**Estado de execução:** a Build 25 é um conjunto de inventários e contratos, **não um novo APK nem a integração dos catálogos**. As Builds 26–34 são planejamento. Há um APK de teste compilado pelo Render em https://vortex-tv-android-build.onrender.com/VortexTV-Android-Debug.apk, sem homologação de catálogo externo.
+
+**Política:** nunca GitHub Actions. Builds e validações por Render/ambiente local independente. Não confundir com o firmware Vortex TV OS.
+
+---
+
+## Arquivo histórico — pré-build UI01
+
+> O texto abaixo descreve o estágio original da UI01 e pode conter requisitos e estado de compilação anteriores às Builds 24/25. Use o plano mestre acima como referência atual.
+
 # Vortex TV — aplicativo de streaming, UI/UX 01
 
 **Este repositório contém CÓDIGO-FONTE, não contém APK compilado e não representa a versão Beta funcional.** Não confundir com **Vortex TV OS**, que é o firmware da TV Box.
