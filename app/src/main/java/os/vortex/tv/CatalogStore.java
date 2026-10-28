@@ -29,6 +29,8 @@ public final class CatalogStore {
         public boolean isDoc(){ return "youtube-doc".equals(format) || (!isLive() && group.toLowerCase().matches(".*(document|nature|história|historia).*?")); }
         public boolean isVideo(){return group.equalsIgnoreCase("Vídeos");}
         public boolean isLive(){
+            // Linear CINDIE TV is not a film-on-demand despite its category.
+            if("CINDIE TV".equals(name)&&"hls".equals(format))return true;
             if("youtube-live".equals(format))return true;
             if("youtube-movie".equals(format)||"youtube-doc".equals(format)
                 ||"youtube-series".equals(format))return false;

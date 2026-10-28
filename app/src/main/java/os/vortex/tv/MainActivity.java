@@ -321,6 +321,7 @@ public final class MainActivity extends Activity {
         ArrayList<CatalogStore.Item> live=new ArrayList<>();
         ArrayList<CatalogStore.Item> year90=new ArrayList<>(),year00=new ArrayList<>(),year10=new ArrayList<>();
         for(CatalogStore.Item item:items){
+            if(CatalogStore.deadYouTubeReference(item))continue;
             if("youtube-movie".equals(item.format)){
                 movies.add(item);
                 int year=0;try{year=Integer.parseInt(item.year);}catch(Exception ignored){}
@@ -426,6 +427,7 @@ public final class MainActivity extends Activity {
     private List<CatalogStore.Item> filmGenre(String genre){
         ArrayList<CatalogStore.Item> out=new ArrayList<>();
         for(CatalogStore.Item i:items){
+            if(CatalogStore.deadYouTubeReference(i))continue;
             if(!i.isFilm() && !("Documentário".equals(genre)&&i.isDoc()))continue;
             String tags=(i.group+" "+i.genre+" "+i.description).toLowerCase(Locale.ROOT);
             String g=genre.toLowerCase(Locale.ROOT);
