@@ -132,6 +132,7 @@ public final class MainActivity extends Activity {
         body=column();body.setPadding(d(tv?42:20),d(8),d(tv?42:20),d(48));
         viewport.addView(body,new ScrollView.LayoutParams(-1,-2));
         root.addView(viewport,new LinearLayout.LayoutParams(-1,0,1));
+        if(!tv)root.addView(mobileNavigation(),new LinearLayout.LayoutParams(-1,d(73)));
         setContentView(root);
         if("Buscar".equals(section)) renderSearch();
         else if("Minha lista".equals(section))renderFavorites();
@@ -159,11 +160,30 @@ public final class MainActivity extends Activity {
             t.setOnClickListener(v->{section=s;render();});focusable(t);nav.addView(t);
         }
         scroll.addView(nav);
-        bar.addView(scroll,new LinearLayout.LayoutParams(0,-1,1));
+        if(tv)bar.addView(scroll,new LinearLayout.LayoutParams(0,-1,1));
+        else bar.addView(new View(this),new LinearLayout.LayoutParams(0,d(1),1));
         TextView add=text("⊕  Fontes",tv?14:12,LIGHT,true);add.setPadding(d(12),d(10),d(12),d(10));
         add.setBackground(shape(0xFF24243B,9));focusable(add);
         add.setOnClickListener(v->showSources());bar.addView(add);
         return bar;
+    }
+    private View mobileNavigation(){
+        LinearLayout bottom=row();bottom.setPadding(d(4),d(3),d(4),d(3));
+        bottom.setBackground(shape(0xFF13131D,0));
+        String[] destinations={"Início","TV ao vivo","Filmes","Séries","Buscar"};
+        String[] labels={"⌂\nInício","▣\nTV","▤\nFilmes","▥\nSéries","⌕\nBuscar"};
+        for(int n=0;n<destinations.length;n++){
+            final String destination=destinations[n];
+            boolean active=destination.equals(section);
+            TextView entry=text(labels[n],11,active?0xFFF3EAFF:0xFF9691AA,active);
+            entry.setGravity(Gravity.CENTER);entry.setLineSpacing(d(2),1.0f);
+            entry.setBackground(shape(active?0xFF302543:0xFF13131D,10));
+            entry.setOnClickListener(v->{section=destination;render();});
+            focusable(entry);
+            LinearLayout.LayoutParams pos=new LinearLayout.LayoutParams(0,-1,1);
+            pos.setMargins(d(2),d(2),d(2),d(2));bottom.addView(entry,pos);
+        }
+        return bottom;
     }
     private void renderHome(){
         hero();
@@ -191,7 +211,7 @@ public final class MainActivity extends Activity {
         if(candidate==null&&!items.isEmpty())candidate=items.get(0);
         final CatalogStore.Item featured=candidate;
         FrameLayout heroFrame=new FrameLayout(this);heroFrame.setBackground(gradient(new int[]{0xFF241D4F,0xFF101522,0xFF080A13},16));
-        LinearLayout.LayoutParams hp=new LinearLayout.LayoutParams(-1,d(tv?330:280));
+        LinearLayout.LayoutParams hp=new LinearLayout.LayoutParams(-1,d(tv?390:310));
         hp.bottomMargin=d(27);body.addView(heroFrame,hp);
         if(featured!=null&&!featured.logo.isEmpty()){
             ImageView backdrop=new ImageView(this);backdrop.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -205,7 +225,7 @@ public final class MainActivity extends Activity {
         TextView chip=text(featured==null?"UMA NOVA FORMA DE ASSISTIR":"EM DESTAQUE",11,0xFFCCB8FF,true);
         h.addView(chip);
         String headline=featured==null?"Seu entretenimento.\nDo seu jeito.":featured.name;
-        TextView title=text(headline,tv?34:26,LIGHT,true);title.setMaxLines(2);title.setEllipsize(TextUtils.TruncateAt.END);
+        TextView title=text(headline,tv?42:30,LIGHT,true);title.setMaxLines(2);title.setEllipsize(TextUtils.TruncateAt.END);
         LinearLayout.LayoutParams tp=new LinearLayout.LayoutParams(tv?d(570):-1,-2);tp.topMargin=d(8);h.addView(title,tp);
         TextView subtitle=text(featured==null?"Uma experiência cinematográfica, simples e feita para sua TV.":""+(featured.provider.isEmpty()?"Acervo aberto":featured.provider)+"  •  "+(featured.year.isEmpty()?featured.group:featured.year),tv?14:12,0xFFE1DDF0,false);
         LinearLayout.LayoutParams sp=new LinearLayout.LayoutParams(-1,-2);sp.topMargin=d(8);h.addView(subtitle,sp);
@@ -427,7 +447,7 @@ public final class MainActivity extends Activity {
         if(content.isEmpty())return;
         LinearLayout sectionRoot=column();
         LinearLayout.LayoutParams outer=new LinearLayout.LayoutParams(-1,-2);outer.bottomMargin=d(24);body.addView(sectionRoot,outer);
-        TextView label=text(name,20,LIGHT,true);label.setPadding(0,0,0,d(14));sectionRoot.addView(label);
+        TextView label=text(name,tv?23:19,LIGHT,true);label.setPadding(0,0,0,d(14));sectionRoot.addView(label);
         HorizontalScrollView strip=new HorizontalScrollView(this);strip.setClipToPadding(false);strip.setHorizontalScrollBarEnabled(false);
         LinearLayout cards=row();cards.setPadding(d(5),d(6),d(5),d(10));strip.addView(cards);
         sectionRoot.addView(strip,new LinearLayout.LayoutParams(-1,-2));
