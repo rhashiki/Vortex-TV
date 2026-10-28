@@ -40,8 +40,11 @@ RUN python3 -m unittest discover -s tests -p 'test_*.py'
 RUN mkdir -p /tmp/vortex-smoke && \
     javac -d /tmp/vortex-smoke \
       app/src/main/java/os/vortex/tv/SourceIdentity.java \
-      app/src/test/java/os/vortex/tv/SourceIdentitySmokeTest.java && \
-    java -cp /tmp/vortex-smoke os.vortex.tv.SourceIdentitySmokeTest
+      app/src/main/java/os/vortex/tv/integration/M3uPlaylistParser.java \
+      app/src/test/java/os/vortex/tv/SourceIdentitySmokeTest.java \
+      app/src/test/java/os/vortex/tv/M3uStreamingSmokeTest.java && \
+    java -cp /tmp/vortex-smoke os.vortex.tv.SourceIdentitySmokeTest && \
+    java -cp /tmp/vortex-smoke os.vortex.tv.M3uStreamingSmokeTest
 RUN gradle --no-daemon --max-workers=2 -Dorg.gradle.jvmargs="-Xmx1536m -Dfile.encoding=UTF-8" :app:assembleDebug
 RUN python3 tools/verify_apk.py app/build/outputs/apk/debug/app-debug.apk
 
