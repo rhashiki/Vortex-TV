@@ -1,0 +1,696 @@
+{
+  "project": "Vortex TV (Android app, not Vortex TV OS)",
+  "audit_date": "2026-10-28",
+  "policy": "Registros de metadados e fontes; nenhuma disponibilidade/autorizações inferidas de URLs",
+  "total_sources": 51,
+  "sources": [
+    {
+      "id": "IPTV_ORG_BR",
+      "name": "iptv-org Brasil",
+      "types": [
+        "canal"
+      ],
+      "role": "Playlist pública de referência",
+      "url": "https://github.com/iptv-org/iptv/blob/master/streams/br.m3u",
+      "status": "643_REFERENCE_ONLY",
+      "phase": "B27",
+      "notes": "452 entradas no arquivo br.m3u; duplicações e streams não testados"
+    },
+    {
+      "id": "IPTV_ORG_PLUTO",
+      "name": "iptv-org Pluto Brasil",
+      "types": [
+        "canal"
+      ],
+      "role": "Lista FAST de referência",
+      "url": "https://github.com/iptv-org/iptv/blob/master/streams/br_pluto.m3u",
+      "status": "REFERENCE_ONLY",
+      "phase": "B27",
+      "notes": "165 entradas; validar player/região/termos da plataforma"
+    },
+    {
+      "id": "IPTV_ORG_SAMSUNG",
+      "name": "iptv-org Samsung Brasil",
+      "types": [
+        "canal"
+      ],
+      "role": "Lista FAST de referência",
+      "url": "https://github.com/iptv-org/iptv/blob/master/streams/br_samsung.m3u",
+      "status": "REFERENCE_ONLY",
+      "phase": "B27",
+      "notes": "3 entradas; não são a oferta total Samsung TV Plus"
+    },
+    {
+      "id": "IPTV_COM_BR",
+      "name": "iptv-com Brasil",
+      "types": [
+        "canal"
+      ],
+      "role": "Playlist pública candidata",
+      "url": "https://github.com/iptv-com/iptv/blob/main/lists/brazil.m3u",
+      "status": "REFERENCE_ONLY",
+      "phase": "B27",
+      "notes": "23 entradas, incluindo marcas pagas; origem/autorizações pendentes"
+    },
+    {
+      "id": "FREE_TV_IPTV",
+      "name": "Free-TV/IPTV",
+      "types": [
+        "canal"
+      ],
+      "role": "Fontes públicas de canais gratuitos",
+      "url": "https://github.com/Free-TV/IPTV",
+      "status": "REFERENCE_ONLY",
+      "phase": "B27",
+      "notes": "Projeto diz incluir somente canais gratuitos; conferir cada stream"
+    },
+    {
+      "id": "IPTV_ORG_API",
+      "name": "iptv-org/api",
+      "types": [
+        "canal",
+        "epg"
+      ],
+      "role": "IDs/logos/categorias/tags/streams em JSON",
+      "url": "https://github.com/iptv-org/api",
+      "status": "DOCUMENTED",
+      "phase": "B26+B27",
+      "notes": "Separar metadados de status da fonte"
+    },
+    {
+      "id": "IPTV_ORG_EPG",
+      "name": "iptv-org/epg",
+      "types": [
+        "epg"
+      ],
+      "role": "Coletores XMLTV de programação",
+      "url": "https://github.com/iptv-org/epg",
+      "status": "DOCUMENTED",
+      "phase": "B27",
+      "notes": "EPG deve refletir programa atual e próximo"
+    },
+    {
+      "id": "IPTV_COM_EPG",
+      "name": "iptv-com/epg",
+      "types": [
+        "epg"
+      ],
+      "role": "Projeto de EPG analisado",
+      "url": "https://github.com/iptv-com/epg",
+      "status": "INVALID_SAMPLE",
+      "phase": "B27",
+      "notes": "Guia encontrado é exemplo Teste 1; não usar como EPG brasileiro"
+    },
+    {
+      "id": "TMDB",
+      "name": "TMDB",
+      "types": [
+        "filme",
+        "série",
+        "documentário",
+        "anime"
+      ],
+      "role": "Metadados em pt-BR, sinopses, capas e IDs",
+      "url": "https://developer.themoviedb.org/docs/languages",
+      "status": "AUTH_REQUIRED",
+      "phase": "B26+B29",
+      "notes": "TMDb não fornece filmes para assistir; metadados por ID"
+    },
+    {
+      "id": "ANILIST",
+      "name": "AniList",
+      "types": [
+        "anime",
+        "série"
+      ],
+      "role": "Metadados e IDs de animes",
+      "url": "https://anilist.co/",
+      "status": "REFERENCE_ONLY",
+      "phase": "B29",
+      "notes": "371 registros locais no inventário NinjaTV"
+    },
+    {
+      "id": "SIMKL",
+      "name": "Simkl",
+      "types": [
+        "série",
+        "filme",
+        "anime"
+      ],
+      "role": "Metadados, identificação e histórico",
+      "url": "https://api.simkl.com",
+      "status": "REFERENCE_ONLY",
+      "phase": "B29",
+      "notes": "Referência estática encontrada no NinjaTV"
+    },
+    {
+      "id": "OPENSUBTITLES",
+      "name": "OpenSubtitles",
+      "types": [
+        "filme",
+        "série",
+        "anime"
+      ],
+      "role": "Busca de legendas",
+      "url": "https://api.opensubtitles.com/api/v1",
+      "status": "REFERENCE_ONLY",
+      "phase": "B31",
+      "notes": "Credencial/termos; não é fonte de vídeo"
+    },
+    {
+      "id": "INTERNET_ARCHIVE",
+      "name": "Internet Archive",
+      "types": [
+        "filme",
+        "documentário",
+        "animação"
+      ],
+      "role": "VOD sob licenças abertas quando declaradas",
+      "url": "https://archive.org",
+      "status": "PARTIALLY_IN_APK",
+      "phase": "B30",
+      "notes": "Somente poucos registros adicionados; melhorar paginação, licenças e qualidade"
+    },
+    {
+      "id": "DAILYMOTION",
+      "name": "Dailymotion",
+      "types": [
+        "filme",
+        "documentário",
+        "vídeo"
+      ],
+      "role": "Pesquisa e integração pelo player/SDK oficial",
+      "url": "https://www.dailymotion.com/search/Filme%20completo%20dublado/videos?duration=more_than_1h",
+      "status": "SEARCH_ONLY",
+      "phase": "B30",
+      "notes": "Título 'filme completo' não comprova duração, filme verdadeiro nem direitos; SDK/termos"
+    },
+    {
+      "id": "FILMESONLINEHD1",
+      "name": "filmesonlinehd1.org",
+      "types": [
+        "filme",
+        "série"
+      ],
+      "role": "Catálogo web citado pelo usuário",
+      "url": "https://filmesonlinehd1.org",
+      "status": "USER_REFERENCE",
+      "phase": "B32",
+      "notes": "Sem inventário completo capturado; site e origens precisam auditoria"
+    },
+    {
+      "id": "MEGA_FILMES_HD",
+      "name": "Mega Filmes HD",
+      "types": [
+        "filme",
+        "série",
+        "anime",
+        "documentário"
+      ],
+      "role": "Indexador web e domínios variantes",
+      "url": "https://www.megafilmeshd.press/",
+      "status": "WEB_INDEX_OBSERVED",
+      "phase": "B32",
+      "notes": "Domínios semelhantes não significam operador único; direitos e players não comprovados"
+    },
+    {
+      "id": "VIZER_SITE",
+      "name": "Vizer/Vizr",
+      "types": [
+        "filme",
+        "série"
+      ],
+      "role": "Catálogo web citado e estudado",
+      "url": "https://vizer.autos",
+      "status": "CODE_REFERENCE",
+      "phase": "B32",
+      "notes": "Há documentação técnica externa; nenhuma fonte homologada para o Vortex"
+    },
+    {
+      "id": "VIZERTV_GH",
+      "name": "viniciusgdr/vizertv",
+      "types": [
+        "filme",
+        "série"
+      ],
+      "role": "Biblioteca multi-provider de pesquisa/info/episódios/player",
+      "url": "https://github.com/viniciusgdr/vizertv",
+      "status": "CODE_REVIEWED",
+      "phase": "B32",
+      "notes": "WarezCDN, Pobreflix, CineGratisTV; sem testar origem nem direitos"
+    },
+    {
+      "id": "STRETOR_GH",
+      "name": "BrunoDelfim/stretor",
+      "types": [
+        "filme",
+        "série",
+        "documentário"
+      ],
+      "role": "Arquitetura de VOD com IDs TMDB e estados de fonte",
+      "url": "https://github.com/BrunoDelfim/stretor",
+      "status": "CODE_DOC_REVIEWED",
+      "phase": "B32",
+      "notes": "Referência de testes documentados pelo autor; não replicados"
+    },
+    {
+      "id": "REDECANAIS_WEB",
+      "name": "RedeCanais / RedeCanaisTV",
+      "types": [
+        "filme",
+        "série",
+        "canal",
+        "anime"
+      ],
+      "role": "Catálogo web e possíveis players",
+      "url": "https://www.redecanaishd.press/",
+      "status": "WEB_INDEX_OBSERVED",
+      "phase": "B32",
+      "notes": "Vários domínios; não confundir índice e direito de exibição"
+    },
+    {
+      "id": "RECANAIS",
+      "name": "Recanais",
+      "types": [
+        "filme",
+        "série"
+      ],
+      "role": "Catálogo web citado pelo usuário",
+      "url": "https://recanais.com",
+      "status": "USER_REFERENCE",
+      "phase": "B32",
+      "notes": "Domínio/estrutura não confirmados neste levantamento"
+    },
+    {
+      "id": "POBREFLIX",
+      "name": "Pobreflix",
+      "types": [
+        "filme",
+        "série"
+      ],
+      "role": "Catálogo web/provider citado por NinjaTV e VizerTV",
+      "url": "https://www.pobreflixtv.living",
+      "status": "STATIC_APK_REFERENCE",
+      "phase": "B32",
+      "notes": "Host encontrado em APK; autorização e funcionamento pendentes"
+    },
+    {
+      "id": "FILMESGAYS",
+      "name": "FilmesGays.net",
+      "types": [
+        "filme",
+        "série",
+        "documentário"
+      ],
+      "role": "Catálogo temático LGBT citado pelo usuário",
+      "url": "https://filmesgays.net",
+      "status": "USER_REFERENCE",
+      "phase": "B32",
+      "notes": "Atribuição de obras e direitos não verificada"
+    },
+    {
+      "id": "TV_ONLINE_HD",
+      "name": "TV Online HD",
+      "types": [
+        "canal",
+        "filme",
+        "série",
+        "anime",
+        "dorama"
+      ],
+      "role": "Portal com rotas de canais e catálogo web",
+      "url": "https://www.tvonlinehd.app.br/?aba=canais",
+      "status": "HTML_REVIEWED",
+      "phase": "B32",
+      "notes": "147 canais contados em análise anterior; players externos não homologados"
+    },
+    {
+      "id": "REDECANAISTV_WEB",
+      "name": "redecanaistv",
+      "types": [
+        "canal"
+      ],
+      "role": "Portal externo de canais mencionado pelo usuário",
+      "url": "https://redecanaistv.by",
+      "status": "USER_REFERENCE",
+      "phase": "B32",
+      "notes": "Nenhum link de reprodução comprovado no Vortex"
+    },
+    {
+      "id": "YOUCINE_APK",
+      "name": "YouCine (APK)",
+      "types": [
+        "canal",
+        "filme",
+        "série"
+      ],
+      "role": "Referência de arquitetura de app com player",
+      "url": "",
+      "status": "STATIC_APK_REVIEWED",
+      "phase": "B32",
+      "notes": "Código principal protegido; não há playlist exportável"
+    },
+    {
+      "id": "NINJATV_APK",
+      "name": "NinjaTV (APK)",
+      "types": [
+        "filme",
+        "série",
+        "anime",
+        "documentário"
+      ],
+      "role": "Referência de extratores e metadados locais",
+      "url": "",
+      "status": "STATIC_APK_REVIEWED",
+      "phase": "B32",
+      "notes": "357 referências de sites/extratores; 371 metadados de anime; 0 VOD confirmado"
+    },
+    {
+      "id": "ZPNET_APK",
+      "name": "Zp.net (APK)",
+      "types": [
+        "canal",
+        "filme",
+        "série",
+        "epg"
+      ],
+      "role": "Referência de esquema M3U/Xtream/XMLTV",
+      "url": "",
+      "status": "STATIC_APK_REVIEWED",
+      "phase": "B28",
+      "notes": "Sem credenciais ou playlist pronta"
+    },
+    {
+      "id": "METAX_APK",
+      "name": "MetaX TV (APK)",
+      "types": [
+        "canal",
+        "filme",
+        "série",
+        "epg"
+      ],
+      "role": "CMS/recomendações e data API observadas",
+      "url": "",
+      "status": "STATIC_APK_REVIEWED",
+      "phase": "B32",
+      "notes": "cms.metaxplay.com; data.metaxplay.com; respostas não capturadas"
+    },
+    {
+      "id": "REDECANAIS_APK",
+      "name": "Rede Canais TV (APK)",
+      "types": [
+        "filme",
+        "série",
+        "canal"
+      ],
+      "role": "Backend discloud aparente",
+      "url": "",
+      "status": "STATIC_APK_REVIEWED",
+      "phase": "B32",
+      "notes": "redecanais.discloud.app; sem fonte direta"
+    },
+    {
+      "id": "TV_DIGITAL_APK",
+      "name": "TV Digital (APK)",
+      "types": [
+        "canal",
+        "epg",
+        "filme"
+      ],
+      "role": "Referência de EPG e infraestrutura HLS",
+      "url": "",
+      "status": "STATIC_APK_REVIEWED",
+      "phase": "B28",
+      "notes": "7 links HLS históricos de 2024 sem validade atual"
+    },
+    {
+      "id": "NEXT_PLUS_APK",
+      "name": "Next+ (APK)",
+      "types": [
+        "filme",
+        "série"
+      ],
+      "role": "Referência de backend de VOD",
+      "url": "",
+      "status": "STATIC_APK_REVIEWED",
+      "phase": "B32",
+      "notes": "api.saracura-do-mato.top; sem catálogo exportado"
+    },
+    {
+      "id": "CINEGATO_APK",
+      "name": "Cinegato (APK)",
+      "types": [
+        "filme",
+        "série",
+        "anime"
+      ],
+      "role": "Referência de arquitetura e interface",
+      "url": "",
+      "status": "STATIC_APK_REVIEWED",
+      "phase": "B32",
+      "notes": "dev.viberplay.io; produção não comprovada"
+    },
+    {
+      "id": "VEORA_APK",
+      "name": "Veora TV (APK)",
+      "types": [
+        "canal",
+        "filme",
+        "série"
+      ],
+      "role": "Referência de UI e player",
+      "url": "",
+      "status": "STATIC_APK_REVIEWED",
+      "phase": "B32",
+      "notes": "Backend não identificado"
+    },
+    {
+      "id": "PLAY_CINE_APK",
+      "name": "Play Cine CT/XCIPTV (APK)",
+      "types": [
+        "canal",
+        "filme",
+        "série",
+        "epg"
+      ],
+      "role": "Padrão de organização IPTV + Xtream",
+      "url": "",
+      "status": "STATIC_APK_REVIEWED",
+      "phase": "B28",
+      "notes": "Exige provedor/autorização, não contém catálogo próprio"
+    },
+    {
+      "id": "ANIME_TV_APK",
+      "name": "AnimeTV / Play Animes (APKs)",
+      "types": [
+        "anime",
+        "série"
+      ],
+      "role": "Arquitetura de app para anime",
+      "url": "",
+      "status": "STATIC_APK_REVIEWED",
+      "phase": "B32",
+      "notes": "Sem links de episódio extraídos"
+    },
+    {
+      "id": "VELOPLAY_APK",
+      "name": "VeloPlay (APK)",
+      "types": [
+        "canal",
+        "filme",
+        "série"
+      ],
+      "role": "IJKPlayer e backend remoto",
+      "url": "",
+      "status": "STATIC_APK_REVIEWED",
+      "phase": "B32",
+      "notes": "URL direta não identificada"
+    },
+    {
+      "id": "OPENTV_GH",
+      "name": "opentvproject/opentv",
+      "types": [
+        "canal",
+        "epg"
+      ],
+      "role": "Referência de player Android e navegação TV",
+      "url": "https://github.com/opentvproject/opentv",
+      "status": "CODE_REVIEWED",
+      "phase": "B26+B28",
+      "notes": "minSdk 23; licença GPLv3, não copiar sem observar obrigações"
+    },
+    {
+      "id": "OWNTV_GH",
+      "name": "ahXN00/OwnTV",
+      "types": [
+        "canal",
+        "filme",
+        "série",
+        "epg"
+      ],
+      "role": "Referência de interface TV e EPG",
+      "url": "https://github.com/ahXN00/OwnTV",
+      "status": "CODE_REVIEWED",
+      "phase": "B26+B28",
+      "notes": "Android >=8; GPLv3, incompatível diretamente com 7.1"
+    },
+    {
+      "id": "IPTV_PROXY_GH",
+      "name": "pierre-emmanuelJ/iptv-proxy",
+      "types": [
+        "canal",
+        "epg"
+      ],
+      "role": "Referência de proxy IPTV autorizado",
+      "url": "https://github.com/pierre-emmanuelJ/iptv-proxy",
+      "status": "CODE_REVIEWED",
+      "phase": "B28",
+      "notes": "GPLv3; somente provedor/playlist com autorização"
+    },
+    {
+      "id": "PLAY_INFINITY_GH",
+      "name": "Dante2526/Play-Infinity",
+      "types": [
+        "filme",
+        "série",
+        "anime",
+        "canal"
+      ],
+      "role": "Referência de watchdog/fallback/player unificado",
+      "url": "https://github.com/Dante2526/Play-Infinity",
+      "status": "DOC_REVIEWED",
+      "phase": "B31+B32",
+      "notes": "Documentação não é prova de streams ativos"
+    },
+    {
+      "id": "KKMOVIES_GH",
+      "name": "kauankelvin7/KKMovies",
+      "types": [
+        "filme",
+        "série"
+      ],
+      "role": "Arquitetura TMDB + disponibilidade por provedor",
+      "url": "https://github.com/kauankelvin7/KKMovies",
+      "status": "DOC_REVIEWED",
+      "phase": "B29+B32",
+      "notes": "Sem execução real da API no Vortex"
+    },
+    {
+      "id": "MOX_GH",
+      "name": "KayohanCosta/Mox-Streaming",
+      "types": [
+        "filme",
+        "série"
+      ],
+      "role": "Referência de sincronização de catálogo de terceiros",
+      "url": "https://github.com/KayohanCosta/Mox-Streaming",
+      "status": "CODE_REVIEWED",
+      "phase": "B32",
+      "notes": "Marca playback_validated false"
+    },
+    {
+      "id": "REDECANAIS_PY_GH",
+      "name": "cleitonleonel/redecanais",
+      "types": [
+        "filme",
+        "série"
+      ],
+      "role": "Referência biblioteca de catálogo",
+      "url": "https://github.com/cleitonleonel/redecanais",
+      "status": "CODE_REVIEWED",
+      "phase": "B32",
+      "notes": "Domínio histórico; não implica reprodução atual"
+    },
+    {
+      "id": "RCRESOLVER_GH",
+      "name": "cleitonleonel/script.module.rcresolver",
+      "types": [
+        "filme",
+        "série"
+      ],
+      "role": "Referência Kodi/resolver",
+      "url": "https://github.com/cleitonleonel/script.module.rcresolver",
+      "status": "CODE_REVIEWED",
+      "phase": "B32",
+      "notes": "Licença Apache 2.0; conferir API e acessos"
+    },
+    {
+      "id": "M3U_REDECANAIS_GH",
+      "name": "bravesoftdz/Gerador-M3U-RedeCanais",
+      "types": [
+        "canal"
+      ],
+      "role": "Referência gerador M3U",
+      "url": "https://github.com/bravesoftdz/Gerador-M3U-RedeCanais",
+      "status": "CODE_REVIEWED",
+      "phase": "B32",
+      "notes": "Não representa playlist de canais pagos atual"
+    },
+    {
+      "id": "REDE_SCRAPER_GH",
+      "name": "annatar-coder/rede-canais-tv-scraper",
+      "types": [
+        "filme",
+        "série",
+        "canal"
+      ],
+      "role": "Referência NodeJS de catálogo",
+      "url": "https://github.com/annatar-coder/rede-canais-tv-scraper",
+      "status": "CODE_REVIEWED",
+      "phase": "B32",
+      "notes": "Necessário revisão de permissões e termos"
+    },
+    {
+      "id": "REDE_SCRAPER_PY_GH",
+      "name": "GUIKAR741/rede-canais-scraper",
+      "types": [
+        "filme",
+        "série"
+      ],
+      "role": "Referência Python, JSON e M3U",
+      "url": "https://github.com/GUIKAR741/rede-canais-scraper",
+      "status": "CODE_REVIEWED",
+      "phase": "B32",
+      "notes": "Não comprova fontes válidas ou autorizadas"
+    },
+    {
+      "id": "MFLIX_GH",
+      "name": "ViniciusRuiz/mflix-back-rede-canais",
+      "types": [
+        "filme",
+        "série"
+      ],
+      "role": "Referência backend RedeCanais",
+      "url": "https://github.com/ViniciusRuiz/mflix-back-rede-canais",
+      "status": "REPO_FOUND",
+      "phase": "B32",
+      "notes": "Não executado"
+    },
+    {
+      "id": "STREMIO_REDECANAIS_GH",
+      "name": "Caio-Albuquerque22/Addon-stremion-redecanais",
+      "types": [
+        "filme",
+        "série"
+      ],
+      "role": "Referência addon Stremio",
+      "url": "https://github.com/Caio-Albuquerque22/Addon-stremion-redecanais",
+      "status": "REPO_FOUND",
+      "phase": "B32",
+      "notes": "Não executado"
+    },
+    {
+      "id": "MEDIAFLOW_GH",
+      "name": "mhdzumair/mediaflow-proxy",
+      "types": [
+        "canal",
+        "filme"
+      ],
+      "role": "Referência de proxy streaming",
+      "url": "https://github.com/mhdzumair/mediaflow-proxy",
+      "status": "REPO_FOUND",
+      "phase": "B31",
+      "notes": "Não incorporar funcionalidades de remoção de DRM"
+    }
+  ]
+}
