@@ -54,6 +54,8 @@ class LocalMultiSourceFailover(unittest.TestCase):
         self.assertIn("playable.length()>=120",ui)
         self.assertIn("privateSources.representatives(150)",store)
         self.assertIn("privateSources.alternatives(selected",store)
+        self.assertIn("lastWorkingSource(Item item)",store)
+        self.assertIn("catalog.lastWorkingSource(i)",ui)
     def test_version(self):
         gradle=self.read("app/build.gradle")
         self.assertIn("versionCode 32",gradle)

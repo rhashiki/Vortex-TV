@@ -753,9 +753,13 @@ public final class MainActivity extends Activity {
                 .setMessage("Endereços HTTP são aceitos apenas quando importados de arquivo local. Nesse caso, podem expor credenciais na rede. Prefira fontes HTTPS.")
                 .setPositiveButton("Entendi",null).show();return;
         }
+        String first=i.url;
+        String learned=catalog.lastWorkingSource(i);
+        if(learned!=null&&M3uPlaylistParser.isHttpUrl(learned))first=learned;
         Intent intent=new Intent(this,VortexPlayerActivity.class);
-        intent.putExtra(VortexPlayerActivity.EXTRA_MEDIA_URL,i.url);
+        intent.putExtra(VortexPlayerActivity.EXTRA_MEDIA_URL,first);
         JSONArray alternatives=new JSONArray();
+        if(!first.equals(i.url))alternatives.put(i.url);
         if("Big Buck Bunny".equals(i.name)
             &&i.url.equals("https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8")){
             alternatives.put("https://cdn.jwplayer.com/manifests/pZxWPRg4.m3u8");
@@ -781,7 +785,7 @@ public final class MainActivity extends Activity {
                 sibling.tvgId,sibling.format,sibling.url)))options.add(sibling.url);
         }
         JSONArray orderedSources=new JSONArray();
-        for(String address:options)if(!address.equals(i.url))orderedSources.put(address);
+        for(String address:options)if(!address.equals(first))orderedSources.put(address);
         if(orderedSources.length()>0)
             intent.putExtra(VortexPlayerActivity.EXTRA_MEDIA_FALLBACKS_JSON,orderedSources.toString());
         if(i.isLive()){

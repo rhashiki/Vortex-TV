@@ -138,6 +138,16 @@ public final class ImportedSourceStore extends SQLiteOpenHelper {
         }
         return out;
     }
+    public synchronized String lastWorking(CatalogStore.Item selected){
+        String key=SourceIdentity.key(selected.name,selected.group,
+            selected.tvgId,selected.format,selected.url);
+        try(Cursor c=getReadableDatabase().rawQuery(
+            "SELECT url FROM sources WHERE identity_key=? AND last_good_ms>last_bad_ms "
+            +"AND last_good_ms>0 ORDER BY last_good_ms DESC LIMIT 1",
+            new String[]{key})){
+            return c.moveToFirst()?c.getString(0):null;
+        }
+    }
     public synchronized boolean contains(String url){
         try(Cursor c=getReadableDatabase().rawQuery(
             "SELECT 1 FROM sources WHERE url=? LIMIT 1",new String[]{url})){
