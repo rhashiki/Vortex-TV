@@ -588,13 +588,36 @@ public final class MainActivity extends Activity {
         input.setBackground(shape(PANEL,10));
         LinearLayout.LayoutParams ip=new LinearLayout.LayoutParams(-1,d(54));ip.topMargin=d(18);body.addView(input,ip);
         LinearLayout results=column();body.addView(results);
+        final android.os.Handler searchHandler=new android.os.Handler(android.os.Looper.getMainLooper());
+        final Runnable[] pending={null};
         input.addTextChangedListener(new android.text.TextWatcher(){
             @Override public void beforeTextChanged(CharSequence s,int st,int count,int after){}
             @Override public void onTextChanged(CharSequence s,int start,int before,int count){
-                results.removeAllViews();
-                ArrayList<CatalogStore.Item> matches=new ArrayList<>();String query=s.toString().toLowerCase(Locale.ROOT);
-                for(CatalogStore.Item i:items)if(i.name.toLowerCase(Locale.ROOT).contains(query)||i.group.toLowerCase(Locale.ROOT).contains(query)||i.genre.toLowerCase(Locale.ROOT).contains(query)||i.provider.toLowerCase(Locale.ROOT).contains(query))matches.add(i);
-                addCards(results,matches,1,60);
+                if(pending[0]!=null)searchHandler.removeCallbacks(pending[0]);
+                final String term=s.toString().trim();
+                pending[0]=()->{
+                    results.removeAllViews();
+                    if(term.length()<2)return;
+                    ArrayList<CatalogStore.Item> matches=new ArrayList<>();
+                    java.util.HashSet<String> seen=new java.util.HashSet<>();
+                    String query=term.toLowerCase(Locale.ROOT);
+                    for(CatalogStore.Item i:items){
+                        if(matches.size()>=65)break;
+                        if(i.name.toLowerCase(Locale.ROOT).contains(query)
+                            ||i.group.toLowerCase(Locale.ROOT).contains(query)
+                            ||i.genre.toLowerCase(Locale.ROOT).contains(query)){
+                            if(seen.add(i.url))matches.add(i);
+                        }
+                    }
+                    // Indexed on-device SQLite searches the entire imported list,
+                    // not just the 150 cards loaded on the home screen.
+                    for(CatalogStore.Item i:catalog.searchImported(term,65)){
+                        if(matches.size()>=65)break;
+                        if(seen.add(i.url))matches.add(i);
+                    }
+                    addCards(results,matches,1,65);
+                };
+                searchHandler.postDelayed(pending[0],220);
             }
             @Override public void afterTextChanged(android.text.Editable e){}
         });
@@ -724,9 +747,10 @@ public final class MainActivity extends Activity {
             }
             startActivity(yt);return;
         }
-        if(!i.url.startsWith("https://")){
-            new AlertDialog.Builder(this).setTitle("Fonte HTTP sem criptografia")
-                .setMessage("A reprodução por HTTP pode expor seu tráfego. Esta versão de desenvolvimento utiliza HTTPS. Importe uma fonte HTTPS válida.")
+        if(!M3uPlaylistParser.isHttpUrl(i.url) ||
+             (i.url.startsWith("http://")&&!catalog.isPrivateImportedUrl(i.url))){
+            new AlertDialog.Builder(this).setTitle("Fonte não permitida")
+                .setMessage("Endereços HTTP são aceitos apenas quando importados de arquivo local. Nesse caso, podem expor credenciais na rede. Prefira fontes HTTPS.")
                 .setPositiveButton("Entendi",null).show();return;
         }
         Intent intent=new Intent(this,VortexPlayerActivity.class);
@@ -740,8 +764,26 @@ public final class MainActivity extends Activity {
             &&i.url.equals("https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8")){
             alternatives.put("https://archive.org/download/TearsOfSteel/TearsOfSteel_720p_512kb.mp4");
         }
-        if(alternatives.length()>0)
-            intent.putExtra(VortexPlayerActivity.EXTRA_MEDIA_FALLBACKS_JSON,alternatives.toString());
+        // Same title/service, multiple URLs: HD/SD/backup variants are invisible
+        // to the user and automatically cycled by the native player on failure.
+        java.util.LinkedHashSet<String> options=new java.util.LinkedHashSet<>();
+        for(int n=0;n<alternatives.length();n++)options.add(alternatives.optString(n));
+        for(String extra:catalog.alternativesFor(i,12)){
+            if(M3uPlaylistParser.isHttpUrl(extra)&&!i.url.equals(extra))
+                options.add(extra);
+            if(options.size()>=12)break;
+        }
+        String selectedKey=SourceIdentity.key(i.name,i.group,i.tvgId,i.format,i.url);
+        for(CatalogStore.Item sibling:items){
+            if(options.size()>=12)break;
+            if(sibling.url.equals(i.url)||!M3uPlaylistParser.isHttpUrl(sibling.url))continue;
+            if(selectedKey.equals(SourceIdentity.key(sibling.name,sibling.group,
+                sibling.tvgId,sibling.format,sibling.url)))options.add(sibling.url);
+        }
+        JSONArray orderedSources=new JSONArray();
+        for(String address:options)if(!address.equals(i.url))orderedSources.put(address);
+        if(orderedSources.length()>0)
+            intent.putExtra(VortexPlayerActivity.EXTRA_MEDIA_FALLBACKS_JSON,orderedSources.toString());
         if(i.isLive()){
             JSONArray playable=new JSONArray();int selected=0;
             for(CatalogStore.Item channel:items) {
@@ -753,8 +795,14 @@ public final class MainActivity extends Activity {
                     entry.put("url",channel.url);
                     entry.put("number",playable.length()+1);
                     entry.put("programme",epgNow(channel.tvgId.isEmpty()?channel.name:channel.tvgId));
+                    JSONArray backups=new JSONArray();
+                    for(String alternate:catalog.alternativesFor(channel,8))
+                        if(M3uPlaylistParser.isHttpUrl(alternate)&&!channel.url.equals(alternate))
+                            backups.put(alternate);
+                    entry.put("alternatives",backups);
                 }catch(Exception ignored){}
                 playable.put(entry);
+                if(playable.length()>=120)break; // avoid Android Binder 1 MB intent limit
             }
             intent.putExtra(VortexPlayerActivity.EXTRA_CHANNELS_JSON,playable.toString());
             intent.putExtra(VortexPlayerActivity.EXTRA_CHANNEL_INDEX,selected);
@@ -903,11 +951,12 @@ public final class MainActivity extends Activity {
                     conn.setRequestProperty("Accept","application/x-mpegURL, audio/x-mpegurl, text/plain");
                     try {
                         if(conn.getResponseCode()!=200)throw new Exception("HTTP "+conn.getResponseCode());
-                        if(conn.getContentLengthLong()>4_000_000)throw new Exception("Arquivo excede 4 MB");
-                        try(InputStream source=new LimitedInputStream(conn.getInputStream(),4_000_000);
+                        if(conn.getContentLengthLong()>16_000_000)throw new Exception("Arquivo excede 16 MB");
+                        try(InputStream source=new LimitedInputStream(conn.getInputStream(),16_000_000);
                             InputStreamReader rdr=new InputStreamReader(source,"UTF-8")){
-                            List<M3uPlaylistParser.Channel> channels=new M3uPlaylistParser().parse(rdr);
-                            return "Adicionados: "+catalog.append(channels)+" de "+channels.size()+" itens encontrados";
+                            ImportedSourceStore.ImportResult imported=catalog.importPlaylist(rdr,"Playlist HTTPS");
+                            return "Fontes analisadas: "+imported.scanned+" • novas: "+
+                                imported.added+" • no banco local: "+imported.total;
                         }
                     }finally{conn.disconnect();}
                 },true);
@@ -965,14 +1014,22 @@ public final class MainActivity extends Activity {
         super.onActivityResult(request,result,data);
         if(result!=RESULT_OK||data==null||data.getData()==null)return;
         final Uri uri=data.getData();
-        if(request==PICK_M3U)runTask(()->{
-            try(InputStream in=new LimitedInputStream(getContentResolver().openInputStream(uri),4_000_000);
-                InputStreamReader rdr=new InputStreamReader(in,"UTF-8")){
-                List<M3uPlaylistParser.Channel> channels=new M3uPlaylistParser().parse(rdr);
-                int count=catalog.append(channels);
-                return "Importados "+count+" novos itens.";
-            }
-        },true);
+        if(request==PICK_M3U)new AlertDialog.Builder(this)
+            .setTitle("Importar playlist privada")
+            .setMessage("A lista ficará armazenada SOMENTE neste dispositivo. Alguns links usam HTTP e podem transmitir credenciais sem criptografia. Use arquivos de fontes confiáveis. Prosseguir?")
+            .setPositiveButton("Importar",(dialog,which)->runTask(()->{
+                try(InputStream in=new LimitedInputStream(
+                        getContentResolver().openInputStream(uri),16_000_000);
+                    InputStreamReader rdr=new InputStreamReader(in,"UTF-8")){
+                    String label=uri.getLastPathSegment();
+                    ImportedSourceStore.ImportResult imported=catalog.importPlaylist(
+                        rdr,label==null?"Arquivo M3U":label);
+                    return "Importadas "+imported.added+" de "+imported.scanned+
+                        " URLs. Fontes locais: "+imported.total+
+                        ". Variações do mesmo título são agrupadas automaticamente.";
+                }
+            },true))
+            .setNegativeButton("Cancelar",null).show();
         if(request==PICK_EPG)runTask(()->{
             HashSet<String> allowed=new HashSet<>();
             for(CatalogStore.Item i:items){if(!i.tvgId.isEmpty())allowed.add(i.tvgId);if(i.isLive())allowed.add(i.name);}
