@@ -20,7 +20,7 @@ class CloudContractTests(unittest.TestCase):
         self.assertIn('"authorized".equals',sync)
         self.assertIn('replaceRemote(approved)',sync)
         self.assertIn('loadLocal()',store)
-        self.assertIn('loadFrom(CLOUD)',store)
+        self.assertIn('for(String layer:new String[]{CLOUD,OFFICIAL_YOUTUBE})',store)
         self.assertIn('saveItems(CLOUD,accepted)',store)
     def test_cloud_must_not_proxy_video(self):
         edge=(ROOT/'supabase/functions/vortex-catalog/index.ts').read_text()
