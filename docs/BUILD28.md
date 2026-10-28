@@ -31,3 +31,10 @@
 - O firmware Vortex TV OS é projeto distinto.
 
 Próximo teste: instalar no celular, tocar na capa Big Buck Bunny, testar Caminandes e Sprite Fright no player oficial, confirmar capas. Caso falhe, capturar mensagem HTTP com o host e tipo de recurso.
+
+## Pós-build: preflight HTTPS independente, via Supabase Edge
+- 28/10/2026, 21:58 UTC, 7 requisições HEAD fixas: pôsteres Big Buck Bunny, Sintel, Tears of Steel, Elephants Dream; thumbnail YouTube Deu a Louca nos Bichos; MP4 Sintel e Elephants Dream. Todas com HTTP 200 e Content-Type coerente (image/jpeg, image/png, video/mp4).
+- Os pôsteres Wikimedia Commons resolveram para thumb.wikimedia.org; arquivos MP4 Archive resolveram para nós de mídia do Internet Archive. HEAD 200 NÃO comprova GET completo nem decodificação no Android.
+- Atualizado o Supabase vortex_media.poster_url (quatro títulos), adicionados sources candidatos MP4 para Sintel e Elephants Dream, com validação http_ok, habilitado=false, e histórico sem playback_ok.
+- Supabase após escrita: 13 mídias, 14 fontes, 14 verificações; 0 fontes playback_ok homologadas.
+- A função diagnóstica vortex-media-preflight verifica exclusivamente URLs previamente fixadas; não recebe URLs arbitrárias do público e não retransmite mídia.
