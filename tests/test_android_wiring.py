@@ -10,14 +10,14 @@ class Wiring(unittest.TestCase):
         self.assertGreaterEqual(len(json.loads(p.read_text())['items']),49)
         self.assertEqual(len({x['video_id'] for x in json.loads(p.read_text())['items']}),len(json.loads(p.read_text())['items']))
     def test_yt_activity_not_extracting_media(self):
-        java=(ROOT/'app/YouTubePlaybackActivity.java').read_text()
+        java=(ROOT/'app/src/main/java/os/vortex/tv/integration/YouTubePlaybackActivity.java').read_text()
         self.assertIn('youtube-nocookie.com/embed/',java)
         self.assertIn('Abrir no YouTube',java)
         self.assertIn('KEYCODE_DPAD_UP',java)
         self.assertIn('KEYCODE_DPAD_DOWN',java)
         self.assertNotIn('yt-dlp',java)
     def test_adapter(self):
-        java=(ROOT/'app/YoutubeCatalogBridge.java').read_text()
+        java=(ROOT/'app/src/main/java/os/vortex/tv/YoutubeCatalogBridge.java').read_text()
         self.assertIn('https://raw.githubusercontent.com/rhashiki/Vortex-TV/main/catalog/youtube/index.json',java)
         self.assertIn('youtube-live',java)
         self.assertIn('youtube-movie',java)
