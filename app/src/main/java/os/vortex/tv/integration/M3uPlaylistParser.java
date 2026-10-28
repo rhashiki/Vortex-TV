@@ -52,7 +52,10 @@ public final class M3uPlaylistParser {
                 Matcher matcher = ATTRIBUTE.matcher(head);
                 while (matcher.find()) attrs.put(matcher.group(1),matcher.group(2));
                 title = comma>=0 ? line.substring(comma+1).trim() : attrs.get("tvg-name");
-                if (title==null || title.isEmpty()) title="Sem titulo";
+                String canonical=attrs.get("tvg-name");
+                if(canonical!=null&&!canonical.trim().isEmpty())title=canonical.trim();
+                title=cleanDisplayName(title);
+                if (title==null || title.isEmpty()) title="Canal sem nome";
                 pending=true;
                 continue;
             }
@@ -65,6 +68,19 @@ public final class M3uPlaylistParser {
                     attr(attrs,"tvg-logo"),kind(line)));
         }
         return channels;
+    }
+    /**
+     * Strip IPTV quality/group labels, preserving the broadcaster's actual name.
+     * Prefer tvg-name over ad-hoc release names in EXTINF descriptions.
+     */
+    static String cleanDisplayName(String name) {
+        if(name==null)return "";
+        String cleaned=name.trim().replaceAll("\\s+"," ");
+        cleaned=cleaned.replaceAll("(?i)^(?:BR|BRA|BRAZIL|BRASIL)\\s*[-:|]\\s*","");
+        cleaned=cleaned.replaceAll("(?i)\\s*(?:\\[|\\()(?:HD|FHD|SD|4K|UHD|1080P|720P|H265)(?:\\]|\\))\\s*$","");
+        cleaned=cleaned.replaceAll("(?i)\\s+[-|:]\\s*(?:HD|FHD|SD|4K|UHD|1080P|720P)\\s*$","");
+        cleaned=cleaned.replaceAll("\\s+"," ").trim();
+        return cleaned.length()>110?cleaned.substring(0,110).trim():cleaned;
     }
     private static String attr(Map<String,String> attrs,String key) {String v=attrs.get(key);return v==null?"":v;}
     public static boolean isHttpUrl(String str) {
