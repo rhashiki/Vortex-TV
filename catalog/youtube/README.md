@@ -2,7 +2,7 @@
 
 ## Estado em 28/10/2026
 
-- **20 referências individuais** de filmes completos encontradas nos resultados de páginas públicas e atribuídas a canais como NetMovies/Filmelier/Film&Clips; vídeos **não testados no dispositivo**. `seed_referencias.json` é um índice, não prova de disponibilidade atual ou licença para re-hospedar.
+- **49 referências individuais** de filmes completos encontradas nos resultados de páginas públicas e atribuídas a canais como NetMovies/Filmelier/Film&Clips; vídeos **não testados no dispositivo**. `seed_referencias.json` é um índice, não prova de disponibilidade atual ou licença para re-hospedar.
 - **4 canais oficiais de filmes** com IDs conhecidos e **9 canais adicionais** indicados, sujeitos a revisão.
 - **12 emissoras/órgãos brasileiros** no registro para monitoramento de lives. Apenas TV Senado/Canal Gov tiveram vídeos publicados com nome *Ao vivo* encontrados na pesquisa; não há prova de transmissão ativa neste instante.
 - **53 buscas configuradas**, incluindo 20 por canais e transmissão ao vivo e 25 buscas de filmes; clássicos 1990–2019 priorizados.
@@ -26,7 +26,7 @@ O `index.json` é gerado atomicamente e deve ser versionado **após revisão hum
 
 A UI Vortex tem seção YouTube, capas do próprio YouTube, categorias e modo de reprodução via **iframe oficial** com fallback para aplicativo/site YouTube. Não usa `Media3` para URLs de páginas `watch?v=...`, pois não são links de mídia. Anúncios do YouTube e controles oficiais não são removidos. O D-Pad ↑/↓ alterna apenas entre lives **ativamente indexadas**; a lista oficial pode estar vazia quando não há API ou live confirmada.
 
-O APK contém 20 referências de filmes para exploração sem API, com status experimental. A versão antiga do APK não possui estas modificações até uma compilação e publicação nova. Em caso de erro de embed, use **Abrir no YouTube**.
+O APK contém 49 referências de filmes para exploração sem API, com status experimental. A versão YouTube Preview 26 é compilada pelo Render; o link só é atualizado após deploy concluído. Em caso de erro de embed, use **Abrir no YouTube**.
 
 ## Ordenação e curadoria
 
