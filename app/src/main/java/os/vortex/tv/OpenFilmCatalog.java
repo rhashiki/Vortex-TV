@@ -21,8 +21,8 @@ import java.util.Locale;
  */
 public final class OpenFilmCatalog {
     private static final String BASE="https://archive.org";
-    private static final int SEARCH_ROWS=100;
-    private static final int MAX_METADATA=72;
+    private static final int SEARCH_ROWS=40;
+    private static final int MAX_METADATA=40;
 
     public static final class Batch {
         public final List<CatalogStore.Item> items;
