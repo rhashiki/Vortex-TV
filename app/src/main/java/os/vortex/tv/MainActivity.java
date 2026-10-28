@@ -76,10 +76,9 @@ public final class MainActivity extends Activity {
         render();
         syncCloud(false);
         if(saved.isEmpty())showModeChooser();
-        if(!uiPrefs.getBoolean("open_archive_discovery_v2",false)) {
-            uiPrefs.edit().putBoolean("open_archive_discovery_v2",true).apply();
-            loadOpenArchive(false);
-        }
+        // Large Internet Archive imports are now opt-in: automatic discovery
+        // flooded the home page with unrelated titles and untested images.
+        // The manual "Carregar mais filmes livres" action remains available.
     }
 
     @Override public void onConfigurationChanged(Configuration config){super.onConfigurationChanged(config);render();}
@@ -190,18 +189,55 @@ public final class MainActivity extends Activity {
         }
         return bottom;
     }
+    private List<CatalogStore.Item> featuredMovies(){
+        String[] order={"Nerve: Um Jogo Sem Regras","Deu a Louca nos Bichos",
+            "Os Mercenários 2","O Grito","O Nevoeiro",
+            "Super-Herói: O Filme","Os 13 Pecados","Trumbo: Lista Negra",
+            "Traffik — Liberdade Roubada","A Loja Mágica de Brinquedos",
+            "O Jantar","Por um Corredor Escuro","Nurse: A Enfermeira Assassina",
+            "Totalmente Trocados","Vingança","Sprite Fright"};
+        ArrayList<CatalogStore.Item> selected=new ArrayList<>();
+        java.util.HashSet<String> known=new java.util.HashSet<>();
+        for(String name:order){
+            for(CatalogStore.Item item:items){
+                if(!name.equals(item.name)||CatalogStore.deadYouTubeReference(item))continue;
+                if(known.add(item.url))selected.add(item);
+                break;
+            }
+        }
+        return selected;
+    }
+    private List<CatalogStore.Item> liveCandidates(boolean available){
+        List<CatalogStore.Item> result=new ArrayList<>();
+        for(CatalogStore.Item item:items){
+            if(!item.isLive())continue;
+            String quality=catalog.sourceQuality(item.url);
+            boolean unavailable="server_unavailable".equals(quality)
+                ||"unverified".equals(quality)||"not_verified".equals(quality);
+            if(available!=unavailable)result.add(item);
+        }
+        return result;
+    }
     private void renderHome(){
         hero();
         if(items.isEmpty()){
             emptyState("Seu catálogo começa com uma fonte", "Importe uma playlist M3U autorizada ou adicione uma URL direta de vídeo. O Vortex TV não inclui catálogos piratas nem conteúdos fictícios.");
             return;
         }
+        rowOf("Cinema conhecido • Filmes em canais oficiais",featuredMovies(),1);
         ArrayList<CatalogStore.Item> youtubeFilms=new ArrayList<>();
-        for(CatalogStore.Item it:items)if("youtube-movie".equals(it.format))youtubeFilms.add(it);
-        rowOf("Filmes completos no YouTube • Referências externas",youtubeFilms,1);
-        rowOf("Filmes e curtas para assistir",filter(1),1);
+        ArrayList<CatalogStore.Item> archiveFilms=new ArrayList<>();
+        ArrayList<CatalogStore.Item> openMovies=new ArrayList<>();
+        for(CatalogStore.Item it:filter(1)){
+            if(it.format.startsWith("youtube-"))youtubeFilms.add(it);
+            else if(it.provider.startsWith("Internet Archive"))archiveFilms.add(it);
+            else openMovies.add(it);
+        }
+        rowOf("Mais filmes completos • YouTube",youtubeFilms,1);
+        rowOf("Curtas e filmes de licença aberta",openMovies,1);
+        rowOf("Canais com sinal detectado no servidor • Teste",liveCandidates(true),0);
+        rowOf("Cinema independente • Internet Archive",archiveFilms,1);
         addOpenArchiveAction();
-        rowOf("Ao vivo agora",filter(0),0);
         for(String genre:FILM_GENRES){
             if("Todos".equals(genre))continue;
             List<CatalogStore.Item> group=filmGenre(genre);
@@ -215,7 +251,15 @@ public final class MainActivity extends Activity {
     }
     private void hero(){
         CatalogStore.Item candidate=null;
-        for(CatalogStore.Item film:items){if(film.isFilm()){candidate=film;break;}}
+        List<CatalogStore.Item> curated=featuredMovies();
+        if(!curated.isEmpty())candidate=curated.get(0);
+        if(candidate==null){
+            for(CatalogStore.Item film:items){
+                if(film.isFilm()&&!CatalogStore.deadYouTubeReference(film)){
+                    candidate=film;break;
+                }
+            }
+        }
         if(candidate==null&&!items.isEmpty())candidate=items.get(0);
         final CatalogStore.Item featured=candidate;
         FrameLayout heroFrame=new FrameLayout(this);heroFrame.setBackground(gradient(new int[]{0xFF241D4F,0xFF101522,0xFF080A13},16));
@@ -256,7 +300,7 @@ public final class MainActivity extends Activity {
         List<CatalogStore.Item> out=new ArrayList<>();
         for(CatalogStore.Item i:items){
             boolean ok=type==0?i.isLive():type==1?i.isFilm():type==2?i.isSeries():type==3?i.isDoc():i.isVideo();
-            if(ok)out.add(i);
+            if(ok&&!CatalogStore.deadYouTubeReference(i))out.add(i);
         }
         return out;
     }
@@ -348,6 +392,17 @@ public final class MainActivity extends Activity {
         }
         categoryScroll.addView(chips);body.addView(categoryScroll);
         List<CatalogStore.Item> selected="Todos".equals(selectedFilmGenre)?filter(1):filmGenre(selectedFilmGenre);
+        // Promote familiar studio releases before uncurated Archive material.
+        final java.util.Map<String,Integer> priority=new java.util.HashMap<>();
+        int rank=0;for(CatalogStore.Item entry:featuredMovies())priority.put(entry.url,rank++);
+        selected.sort((left,right)->{
+            int a=priority.containsKey(left.url)?priority.get(left.url):999;
+            int b=priority.containsKey(right.url)?priority.get(right.url):999;
+            if(a!=b)return Integer.compare(a,b);
+            boolean archiveA=left.provider.startsWith("Internet Archive");
+            boolean archiveB=right.provider.startsWith("Internet Archive");
+            return Boolean.compare(archiveA,archiveB);
+        });
         if(selected.isEmpty())emptyState("Ainda sem filmes neste gênero","Atualize o acervo aberto ou importe sua coleção de mídia para preencher esta categoria.");
         else {
             rowOf(""+selectedFilmGenre+"  ·  "+selected.size()+" títulos",selected,1);
@@ -417,10 +472,17 @@ public final class MainActivity extends Activity {
         heading("TV ao vivo", "Guia vertical • ↑/↓ troca de canais no player • ←/→ abre a lista");
         TextView note=text("AO VIVO  •  Canais pagos sem fonte ativa são identificados e não reproduzem até que uma fonte compatível seja adicionada.",tv?13:11,MUTED,false);
         note.setPadding(0,d(12),0,d(18));body.addView(note);
-        TextView available=text("CANAIS COM FONTE CADASTRADA",tv?16:14,0xFFBDA9FF,true);
+        TextView available=text("SINAL DETECTADO EM TESTE DE REDE • SEM HOMOLOGAÇÃO NO APARELHO",tv?16:14,0xFFBDA9FF,true);
         available.setPadding(0,d(12),0,d(12));body.addView(available);
         int number=1;
-        for(CatalogStore.Item channel:filter(0))addGuideRow(number++,channel.name,channel.group,channel.logo,epgNow(channel.tvgId.isEmpty()?channel.name:channel.tvgId),channel, true);
+        for(CatalogStore.Item channel:liveCandidates(true))
+            addGuideRow(number++,channel.name,channel.group,channel.logo,
+                epgNow(channel.tvgId.isEmpty()?channel.name:channel.tvgId),channel,true);
+        TextView offline=text("FONTES EM MANUTENÇÃO • NÃO HOMOLOGADAS",tv?16:14,0xFFBDA9FF,true);
+        offline.setPadding(0,d(28),0,d(12));body.addView(offline);
+        for(CatalogStore.Item channel:liveCandidates(false))
+            addGuideRow(number++,channel.name,channel.group,channel.logo,
+                "Sem resposta de vídeo no servidor; pode variar por rede",channel,false);
         TextView premium=text("CANAIS POR ASSINATURA • GUIA",tv?16:14,0xFFBDA9FF,true);
         premium.setPadding(0,d(28),0,d(12));body.addView(premium);
         for(GuideChannel channel:unavailableGuide){
@@ -447,14 +509,21 @@ public final class MainActivity extends Activity {
         TextView detail=text((group.isEmpty()?"TV":group)+"  •  "+program,tv?12:11,MUTED,false);
         detail.setSingleLine(true);detail.setEllipsize(TextUtils.TruncateAt.END);titles.addView(detail);
         line.addView(titles,new LinearLayout.LayoutParams(0,-2,1));
-        TextView status=text(playable?"▶  ASSISTIR":"SEM FONTE",tv?13:10,playable?POSITIVE:MUTED,true);
+        String quality=source==null?"none":catalog.sourceQuality(source.url);
+        String statusText=playable?("server_segment_ok".equals(quality)?"▶  TESTAR":"▶  ASSISTIR")
+            :(source!=null?"INDISPONÍVEL":"SEM FONTE");
+        TextView status=text(statusText,tv?13:10,playable?POSITIVE:MUTED,true);
         line.addView(status);
         focusable(line);
         line.setOnClickListener(v->{
             if(playable&&source!=null)play(source);
+            else if(source!=null)new AlertDialog.Builder(this).setTitle(name+" • Fonte indisponível")
+                .setMessage("A última verificação no servidor não encontrou vídeo. A disponibilidade pode variar na rede da TV Box. Deseja testar esta URL mesmo assim?")
+                .setPositiveButton("Testar mesmo assim",(dialog,which)->play(source))
+                .setNegativeButton("Fechar",null).show();
             else new AlertDialog.Builder(this).setTitle(name)
-                .setMessage("Este canal está no guia, mas ainda não possui um sinal reproduzível. Você pode importar uma lista M3U de seu provedor para associá-lo.")
-                .setPositiveButton("Importar M3U",(d,w)->showSources())
+                .setMessage("Canal cadastrado apenas no guia. Nenhuma URL reproduzível foi homologada.")
+                .setPositiveButton("Importar M3U",(dialog,which)->showSources())
                 .setNegativeButton("Fechar",null).show();
         });
         LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(-1,-2);params.bottomMargin=d(7);
@@ -533,9 +602,20 @@ public final class MainActivity extends Activity {
         addCards(cards,content,cardType,tv?60:36);
     }
     private void loadPoster(ImageView view,String url){
-        if(url==null || !url.startsWith("https://"))return;
-        Glide.with(this).load(url).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-            .centerCrop().into(view);
+        if(url==null||!url.startsWith("https://"))return;
+        android.graphics.drawable.Drawable transparent=
+            new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT);
+        com.bumptech.glide.RequestBuilder<android.graphics.drawable.Drawable> request=
+            Glide.with(this).load(url).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                .timeout(8000).placeholder(transparent).centerCrop();
+        // YouTube may retire a thumbnail variant; try the alternate official image.
+        if(url.startsWith("https://i.ytimg.com/vi/")&&url.endsWith("/hqdefault.jpg")){
+            String alternative=url.replace("/hqdefault.jpg","/mqdefault.jpg");
+            request=request.error(Glide.with(this).load(alternative).timeout(8000)
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                .centerCrop().error(transparent));
+        }else request=request.error(transparent);
+        request.into(view);
     }
     private void addCards(LinearLayout target,List<CatalogStore.Item> content,int type,int max){
         int total=Math.min(content.size(),max);
@@ -544,7 +624,17 @@ public final class MainActivity extends Activity {
             LinearLayout holder=column();holder.setClipChildren(false);
             int width=d(type==0?(tv?220:182):(tv?172:143));
             int height=d(type==0?(tv?135:108):(tv?240:196));
-            FrameLayout poster=new FrameLayout(this);poster.setBackground(gradient(new int[]{0xFF292142,0xFF12172A},11));
+            FrameLayout poster=new FrameLayout(this);
+            int theme=(i.name.hashCode()&0x00777777)|0xFF151522;
+            poster.setBackground(gradient(new int[]{theme,0xFF171322,0xFF090D1A},11));
+            TextView watermark=text(i.isLive()?"▣  TV AO VIVO":"✦  VORTEX CINEMA",
+                tv?13:11,0xFFB8A0DE,true);
+            FrameLayout.LayoutParams markParams=new FrameLayout.LayoutParams(-1,-2,Gravity.TOP);
+            markParams.setMargins(d(12),d(12),d(8),0);
+            poster.addView(watermark,markParams);
+            TextView glyph=text(i.isLive()?"◉":"▶",tv?54:37,0x667A72A0,true);
+            glyph.setGravity(Gravity.CENTER);
+            poster.addView(glyph,new FrameLayout.LayoutParams(-1,-1));
             if(i.logo.startsWith("https://")){
                 ImageView cover=new ImageView(this);cover.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 poster.addView(cover,new FrameLayout.LayoutParams(-1,-1));loadPoster(cover,i.logo);

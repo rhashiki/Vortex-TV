@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -42,8 +44,10 @@ public final class CatalogStore {
     private static final String CLOUD="cloud_items_v1";
     private static final int MAX_ITEMS=2500;
     private final SharedPreferences prefs;
+    private final Map<String,String> bundledQuality=new HashMap<>();
     public CatalogStore(Context ctx){
         prefs=ctx.getSharedPreferences("vortex_catalog",Context.MODE_PRIVATE);
+        loadBundledQuality(ctx);
         repairLegacyBundledSources();
         initializeSeeds(ctx);
         repairArchiveTitles();
@@ -138,6 +142,30 @@ public final class CatalogStore {
             android.util.Log.w("VortexTV","Bundled catalog unavailable",e);
         }
     }
+    /** Snapshot from the last server-side segment check; never claims device playback. */
+    private void loadBundledQuality(Context ctx){
+        try(java.io.InputStream in=ctx.getAssets().open("seed_catalog.json");
+            java.io.ByteArrayOutputStream out=new java.io.ByteArrayOutputStream()){
+            byte[] buf=new byte[4096];int n;
+            while((n=in.read(buf))!=-1)out.write(buf,0,n);
+            JSONArray entries=new JSONArray(out.toString("UTF-8"));
+            for(int i=0;i<entries.length();i++){
+                JSONObject row=entries.optJSONObject(i);if(row==null)continue;
+                String url=row.optString("url"),status=row.optString("status","not_verified");
+                if(url.startsWith("https://"))bundledQuality.put(url,status);
+            }
+        }catch(Exception ex){android.util.Log.w("VortexTV","Stream health seed unavailable",ex);}
+    }
+    public String sourceQuality(String url){return bundledQuality.containsKey(url)
+        ?bundledQuality.get(url):"manual";}
+    /** Broken official YouTube thumbnail references should not occupy curated shelves. */
+    public static boolean deadYouTubeReference(Item item){
+        if(item==null||!item.format.startsWith("youtube-"))return false;
+        return item.url.equals("https://www.youtube.com/watch?v=DUAyQ8yxg38")
+            ||item.url.equals("https://www.youtube.com/watch?v=5Au2Mboodro")
+            ||item.url.equals("https://www.youtube.com/watch?v=HfQoBFovpG8");
+    }
+
     /** Clean only machine-imported Archive titles once; never rewrite user titles. */
     private void repairArchiveTitles(){
         if(prefs.getBoolean("archive_title_clean_v1",false))return;

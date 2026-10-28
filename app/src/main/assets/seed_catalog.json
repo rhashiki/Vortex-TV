@@ -6,7 +6,8 @@
     "group": "Abertos Brasil",
     "logo": "",
     "format": "hls",
-    "status": "not_verified"
+    "status": "server_segment_ok",
+    "last_audit": "2026-10-28"
   },
   {
     "name": "Canal Gov",
@@ -15,7 +16,8 @@
     "group": "Abertos Brasil",
     "logo": "",
     "format": "hls",
-    "status": "not_verified"
+    "status": "server_segment_ok",
+    "last_audit": "2026-10-28"
   },
   {
     "name": "NBR",
@@ -24,7 +26,8 @@
     "group": "Abertos Brasil",
     "logo": "",
     "format": "hls",
-    "status": "not_verified"
+    "status": "server_unavailable",
+    "last_audit": "2026-10-28"
   },
   {
     "name": "TV Educação",
@@ -33,7 +36,8 @@
     "group": "Educacional",
     "logo": "",
     "format": "hls",
-    "status": "not_verified"
+    "status": "server_unavailable",
+    "last_audit": "2026-10-28"
   },
   {
     "name": "TV Câmara",
@@ -42,7 +46,8 @@
     "group": "Legislativo",
     "logo": "",
     "format": "hls",
-    "status": "not_verified"
+    "status": "server_segment_ok",
+    "last_audit": "2026-10-28"
   },
   {
     "name": "TV Senado",
@@ -51,7 +56,8 @@
     "group": "Legislativo",
     "logo": "",
     "format": "hls",
-    "status": "not_verified"
+    "status": "server_unavailable",
+    "last_audit": "2026-10-28"
   },
   {
     "name": "TV Justiça",
@@ -60,7 +66,8 @@
     "group": "Legislativo",
     "logo": "",
     "format": "hls",
-    "status": "not_verified"
+    "status": "server_unavailable",
+    "last_audit": "2026-10-28"
   },
   {
     "name": "TV Cultura (SP)",
@@ -69,7 +76,8 @@
     "group": "Cultura",
     "logo": "",
     "format": "hls",
-    "status": "not_verified"
+    "status": "server_unavailable",
+    "last_audit": "2026-10-28"
   },
   {
     "name": "TV Univesp",
@@ -78,7 +86,8 @@
     "group": "Educacional",
     "logo": "",
     "format": "hls",
-    "status": "not_verified"
+    "status": "server_unavailable",
+    "last_audit": "2026-10-28"
   },
   {
     "name": "TV Futura",
@@ -87,7 +96,8 @@
     "group": "Educacional",
     "logo": "",
     "format": "hls",
-    "status": "not_verified"
+    "status": "server_unavailable",
+    "last_audit": "2026-10-28"
   },
   {
     "name": "Rede Vida",
@@ -96,7 +106,8 @@
     "group": "Religioso",
     "logo": "",
     "format": "hls",
-    "status": "not_verified"
+    "status": "server_unavailable",
+    "last_audit": "2026-10-28"
   },
   {
     "name": "TV Aparecida",
@@ -105,7 +116,8 @@
     "group": "Religioso",
     "logo": "",
     "format": "hls",
-    "status": "not_verified"
+    "status": "server_unavailable",
+    "last_audit": "2026-10-28"
   },
   {
     "name": "Rede Gênesis",
@@ -114,7 +126,8 @@
     "group": "Religioso",
     "logo": "",
     "format": "hls",
-    "status": "not_verified"
+    "status": "server_unavailable",
+    "last_audit": "2026-10-28"
   },
   {
     "name": "TV Novo Tempo",
@@ -123,7 +136,8 @@
     "group": "Religioso",
     "logo": "",
     "format": "hls",
-    "status": "not_verified"
+    "status": "server_unavailable",
+    "last_audit": "2026-10-28"
   },
   {
     "name": "TV UFSC",
@@ -132,7 +146,8 @@
     "group": "Universitário",
     "logo": "",
     "format": "hls",
-    "status": "not_verified"
+    "status": "server_unavailable",
+    "last_audit": "2026-10-28"
   },
   {
     "name": "TV UFRJ",
@@ -141,7 +156,8 @@
     "group": "Universitário",
     "logo": "",
     "format": "hls",
-    "status": "not_verified"
+    "status": "server_unavailable",
+    "last_audit": "2026-10-28"
   },
   {
     "name": "DW Brasil",
@@ -150,7 +166,8 @@
     "group": "Notícias",
     "logo": "",
     "format": "hls",
-    "status": "not_verified"
+    "status": "server_unavailable",
+    "last_audit": "2026-10-28"
   },
   {
     "name": "France 24 (PT)",
@@ -159,7 +176,8 @@
     "group": "Notícias",
     "logo": "",
     "format": "hls",
-    "status": "not_verified"
+    "status": "server_unavailable",
+    "last_audit": "2026-10-28"
   },
   {
     "name": "NASA TV",
@@ -168,7 +186,8 @@
     "group": "Ciência",
     "logo": "",
     "format": "hls",
-    "status": "not_verified"
+    "status": "server_unavailable",
+    "last_audit": "2026-10-28"
   },
   {
     "name": "Sony Channel",
@@ -177,7 +196,8 @@
     "group": "Séries",
     "logo": "",
     "format": "hls",
-    "status": "not_verified"
+    "status": "server_unavailable",
+    "last_audit": "2026-10-28"
   },
   {
     "name": "CNN Brasil",
@@ -186,7 +206,8 @@
     "group": "Notícias",
     "logo": "",
     "format": "hls",
-    "status": "not_verified"
+    "status": "server_unavailable",
+    "last_audit": "2026-10-28"
   },
   {
     "name": "N Sports",
@@ -195,7 +216,8 @@
     "group": "Esportes",
     "logo": "",
     "format": "hls",
-    "status": "not_verified"
+    "status": "server_unavailable",
+    "last_audit": "2026-10-28"
   },
   {
     "name": "CINDIE TV",
@@ -204,7 +226,7 @@
     "group": "Filmes",
     "logo": "",
     "format": "hls",
-    "status": "not_verified"
+    "status": "unverified"
   },
   {
     "name": "Big Buck Bunny",
@@ -213,7 +235,7 @@
     "group": "Filmes • Animação",
     "logo": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Big_buck_bunny_poster_big.jpg?width=500",
     "format": "hls",
-    "status": "not_verified",
+    "status": "unverified",
     "provider": "Blender Foundation · Creative Commons",
     "year": "2008",
     "genre": "Animação",
@@ -239,7 +261,7 @@
     "group": "Filmes • Ficção científica",
     "logo": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Tos-poster.png?width=500",
     "format": "hls",
-    "status": "not_verified",
+    "status": "unverified",
     "provider": "Blender Foundation · Creative Commons",
     "year": "2012",
     "genre": "Ficção científica",
