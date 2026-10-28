@@ -17,8 +17,8 @@ android {
     }
     buildTypes {
         debug {
-            applicationIdSuffix '.beta24'
-            manifestPlaceholders = [appLabel: 'Vortex TV 24 Beta']
+            applicationIdSuffix '.preview24'
+            manifestPlaceholders = [appLabel: 'Vortex TV 24 Teste']
         }
         release {
             minifyEnabled false
