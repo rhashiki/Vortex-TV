@@ -1,0 +1,347 @@
+{
+  "schema": 1,
+  "description": "Busca YouTube Data API v3, sem raspagem de HTML nem extração de stream/DRM. Fontes de catálogo são referências; disponibilidade muda.",
+  "region": "BR",
+  "language": "pt",
+  "movie_min_minutes": 65,
+  "max_search_calls": 80,
+  "official_movie_channels": [
+    {
+      "id": "UCK5RRQ3TdwAbbCWrtnXsN3Q",
+      "name": "NetMovies",
+      "url": "https://www.youtube.com/channel/UCK5RRQ3TdwAbbCWrtnXsN3Q",
+      "focus": [
+        "Ação",
+        "Drama",
+        "Comédia",
+        "Terror",
+        "1990-2019"
+      ],
+      "rights_evidence": "Canal oficial da plataforma NetMovies; títulos licenciados declarados pelo serviço"
+    },
+    {
+      "id": "UCklg72s4SymWVrriqiUgXhw",
+      "name": "NetMovies Clássicos",
+      "url": "https://www.youtube.com/channel/UCklg72s4SymWVrriqiUgXhw",
+      "focus": [
+        "Clássicos",
+        "1990-2019",
+        "Cinema clássico"
+      ],
+      "rights_evidence": "Descrição oficial do canal declara filmes completos licenciados e dublados"
+    },
+    {
+      "id": "UCWFovw8iyHBezTmaEWEV0RA",
+      "name": "Adrenalina Pura TV BR",
+      "url": "https://www.youtube.com/channel/UCWFovw8iyHBezTmaEWEV0RA",
+      "focus": [
+        "Ação",
+        "Terror",
+        "Suspense",
+        "1990-2019"
+      ],
+      "rights_evidence": "Canal oficial do Grupo Sofá Digital; declara licenciamento de filmes"
+    },
+    {
+      "id": "UCCRmnBThm-dlqovUoeftVzg",
+      "name": "Filmelier TV BR",
+      "url": "https://www.youtube.com/channel/UCCRmnBThm-dlqovUoeftVzg",
+      "focus": [
+        "Drama",
+        "Romance",
+        "1990-2019"
+      ],
+      "rights_evidence": "Canal indicado publicamente pelo Filmelier; verificar direitos por vídeo"
+    }
+  ],
+  "additional_movie_channel_references": [
+    {
+      "name": "Film Plus BR",
+      "url": "https://www.youtube.com/c/FilmPlusbr/featured",
+      "channel_id": "",
+      "status": "VALIDAR_ID_E_CATALOGO"
+    },
+    {
+      "name": "Swen Filmes",
+      "url": "https://www.youtube.com/@SwenFilmes",
+      "channel_id": "",
+      "status": "VALIDAR_ID_E_CATALOGO"
+    },
+    {
+      "name": "Sato Company",
+      "url": "https://www.youtube.com/results?search_query=Sato+Company+filme+completo",
+      "channel_id": "",
+      "status": "VALIDAR_ID_E_CATALOGO"
+    },
+    {
+      "name": "Noite de Filmes",
+      "url": "https://www.youtube.com/results?search_query=Noite+de+Filmes+filme+completo+dublado",
+      "channel_id": "",
+      "status": "VALIDAR_ID_E_CATALOGO"
+    },
+    {
+      "name": "Film&Clips",
+      "url": "https://www.youtube.com/results?search_query=Film%26Clips+full+movie",
+      "channel_id": "",
+      "status": "VALIDAR_ID_E_CATALOGO"
+    }
+  ],
+  "live_channels_to_discover": [
+    {
+      "name": "TV Senado",
+      "url": "https://www.youtube.com/@tvsenado",
+      "category": "Legislativo",
+      "status": "REFERÊNCIA_OFICIAL_SEM_LIVE_VALIDADA_AGORA"
+    },
+    {
+      "name": "Canal Gov",
+      "url": "https://www.youtube.com/@CanalGov",
+      "category": "Governo",
+      "status": "REFERÊNCIA_OFICIAL_SEM_LIVE_VALIDADA_AGORA"
+    },
+    {
+      "name": "TV Câmara",
+      "url": "https://www.youtube.com/c/C%C3%A2maradosDeputadosoficial",
+      "category": "Legislativo",
+      "status": "REFERÊNCIA_OFICIAL_SEM_LIVE_VALIDADA_AGORA"
+    },
+    {
+      "name": "TV Brasil",
+      "url": "https://www.youtube.com/tvbrasil",
+      "category": "TV aberta",
+      "status": "REFERÊNCIA_OFICIAL_SEM_LIVE_VALIDADA_AGORA"
+    },
+    {
+      "name": "CNN Brasil",
+      "url": "https://www.youtube.com/@cnnbrasil",
+      "category": "Notícias",
+      "status": "VERIFICAR_LIVE"
+    },
+    {
+      "name": "Record News",
+      "url": "https://www.youtube.com/@recordnews",
+      "category": "Notícias",
+      "status": "REFERÊNCIA_OFICIAL_SEM_LIVE_VALIDADA_AGORA"
+    },
+    {
+      "name": "Band Jornalismo",
+      "url": "https://www.youtube.com/@BandJornalismo",
+      "category": "Notícias",
+      "status": "REFERÊNCIA_OFICIAL_SEM_LIVE_VALIDADA_AGORA"
+    },
+    {
+      "name": "TV Cultura",
+      "url": "https://www.youtube.com/results?search_query=TV+Cultura+ao+vivo+oficial",
+      "category": "Cultura",
+      "status": "VERIFICAR_LIVE"
+    },
+    {
+      "name": "TV Justiça",
+      "url": "https://www.youtube.com/results?search_query=TV+Justi%C3%A7a+ao+vivo",
+      "category": "Legislativo",
+      "status": "VERIFICAR_LIVE"
+    },
+    {
+      "name": "DW Brasil",
+      "url": "https://www.youtube.com/@dwbrasil",
+      "category": "Notícias",
+      "status": "VERIFICAR_LIVE"
+    },
+    {
+      "name": "Euronews Brasil",
+      "url": "https://www.youtube.com/results?search_query=euronews+ao+vivo+portugues",
+      "category": "Notícias",
+      "status": "VERIFICAR_LIVE"
+    },
+    {
+      "name": "France 24 Português",
+      "url": "https://www.youtube.com/results?search_query=France+24+portugues+ao+vivo",
+      "category": "Notícias",
+      "status": "VERIFICAR_LIVE"
+    }
+  ],
+  "live_queries": [
+    {
+      "q": "tv brasil ebc ao vivo oficial",
+      "category": "TV aberta"
+    },
+    {
+      "q": "tv camara ao vivo oficial",
+      "category": "Legislativo"
+    },
+    {
+      "q": "tv senado ao vivo oficial",
+      "category": "Legislativo"
+    },
+    {
+      "q": "tv justica ao vivo oficial",
+      "category": "Legislativo"
+    },
+    {
+      "q": "canal gov ao vivo",
+      "category": "Governo"
+    },
+    {
+      "q": "record news ao vivo oficial",
+      "category": "Notícias"
+    },
+    {
+      "q": "cnn brasil ao vivo",
+      "category": "Notícias"
+    },
+    {
+      "q": "band jornalismo ao vivo",
+      "category": "Notícias"
+    },
+    {
+      "q": "tv cultura ao vivo",
+      "category": "Cultura"
+    },
+    {
+      "q": "dw brasil noticias ao vivo",
+      "category": "Notícias"
+    },
+    {
+      "q": "france 24 portugues ao vivo",
+      "category": "Notícias"
+    },
+    {
+      "q": "tv aberta brasil ao vivo 24 horas",
+      "category": "TV aberta"
+    },
+    {
+      "q": "tv educacao universitária ao vivo",
+      "category": "Educação"
+    },
+    {
+      "q": "documentarios natureza ao vivo canal",
+      "category": "Documentários"
+    },
+    {
+      "q": "canal ciencia espaco ao vivo",
+      "category": "Ciência"
+    },
+    {
+      "q": "musica brasileira ao vivo 24 horas radio",
+      "category": "Música"
+    },
+    {
+      "q": "noticias esportivas brasileiras ao vivo",
+      "category": "Esportes"
+    },
+    {
+      "q": "canal religioso tv ao vivo oficial",
+      "category": "Religioso"
+    },
+    {
+      "q": "tv regional santa catarina ao vivo",
+      "category": "TV regional"
+    },
+    {
+      "q": "tv comunitaria brasil ao vivo",
+      "category": "TV comunitária"
+    }
+  ],
+  "movie_queries": [
+    {
+      "q": "filme completo dublado",
+      "category": "Filmes"
+    },
+    {
+      "q": "filme completo dublado anos 90",
+      "category": "Clássicos 1990–1999"
+    },
+    {
+      "q": "filme completo dublado 1990 1999",
+      "category": "Clássicos 1990–1999"
+    },
+    {
+      "q": "filme de ação 1995 completo dublado",
+      "category": "Clássicos 1990–1999"
+    },
+    {
+      "q": "filme de terror anos 90 completo dublado",
+      "category": "Clássicos 1990–1999"
+    },
+    {
+      "q": "filme completo dublado anos 2000",
+      "category": "Clássicos 2000–2009"
+    },
+    {
+      "q": "filme completo dublado 2000 2009",
+      "category": "Clássicos 2000–2009"
+    },
+    {
+      "q": "filme de comédia 2004 completo dublado",
+      "category": "Clássicos 2000–2009"
+    },
+    {
+      "q": "filme de suspense 2007 completo dublado",
+      "category": "Clássicos 2000–2009"
+    },
+    {
+      "q": "filme de romance 2008 completo dublado",
+      "category": "Clássicos 2000–2009"
+    },
+    {
+      "q": "filme completo dublado anos 2010",
+      "category": "Clássicos 2010–2019"
+    },
+    {
+      "q": "filme completo dublado 2010 2019",
+      "category": "Clássicos 2010–2019"
+    },
+    {
+      "q": "filme de ação 2014 completo dublado",
+      "category": "Clássicos 2010–2019"
+    },
+    {
+      "q": "filme suspense 2016 completo dublado",
+      "category": "Clássicos 2010–2019"
+    },
+    {
+      "q": "filme brasileiro completo dublado",
+      "category": "Cinema nacional"
+    },
+    {
+      "q": "longa metragem completo dublado filme clássico",
+      "category": "Clássicos"
+    },
+    {
+      "q": "documentário completo dublado história",
+      "category": "Documentários"
+    },
+    {
+      "q": "documentário completo brasil natureza",
+      "category": "Documentários"
+    },
+    {
+      "q": "filme animação completo dublado",
+      "category": "Animação"
+    },
+    {
+      "q": "filme terror completo dublado",
+      "category": "Terror"
+    },
+    {
+      "q": "filme ficção científica completo dublado",
+      "category": "Ficção científica"
+    },
+    {
+      "q": "filme drama completo dublado",
+      "category": "Drama"
+    },
+    {
+      "q": "filme aventura completo dublado",
+      "category": "Aventura"
+    },
+    {
+      "q": "filme romance completo dublado",
+      "category": "Romance"
+    },
+    {
+      "q": "filme LGBT completo dublado",
+      "category": "LGBT+"
+    }
+  ]
+}
