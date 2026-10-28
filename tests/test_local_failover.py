@@ -33,6 +33,7 @@ class LocalMultiSourceFailover(unittest.TestCase):
         self.assertNotIn("supabase.co",db)
         self.assertNotIn("github.com",db)
         self.assertIn("source_label",db)
+        self.assertIn('getWritableDatabase().delete("sources",null,null)',db)
     def test_retry_on_http_decoder_and_stall(self):
         player=self.read("app/src/main/java/os/vortex/tv/integration/VortexPlayerActivity.java")
         self.assertIn("onPlayerError(PlaybackException error)",player)

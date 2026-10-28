@@ -384,5 +384,8 @@ public final class CatalogStore {
         if(fav.contains(url))fav.remove(url);else fav.add(url);
         prefs.edit().putStringSet(FAV,fav).apply();
     }
-    public void clear(){prefs.edit().remove(KEY).remove(CLOUD).remove(OFFICIAL_YOUTUBE).remove(FAV).apply();}
+    public void clear(){
+        privateSources.clear();
+        prefs.edit().remove(KEY).remove(CLOUD).remove(OFFICIAL_YOUTUBE).remove(FAV).apply();
+    }
 }

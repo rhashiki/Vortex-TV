@@ -481,7 +481,7 @@ public final class MainActivity extends Activity {
         heading("TV ao vivo", "Guia vertical • ↑/↓ troca de canais no player • ←/→ abre a lista");
         TextView note=text("AO VIVO  •  Canais pagos sem fonte ativa são identificados e não reproduzem até que uma fonte compatível seja adicionada.",tv?13:11,MUTED,false);
         note.setPadding(0,d(12),0,d(18));body.addView(note);
-        TextView available=text("SINAL DETECTADO EM TESTE DE REDE • SEM HOMOLOGAÇÃO NO APARELHO",tv?16:14,0xFFBDA9FF,true);
+        TextView available=text("SINAIS TESTADOS E FONTES PRIVADAS • SUJEITAS A TESTE",tv?16:14,0xFFBDA9FF,true);
         available.setPadding(0,d(12),0,d(12));body.addView(available);
         int number=1;
         for(CatalogStore.Item channel:liveCandidates(true))
@@ -519,7 +519,7 @@ public final class MainActivity extends Activity {
         detail.setSingleLine(true);detail.setEllipsize(TextUtils.TruncateAt.END);titles.addView(detail);
         line.addView(titles,new LinearLayout.LayoutParams(0,-2,1));
         String quality=source==null?"none":catalog.sourceQuality(source.url);
-        String statusText=playable?("server_segment_ok".equals(quality)?"▶  TESTAR":"▶  ASSISTIR")
+        String statusText=playable?("server_segment_ok".equals(quality)?"▶  TESTAR":"▶  TESTAR")
             :(source!=null?"INDISPONÍVEL":"SEM FONTE");
         TextView status=text(statusText,tv?13:10,playable?POSITIVE:MUTED,true);
         line.addView(status);

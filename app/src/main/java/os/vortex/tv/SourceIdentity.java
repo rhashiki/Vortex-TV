@@ -14,6 +14,18 @@ public final class SourceIdentity {
         return text.replaceAll("[^A-Z0-9]+"," ").replaceAll("\\s+"," ").trim();
     }
 
+    private static String urlFingerprint(String url){
+        try {
+            byte[] bytes=java.security.MessageDigest.getInstance("SHA-256")
+                .digest((url==null?"":url).getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            StringBuilder out=new StringBuilder();
+            for(int i=0;i<16;i++)
+                out.append(String.format(Locale.ROOT,"%02x",bytes[i]&0xff));
+            return out.toString();
+        }catch(Exception ignored){
+            return Integer.toHexString((url==null?"":url).hashCode());
+        }
+    }
     static String cleanTitle(String name){
         String value=normalized(name);
         // Remove transport/quality labels, not meaningful words inside movie titles.
@@ -32,7 +44,7 @@ public final class SourceIdentity {
         String title=cleanTitle(name);
         if(title.isEmpty()){
             // Missing titles cannot safely be merged with unrelated media.
-            return "url:"+Integer.toHexString((url==null?"":url).hashCode());
+            return "url:"+urlFingerprint(url);
         }
         String g=normalized(group);
         String f=format==null?"":format.toLowerCase(Locale.ROOT);
@@ -41,7 +53,7 @@ public final class SourceIdentity {
         if(genericEpisode){
             // e.g. T01 EP03 exists in hundreds of completely different shows.
             if(g.equals("SERIADO")||g.equals("SERIE")||g.equals("SERIES")||g.isEmpty())
-                return "isolated-episode:"+Integer.toHexString((url==null?"":url).hashCode());
+                return "isolated-episode:"+urlFingerprint(url);
             return "episode|"+g+"|"+title;
         }
         boolean tv=g.contains("CANAIS")||g.contains("TV")||g.contains("AO VIVO")
@@ -54,7 +66,7 @@ public final class SourceIdentity {
         boolean videoOnDemand=g.contains("FILME")||g.contains("SERIE")
             ||g.contains("SERIADO")||g.contains("ON DEMAND")||g.contains("VOD")
             ||g.contains("TEMPORADA")||g.contains("ANIME");
-        if(tv&&!g.equals("FILMES"))return "channel|"+title;
+        if(tv&&(!videoOnDemand||g.contains("CANAIS")))return "channel|"+title;
         if(videoOnDemand||"file".equals(f))return "video|"+title;
         if("hls".equals(f)||"dash".equals(f))return "channel|"+title;
         return "video|"+title;

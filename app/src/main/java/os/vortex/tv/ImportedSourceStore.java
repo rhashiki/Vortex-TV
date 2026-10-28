@@ -86,6 +86,8 @@ public final class ImportedSourceStore extends SQLiteOpenHelper {
         }
     }
     public synchronized int count(){return count(getReadableDatabase());}
+    /** Local-only source data may contain sensitive credentials: wipe on user request. */
+    public synchronized void clear(){getWritableDatabase().delete("sources",null,null);}
     private static CatalogStore.Item item(Cursor c){
         return new CatalogStore.Item(c.getString(0),c.getString(1),c.getString(2),
             c.getString(3),c.getString(4),c.getString(5),
