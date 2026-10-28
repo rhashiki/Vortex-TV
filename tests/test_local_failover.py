@@ -59,8 +59,8 @@ class LocalMultiSourceFailover(unittest.TestCase):
         self.assertIn("catalog.lastWorkingSource(i)",ui)
     def test_version(self):
         gradle=self.read("app/build.gradle")
-        self.assertIn("versionCode 32",gradle)
-        self.assertIn("versionName '0.3.2-failover'",gradle)
+        self.assertIn("versionCode 33",gradle)
+        self.assertIn("versionName '0.3.3-native-catalog'",gradle)
 
 if __name__=="__main__":
     unittest.main()

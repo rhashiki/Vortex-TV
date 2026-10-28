@@ -14,7 +14,7 @@
             android:exported="false" android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
         <activity android:name="os.vortex.tv.integration.VortexPlayerActivity"
             android:exported="false" android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
-        <activity android:name=".MainActivity"
+        <activity android:name="os.vortex.tv.MainActivity"
             android:exported="true" android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

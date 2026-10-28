@@ -76,6 +76,7 @@ public final class MainActivity extends Activity {
         render();
         syncCloud(false);
         syncNetMovies(false);
+        syncNativeCatalog(false);
         if(saved.isEmpty())showModeChooser();
         // Large Internet Archive imports are now opt-in: automatic discovery
         // flooded the home page with unrelated titles and untested images.
@@ -221,6 +222,10 @@ public final class MainActivity extends Activity {
     }
     private void renderHome(){
         hero();
+        if(!NativeCatalogConfig.readFamilyAccess(getApplicationContext()).isEmpty()){
+            body.addView(button("↻ Atualizar catálogo Vortex",false,
+                ()->syncNativeCatalog(true)));
+        }
         if(items.isEmpty()){
             emptyState("Seu catálogo começa com uma fonte", "Importe uma playlist M3U autorizada ou adicione uma URL direta de vídeo. O Vortex TV não inclui catálogos piratas nem conteúdos fictícios.");
             return;
@@ -847,6 +852,50 @@ public final class MainActivity extends Activity {
                 });
             }
         },"Vortex-NetMovies-Feed").start();
+    }
+    /**
+     * Native Vortex TV OS: no login, no pairing and no file import.
+     * OEM configuration is provisioned with the private firmware image.
+     */
+    private volatile boolean nativeCatalogBusy=false;
+    private void syncNativeCatalog(boolean manual){
+        if(nativeCatalogBusy)return;
+        String access=NativeCatalogConfig.readFamilyAccess(getApplicationContext());
+        if(access.isEmpty()){
+            if(manual)Toast.makeText(this,
+                "Catálogo nativo disponível somente no Vortex TV OS",
+                Toast.LENGTH_LONG).show();
+            return;
+        }
+        long now=System.currentTimeMillis();
+        long last=uiPrefs.getLong("family_last_sync_v1",0L);
+        if(!manual&&last>0&&now>=last&&now-last<12L*60L*60L*1000L)return;
+        nativeCatalogBusy=true;
+        if(manual)Toast.makeText(this,"Atualizando catálogo...",Toast.LENGTH_SHORT).show();
+        new Thread(()->{
+            boolean done=false;
+            String feedback="";
+            try{
+                FamilyCatalogSync.Result result=FamilyCatalogSync.sync(
+                    getApplicationContext(),catalog,uiPrefs,access);
+                done=result.completed;
+                feedback="Catálogo atualizado: "+result.total+" fontes; "+
+                    result.added+" novas.";
+                if(!done)feedback+=" A sincronização continuará na próxima abertura.";
+            }catch(Exception e){
+                feedback="Catálogo salvo preservado. Sincronização indisponível.";
+                // Do not log credential-containing URLs or OEM access token.
+            }
+            final boolean success=done;
+            final String message=feedback;
+            runOnUiThread(()->{
+                nativeCatalogBusy=false;
+                if(isFinishing())return;
+                items=catalog.load();
+                render();
+                if(manual||!success)Toast.makeText(this,message,Toast.LENGTH_LONG).show();
+            });
+        },"Vortex-Native-Catalog").start();
     }
     private void showSources(){
         new AlertDialog.Builder(this).setTitle("Gerenciar fontes")
