@@ -1,0 +1,362 @@
+[
+  {
+    "name": "HBO",
+    "number": 20,
+    "group": "Filmes",
+    "status": "without_stream"
+  },
+  {
+    "name": "HBO 2",
+    "number": 21,
+    "group": "Filmes",
+    "status": "without_stream"
+  },
+  {
+    "name": "AXN",
+    "number": 22,
+    "group": "Séries",
+    "status": "without_stream"
+  },
+  {
+    "name": "Universal TV",
+    "number": 23,
+    "group": "Séries",
+    "status": "without_stream"
+  },
+  {
+    "name": "History",
+    "number": 24,
+    "group": "Documentários",
+    "status": "without_stream"
+  },
+  {
+    "name": "FX",
+    "number": 25,
+    "group": "Séries",
+    "status": "without_stream"
+  },
+  {
+    "name": "Telecine Premium",
+    "number": 26,
+    "group": "Filmes",
+    "status": "without_stream"
+  },
+  {
+    "name": "SporTV",
+    "number": 27,
+    "group": "Esportes",
+    "status": "without_stream"
+  },
+  {
+    "name": "Paramount Network",
+    "number": 28,
+    "group": "Filmes",
+    "status": "without_stream"
+  },
+  {
+    "name": "Warner TV",
+    "number": 29,
+    "group": "Séries",
+    "status": "without_stream"
+  },
+  {
+    "name": "HBO Family",
+    "number": 34,
+    "group": "Filmes",
+    "status": "without_stream"
+  },
+  {
+    "name": "HBO Mundi",
+    "number": 35,
+    "group": "Filmes",
+    "status": "without_stream"
+  },
+  {
+    "name": "HBO Pop",
+    "number": 36,
+    "group": "Filmes",
+    "status": "without_stream"
+  },
+  {
+    "name": "HBO Xtreme",
+    "number": 37,
+    "group": "Filmes",
+    "status": "without_stream"
+  },
+  {
+    "name": "HBO Signature",
+    "number": 38,
+    "group": "Filmes",
+    "status": "without_stream"
+  },
+  {
+    "name": "Telecine Action",
+    "number": 39,
+    "group": "Filmes",
+    "status": "without_stream"
+  },
+  {
+    "name": "Telecine Touch",
+    "number": 40,
+    "group": "Filmes",
+    "status": "without_stream"
+  },
+  {
+    "name": "Telecine Pipoca",
+    "number": 41,
+    "group": "Filmes",
+    "status": "without_stream"
+  },
+  {
+    "name": "Telecine Cult",
+    "number": 42,
+    "group": "Filmes",
+    "status": "without_stream"
+  },
+  {
+    "name": "Telecine Fun",
+    "number": 43,
+    "group": "Filmes",
+    "status": "without_stream"
+  },
+  {
+    "name": "Cinemax",
+    "number": 44,
+    "group": "Filmes",
+    "status": "without_stream"
+  },
+  {
+    "name": "AMC",
+    "number": 45,
+    "group": "Filmes",
+    "status": "without_stream"
+  },
+  {
+    "name": "TCM",
+    "number": 46,
+    "group": "Filmes",
+    "status": "without_stream"
+  },
+  {
+    "name": "Megapix",
+    "number": 47,
+    "group": "Filmes",
+    "status": "without_stream"
+  },
+  {
+    "name": "Space",
+    "number": 48,
+    "group": "Filmes",
+    "status": "without_stream"
+  },
+  {
+    "name": "Star Channel",
+    "number": 49,
+    "group": "Séries",
+    "status": "without_stream"
+  },
+  {
+    "name": "Star Life",
+    "number": 50,
+    "group": "Séries",
+    "status": "without_stream"
+  },
+  {
+    "name": "A&E",
+    "number": 51,
+    "group": "Séries",
+    "status": "without_stream"
+  },
+  {
+    "name": "Investigation Discovery",
+    "number": 52,
+    "group": "Documentários",
+    "status": "without_stream"
+  },
+  {
+    "name": "Discovery Channel",
+    "number": 53,
+    "group": "Documentários",
+    "status": "without_stream"
+  },
+  {
+    "name": "Discovery H&H",
+    "number": 54,
+    "group": "Documentários",
+    "status": "without_stream"
+  },
+  {
+    "name": "Discovery Science",
+    "number": 55,
+    "group": "Documentários",
+    "status": "without_stream"
+  },
+  {
+    "name": "Animal Planet",
+    "number": 56,
+    "group": "Documentários",
+    "status": "without_stream"
+  },
+  {
+    "name": "National Geographic",
+    "number": 57,
+    "group": "Documentários",
+    "status": "without_stream"
+  },
+  {
+    "name": "Nat Geo Wild",
+    "number": 58,
+    "group": "Documentários",
+    "status": "without_stream"
+  },
+  {
+    "name": "History 2",
+    "number": 59,
+    "group": "Documentários",
+    "status": "without_stream"
+  },
+  {
+    "name": "TLC",
+    "number": 60,
+    "group": "Estilo de vida",
+    "status": "without_stream"
+  },
+  {
+    "name": "GNT",
+    "number": 61,
+    "group": "Estilo de vida",
+    "status": "without_stream"
+  },
+  {
+    "name": "Viva",
+    "number": 62,
+    "group": "Séries",
+    "status": "without_stream"
+  },
+  {
+    "name": "ESPN",
+    "number": 63,
+    "group": "Esportes",
+    "status": "without_stream"
+  },
+  {
+    "name": "ESPN 2",
+    "number": 64,
+    "group": "Esportes",
+    "status": "without_stream"
+  },
+  {
+    "name": "ESPN 3",
+    "number": 65,
+    "group": "Esportes",
+    "status": "without_stream"
+  },
+  {
+    "name": "ESPN 4",
+    "number": 66,
+    "group": "Esportes",
+    "status": "without_stream"
+  },
+  {
+    "name": "ESPN 5",
+    "number": 67,
+    "group": "Esportes",
+    "status": "without_stream"
+  },
+  {
+    "name": "ESPN 6",
+    "number": 68,
+    "group": "Esportes",
+    "status": "without_stream"
+  },
+  {
+    "name": "SporTV 2",
+    "number": 69,
+    "group": "Esportes",
+    "status": "without_stream"
+  },
+  {
+    "name": "SporTV 3",
+    "number": 70,
+    "group": "Esportes",
+    "status": "without_stream"
+  },
+  {
+    "name": "BandSports",
+    "number": 71,
+    "group": "Esportes",
+    "status": "without_stream"
+  },
+  {
+    "name": "Premiere",
+    "number": 72,
+    "group": "Esportes",
+    "status": "without_stream"
+  },
+  {
+    "name": "Cartoon Network",
+    "number": 73,
+    "group": "Infantil",
+    "status": "without_stream"
+  },
+  {
+    "name": "Cartoonito",
+    "number": 74,
+    "group": "Infantil",
+    "status": "without_stream"
+  },
+  {
+    "name": "Discovery Kids",
+    "number": 75,
+    "group": "Infantil",
+    "status": "without_stream"
+  },
+  {
+    "name": "Nickelodeon",
+    "number": 76,
+    "group": "Infantil",
+    "status": "without_stream"
+  },
+  {
+    "name": "Nick Jr.",
+    "number": 77,
+    "group": "Infantil",
+    "status": "without_stream"
+  },
+  {
+    "name": "Disney Channel",
+    "number": 78,
+    "group": "Infantil",
+    "status": "without_stream"
+  },
+  {
+    "name": "Gloob",
+    "number": 79,
+    "group": "Infantil",
+    "status": "without_stream"
+  },
+  {
+    "name": "Gloobinho",
+    "number": 80,
+    "group": "Infantil",
+    "status": "without_stream"
+  },
+  {
+    "name": "MTV",
+    "number": 81,
+    "group": "Música",
+    "status": "without_stream"
+  },
+  {
+    "name": "Multishow",
+    "number": 82,
+    "group": "Entretenimento",
+    "status": "without_stream"
+  },
+  {
+    "name": "Canal OFF",
+    "number": 83,
+    "group": "Esportes",
+    "status": "without_stream"
+  }
+]

@@ -1,0 +1,245 @@
+[
+  {
+    "name": "TV Brasil",
+    "url": "https://tvbrasil-stream.ebc.com.br/index.m3u8",
+    "tvgId": "",
+    "group": "Abertos Brasil",
+    "logo": "",
+    "format": "hls",
+    "status": "not_verified"
+  },
+  {
+    "name": "Canal Gov",
+    "url": "https://canalgov-stream.ebc.com.br/index.m3u8",
+    "tvgId": "",
+    "group": "Abertos Brasil",
+    "logo": "",
+    "format": "hls",
+    "status": "not_verified"
+  },
+  {
+    "name": "NBR",
+    "url": "https://nbr-stream.ebc.com.br/index.m3u8",
+    "tvgId": "",
+    "group": "Abertos Brasil",
+    "logo": "",
+    "format": "hls",
+    "status": "not_verified"
+  },
+  {
+    "name": "TV Educação",
+    "url": "https://educacao-stream.ebc.com.br/index.m3u8",
+    "tvgId": "",
+    "group": "Educacional",
+    "logo": "",
+    "format": "hls",
+    "status": "not_verified"
+  },
+  {
+    "name": "TV Câmara",
+    "url": "https://stream3.camara.leg.br/tv1/manifest.m3u8",
+    "tvgId": "",
+    "group": "Legislativo",
+    "logo": "",
+    "format": "hls",
+    "status": "not_verified"
+  },
+  {
+    "name": "TV Senado",
+    "url": "https://videos.senado.leg.br/live/tvsenado.m3u8",
+    "tvgId": "",
+    "group": "Legislativo",
+    "logo": "",
+    "format": "hls",
+    "status": "not_verified"
+  },
+  {
+    "name": "TV Justiça",
+    "url": "https://tvjustica-stream.ebc.com.br/index.m3u8",
+    "tvgId": "",
+    "group": "Legislativo",
+    "logo": "",
+    "format": "hls",
+    "status": "not_verified"
+  },
+  {
+    "name": "TV Cultura (SP)",
+    "url": "https://cultura-live.cdn.nextplay.com.br/cultura/index.m3u8",
+    "tvgId": "",
+    "group": "Cultura",
+    "logo": "",
+    "format": "hls",
+    "status": "not_verified"
+  },
+  {
+    "name": "TV Univesp",
+    "url": "https://univesptv-stream.cdn.nextplay.com.br/univesptv/index.m3u8",
+    "tvgId": "",
+    "group": "Educacional",
+    "logo": "",
+    "format": "hls",
+    "status": "not_verified"
+  },
+  {
+    "name": "TV Futura",
+    "url": "https://futura-hls-video.cdn.nextplay.com.br/futura/index.m3u8",
+    "tvgId": "",
+    "group": "Educacional",
+    "logo": "",
+    "format": "hls",
+    "status": "not_verified"
+  },
+  {
+    "name": "Rede Vida",
+    "url": "https://cvd1.cds.ebtcvd.net/live-redevida/smil:redevida.smil/playlist.m3u8",
+    "tvgId": "",
+    "group": "Religioso",
+    "logo": "",
+    "format": "hls",
+    "status": "not_verified"
+  },
+  {
+    "name": "TV Aparecida",
+    "url": "https://tvaparecida-live.cdn.nextplay.com.br/tvaparecida/index.m3u8",
+    "tvgId": "",
+    "group": "Religioso",
+    "logo": "",
+    "format": "hls",
+    "status": "not_verified"
+  },
+  {
+    "name": "Rede Gênesis",
+    "url": "https://genesis-live.cdn.nextplay.com.br/genesis/index.m3u8",
+    "tvgId": "",
+    "group": "Religioso",
+    "logo": "",
+    "format": "hls",
+    "status": "not_verified"
+  },
+  {
+    "name": "TV Novo Tempo",
+    "url": "https://stream.novotempo.com/tv/index.m3u8",
+    "tvgId": "",
+    "group": "Religioso",
+    "logo": "",
+    "format": "hls",
+    "status": "not_verified"
+  },
+  {
+    "name": "TV UFSC",
+    "url": "https://streaming.ufsc.br/hls/tvufsc.m3u8",
+    "tvgId": "",
+    "group": "Universitário",
+    "logo": "",
+    "format": "hls",
+    "status": "not_verified"
+  },
+  {
+    "name": "TV UFRJ",
+    "url": "https://video.ufrj.br/live/ufrj.m3u8",
+    "tvgId": "",
+    "group": "Universitário",
+    "logo": "",
+    "format": "hls",
+    "status": "not_verified"
+  },
+  {
+    "name": "DW Brasil",
+    "url": "https://dwamdstream103.akamaized.net/hls/live/2015536/dwstream103/index.m3u8",
+    "tvgId": "",
+    "group": "Notícias",
+    "logo": "",
+    "format": "hls",
+    "status": "not_verified"
+  },
+  {
+    "name": "France 24 (PT)",
+    "url": "https://static.france24.com/live/F24_PT_LO_HLS/live_web.m3u8",
+    "tvgId": "",
+    "group": "Notícias",
+    "logo": "",
+    "format": "hls",
+    "status": "not_verified"
+  },
+  {
+    "name": "NASA TV",
+    "url": "https://ntv1.nasa.gov/ntv1.m3u8",
+    "tvgId": "",
+    "group": "Ciência",
+    "logo": "",
+    "format": "hls",
+    "status": "not_verified"
+  },
+  {
+    "name": "Sony Channel",
+    "url": "https://cdn-5.nxplay.com.br/SONY_CHANNEL/index.m3u8",
+    "tvgId": "",
+    "group": "Séries",
+    "logo": "",
+    "format": "hls",
+    "status": "not_verified"
+  },
+  {
+    "name": "CNN Brasil",
+    "url": "https://d25usgadhphvwi.cloudfront.net/hls/main.m3u8",
+    "tvgId": "",
+    "group": "Notícias",
+    "logo": "",
+    "format": "hls",
+    "status": "not_verified"
+  },
+  {
+    "name": "N Sports",
+    "url": "https://ogc-nsprt-tcl-roku-syndication.otteravision.com/ogc/nsprt/nsprt.m3u8",
+    "tvgId": "",
+    "group": "Esportes",
+    "logo": "",
+    "format": "hls",
+    "status": "not_verified"
+  },
+  {
+    "name": "CINDIE TV",
+    "url": "https://cc-hqw8u5r1nshjc.akamaized.net/scheduler/scheduleMaster/352.m3u8",
+    "tvgId": "",
+    "group": "Filmes",
+    "logo": "",
+    "format": "hls",
+    "status": "not_verified"
+  },
+  {
+    "name": "Big Buck Bunny",
+    "url": "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    "tvgId": "",
+    "group": "Filmes • Animação",
+    "logo": "https://storage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg",
+    "format": "file",
+    "status": "not_verified"
+  },
+  {
+    "name": "Sintel",
+    "url": "https://storage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+    "tvgId": "",
+    "group": "Filmes • Fantasia",
+    "logo": "https://storage.googleapis.com/gtv-videos-bucket/sample/images/Sintel.jpg",
+    "format": "file",
+    "status": "not_verified"
+  },
+  {
+    "name": "Tears of Steel",
+    "url": "https://storage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+    "tvgId": "",
+    "group": "Filmes • Ficção científica",
+    "logo": "https://storage.googleapis.com/gtv-videos-bucket/sample/images/TearsOfSteel.jpg",
+    "format": "file",
+    "status": "not_verified"
+  },
+  {
+    "name": "Elephants Dream",
+    "url": "https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+    "tvgId": "",
+    "group": "Filmes • Animação",
+    "logo": "https://storage.googleapis.com/gtv-videos-bucket/sample/images/ElephantsDream.jpg",
+    "format": "file",
+    "status": "not_verified"
+  }
+]
