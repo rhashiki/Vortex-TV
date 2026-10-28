@@ -75,6 +75,17 @@ Estados independentes:
 - **B32:** `filmesonlinehd1.org`, `megafilmeshd.press` e variantes, `vizer.autos`/Vizr, RedeCanais/Recanais/redecanaistv, Pobreflix, `filmesgays.net`, `tvonlinehd.app.br`; GitHub `viniciusgdr/vizertv`, `BrunoDelfim/stretor`, `Dante2526/Play-Infinity`, `kauankelvin7/KKMovies`, `KayohanCosta/Mox-Streaming`, `cleitonleonel/redecanais`, `script.module.rcresolver`, `Gerador-M3U-RedeCanais`, `rede-canais-tv-scraper`, `rede-canais-scraper`, `mflix-back-rede-canais`, `Addon-stremion-redecanais`.
 - **APKs estudados sem incorporação direta de DEX:** NinjaTV, YouCine, Zp.net, MetaX, Rede Canais TV, TV Digital, Next+, Cinegato, Veora, AnimeTV, Play Animes, VeloPlay.
 
+## Extensão de YouTube — implementada parcialmente em 28/10/2026
+
+- Branch main contém `catalog/youtube/search_plan.json`: **53 buscas configuradas**, com 20 consultas de live, 25 de filmes e 8 de distribuidores oficiais.
+- `catalog/youtube/seed_referencias.json`: **49 referências únicas de filmes** com vídeo YouTube, canais identificados e miniaturas geradas a partir do ID. **Não são 49 reproduções homologadas**.
+- `catalog/youtube/index.json`: **índice remoto vazio por ausência da chave da API oficial**; não contém lives reais; nenhuma afirmação de varredura completa.
+- `tools/index_youtube.py`: indexador YouTube Data API v3 com paginação, duração >=65 min, filtro de trailers, status embeddable, região BR, deduplicação, canais oficiais e distinção entre ano de upload e produção.
+- App Android: guia/seção YouTube, capa, WebView com iframe do YouTube e fallback para player externo, D-pad ↑/↓ para lives retornadas pelo índice; testes Android 7.1 pendentes.
+- **B27 passa a cobrir também YouTube Live** de canais oficiais; **B30 cobre YouTube Movies** com foco 1990–2019, além de Dailymotion e Internet Archive.
+- Falta credencial `YOUTUBE_API_KEY` segura de um projeto Google Cloud com YouTube Data API v3; não salvá-la no repositório. Quota padrão: até 100 consultas `search.list` por dia. Sem credencial não se promete indexação de todas as lives nem descoberta de novos filmes.
+- Nenhum conteúdo protegido é re-hospedado, anúncios/DRM da plataforma não são removidos.
+
 ## Critério de aprovação — todas as builds
 
 Cada build contém (1) escopo e fontes exatas, (2) alterações de código, (3) testes unitários e integração, (4) evidência do APK e do backend, (5) matriz de conteúdo testado, (6) resultado no dispositivo alvo, (7) pendências sem eufemismo. **Não concluir build que somente criou cartões e nomes.**
