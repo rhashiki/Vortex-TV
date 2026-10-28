@@ -77,12 +77,14 @@ public final class YoutubeCatalogBridge {
             if(!validId(id))continue;
             String title=e.optString("name","").trim();
             if(title.length()<3||title.length()>170)continue;
-            String kind=seed?"movie":e.optString("media_type","movie");
+            String kind=e.optString("media_type","movie");
             String format="channel".equals(kind)?"youtube-live":
-                "documentary".equals(kind)?"youtube-doc":"youtube-movie";
+                "documentary".equals(kind)?"youtube-doc":
+                "episode".equals(kind)?"youtube-series":"youtube-movie";
             String g=genre(e.optString("genre",seed?"Filmes":"Outros"));
             String group="youtube-live".equals(format)?"TV YouTube • "+g:
-                "youtube-doc".equals(format)?"Documentários • "+g:"Filmes • "+g;
+                "youtube-doc".equals(format)?"Documentários • "+g:
+                "youtube-series".equals(format)?"Séries • Caminandes":"Filmes • "+g;
             String rights=e.optString("rights_status",e.optString("status","NÃO VERIFICADO"));
             String descr=e.optString("description","").trim();
             String status=e.optString("playback_status","SEM TESTE DE REPRODUÇÃO");

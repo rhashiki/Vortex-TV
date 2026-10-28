@@ -443,6 +443,46 @@
       "provider": "Adrenalina Pura TV BR",
       "status": "REFERENCIA_XTOR_NAO_TESTADA",
       "evidence_url": "https://www.xtor.com.br/"
+    },
+    {
+      "name": "Caminandes 1: Llama Drama",
+      "video_id": "JOhiWY7XmoY",
+      "media_type": "episode",
+      "genre": "Animação",
+      "provider": "Blender Studio",
+      "status": "REFERENCIA_OFICIAL_NAO_TESTADA",
+      "year": "2013",
+      "description": "Série de animação aberta • Episódio 1. CC BY."
+    },
+    {
+      "name": "Caminandes 2: Gran Dillama",
+      "video_id": "Z4C82eyhwgU",
+      "media_type": "episode",
+      "genre": "Animação",
+      "provider": "Blender Studio",
+      "status": "REFERENCIA_OFICIAL_NAO_TESTADA",
+      "year": "2013",
+      "description": "Série de animação aberta • Episódio 2. CC BY-SA."
+    },
+    {
+      "name": "Caminandes 3: Llamigos",
+      "video_id": "SkVqJ1SGeL0",
+      "media_type": "episode",
+      "genre": "Animação",
+      "provider": "Blender Studio",
+      "status": "REFERENCIA_OFICIAL_NAO_TESTADA",
+      "year": "2016",
+      "description": "Série de animação aberta • Episódio 3. CC BY."
+    },
+    {
+      "name": "Sprite Fright",
+      "video_id": "_cMxraX_5RE",
+      "media_type": "movie",
+      "genre": "Terror",
+      "provider": "Blender Studio",
+      "status": "REFERENCIA_OFICIAL_NAO_TESTADA",
+      "year": "2021",
+      "description": "Curta aberto CC BY 4.0."
     }
   ]
 }

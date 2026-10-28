@@ -23,12 +23,14 @@ public final class CatalogStore {
             this.genre=genre;this.provider=provider;this.description=description;this.year=year;
         }
         public boolean isFilm() {return "youtube-movie".equals(format) || (!isLive() && (group.toLowerCase().matches(".*(filme|movie|cinema|vod).*?") || "Filmes".equalsIgnoreCase(provider)));}
-        public boolean isSeries(){ return !isLive() && group.toLowerCase().matches(".*(série|serie|series|temporada).*?"); }
+        public boolean isSeries(){ return "youtube-series".equals(format) || (!isLive() && group.toLowerCase().matches(".*(série|serie|series|temporada).*?")); }
         public boolean isDoc(){ return "youtube-doc".equals(format) || (!isLive() && group.toLowerCase().matches(".*(document|nature|história|historia).*?")); }
         public boolean isVideo(){return group.equalsIgnoreCase("Vídeos");}
         public boolean isLive(){
             if("youtube-live".equals(format))return true;
-            if("youtube-movie".equals(format)||"youtube-doc".equals(format))return false;
+            if("youtube-movie".equals(format)||"youtube-doc".equals(format)
+                ||"youtube-series".equals(format))return false;
+            if(group.toLowerCase(java.util.Locale.ROOT).matches(".*(filme|movie|cinema|vod|série|serie|temporada|document).*"))return false;
             if("hls".equals(format) || "dash".equals(format))return true;
             if("Vídeos".equalsIgnoreCase(group))return false;
             if("file".equals(format) || "Filmes".equalsIgnoreCase(provider))return false;
@@ -42,11 +44,63 @@ public final class CatalogStore {
     private final SharedPreferences prefs;
     public CatalogStore(Context ctx){
         prefs=ctx.getSharedPreferences("vortex_catalog",Context.MODE_PRIVATE);
+        repairLegacyBundledSources();
         initializeSeeds(ctx);
         repairArchiveTitles();
     }
+
+    /**
+     * Upgrade only exact bundled demo URLs. Never rewrite user imports, names,
+     * unrelated URLs, or wipe favorites. Migrates old demo favorites as well.
+     */
+    private void repairLegacyBundledSources(){
+        if(prefs.getBoolean("repair_demo_v3",false))return;
+        final String base="https://storage.googleapis.com/gtv-videos-bucket/sample/";
+        final String[] names={"Big Buck Bunny","Sintel","Tears of Steel","Elephants Dream","TV Câmara"};
+        final String[] old={
+            base+"BigBuckBunny.mp4",base+"Sintel.mp4",base+"TearsOfSteel.mp4",
+            base+"ElephantsDream.mp4","https://stream3.camara.leg.br/tv1/manifest.m3u8"};
+        final String[] replacement={
+            "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+            "https://archive.org/download/Sintel/sintel-2048-surround_512kb.mp4",
+            "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8",
+            "https://archive.org/download/ElephantsDream/ed_hd_512kb.mp4",
+            "https://stream3.camara.gov.br/tv1/manifest.m3u8"};
+        final String[] posters={
+            "https://commons.wikimedia.org/wiki/Special:Redirect/file/Big_buck_bunny_poster_big.jpg?width=500",
+            "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sintel_poster.jpg?width=500",
+            "https://commons.wikimedia.org/wiki/Special:Redirect/file/Tos-poster.png?width=500",
+            "https://archive.org/services/img/ElephantsDream",""};
+        List<Item> stored=loadLocal();
+        ArrayList<Item> updated=new ArrayList<>();
+        Set<String> favorites=new HashSet<>(prefs.getStringSet(FAV,new HashSet<String>()));
+        boolean changed=false;
+        for(Item item:stored){
+            for(int n=0;n<old.length;n++){
+                if(!old[n].equals(item.url)||!names[n].equals(item.name))continue;
+                String poster=posters[n].isEmpty()?item.logo:posters[n];
+                String newFormat=replacement[n].endsWith(".m3u8")?"hls":"file";
+                item=new Item(item.name,replacement[n],item.tvgId,item.group,poster,
+                    newFormat,item.genre,item.provider,item.description,item.year);
+                if(favorites.remove(old[n]))favorites.add(replacement[n]);
+                changed=true;
+                break;
+            }
+            updated.add(item);
+        }
+        if(changed){
+            // Preserve user collections while avoiding duplicated sources.
+            ArrayList<Item> unique=new ArrayList<>();
+            Set<String> urls=new HashSet<>();
+            for(Item item:updated)if(urls.add(item.url))unique.add(item);
+            save(unique);
+            prefs.edit().putStringSet(FAV,favorites).apply();
+        }
+        prefs.edit().putBoolean("repair_demo_v3",true).apply();
+    }
+
     private void initializeSeeds(Context ctx) {
-        if(prefs.getBoolean("seed_v2",false)) return;
+        if(prefs.getBoolean("seed_v3",false)) return;
         try(java.io.InputStream stream=ctx.getAssets().open("seed_catalog.json")) {
             java.io.ByteArrayOutputStream out=new java.io.ByteArrayOutputStream();
             byte[] bytes=new byte[8192];int n;
@@ -77,7 +131,8 @@ public final class CatalogStore {
                     }
                 }
             }
-            prefs.edit().putString(KEY,existing.toString()).putBoolean("seed_v1",true).putBoolean("seed_v2",true).apply();
+            prefs.edit().putString(KEY,existing.toString()).putBoolean("seed_v1",true)
+                .putBoolean("seed_v2",true).putBoolean("seed_v3",true).apply();
         } catch(Exception e) {
             // Never overwrite an existing catalog on failed seed read.
             android.util.Log.w("VortexTV","Bundled catalog unavailable",e);

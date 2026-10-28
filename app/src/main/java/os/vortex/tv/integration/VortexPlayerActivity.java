@@ -42,6 +42,7 @@ public final class VortexPlayerActivity extends Activity {
     public static final String EXTRA_MEDIA_URL = "vortex.media_url";
     public static final String EXTRA_CHANNELS_JSON = "vortex.channels_json";
     public static final String EXTRA_CHANNEL_INDEX = "vortex.channel_index";
+    public static final String EXTRA_MEDIA_FALLBACKS_JSON = "vortex.media_fallbacks";
     private static final int LIGHT=0xFFF6F4FF, MUTED=0xFFB7B1CC, PURPLE=0xFFB48AFF;
     private final Handler handler = new Handler(Looper.getMainLooper());
 
@@ -50,6 +51,8 @@ public final class VortexPlayerActivity extends Activity {
     private PlayerView playerView;
     private ExoPlayer player;
     private String mediaUrl;
+    private final java.util.ArrayList<String> backupUrls=new java.util.ArrayList<>();
+    private final java.util.HashSet<String> attempted=new java.util.HashSet<>();
     private LinearLayout channelInfo;
     private TextView infoNumber;
     private TextView infoTitle;
@@ -73,6 +76,14 @@ public final class VortexPlayerActivity extends Activity {
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
         mediaUrl=getIntent().getStringExtra(EXTRA_MEDIA_URL);
+        try {
+            JSONArray fallbackData=new JSONArray(getIntent().getStringExtra(EXTRA_MEDIA_FALLBACKS_JSON));
+            for(int i=0;i<fallbackData.length()&&i<3;i++){
+                String candidate=fallbackData.optString(i,"");
+                if(candidate.startsWith("https://")&&!candidate.equals(mediaUrl)
+                    &&M3uPlaylistParser.isHttpUrl(candidate))backupUrls.add(candidate);
+            }
+        }catch(Exception ignored){}
         try {
             String raw=getIntent().getStringExtra(EXTRA_CHANNELS_JSON);
             if(raw!=null)channels=new JSONArray(raw);
@@ -112,6 +123,7 @@ public final class VortexPlayerActivity extends Activity {
         playerView.setPlayer(player);
         player.addListener(new Player.Listener() {
             @Override public void onPlayerError(PlaybackException error) {
+                if(tryAlternative())return;
                 new AlertDialog.Builder(VortexPlayerActivity.this)
                     .setTitle("Falha de reprodução • Detalhes")
                     .setMessage(describePlayerError(error))
@@ -157,8 +169,20 @@ public final class VortexPlayerActivity extends Activity {
             ".\nPode haver erro de rede, codec ou indisponibilidade da fonte.";
     }
 
+    private boolean tryAlternative(){
+        while(!backupUrls.isEmpty()){
+            String next=backupUrls.remove(0);
+            if(attempted.contains(next))continue;
+            mediaUrl=next;
+            Toast.makeText(this,"Fonte indisponível; tentando alternativa...",Toast.LENGTH_SHORT).show();
+            playSelected();
+            return true;
+        }
+        return false;
+    }
     private void playSelected() {
         if(player==null || mediaUrl==null)return;
+        attempted.add(mediaUrl);
         MediaItem.Builder item=new MediaItem.Builder().setUri(Uri.parse(mediaUrl));
         String format=M3uPlaylistParser.kind(mediaUrl);
         if("hls".equals(format))item.setMimeType(MimeTypes.APPLICATION_M3U8);

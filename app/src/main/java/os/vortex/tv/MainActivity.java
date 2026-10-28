@@ -565,7 +565,11 @@ public final class MainActivity extends Activity {
             tag.setPadding(d(2),d(7),d(2),0);holder.addView(tag);
             LinearLayout.LayoutParams holderParams=new LinearLayout.LayoutParams(width,-2);
             holderParams.rightMargin=d(tv?16:12);target.addView(holder,holderParams);
-            poster.setOnClickListener(v->detail(i));focusable(poster);
+            // First selection immediately plays; long-press opens details/favorites.
+            poster.setOnClickListener(v->play(i));
+            poster.setOnLongClickListener(v->{detail(i);return true;});
+            poster.setContentDescription(i.name+"; tocar para assistir, segurar para informações");
+            focusable(poster);
         }
     }
     private void detail(CatalogStore.Item i){
@@ -628,6 +632,17 @@ public final class MainActivity extends Activity {
         }
         Intent intent=new Intent(this,VortexPlayerActivity.class);
         intent.putExtra(VortexPlayerActivity.EXTRA_MEDIA_URL,i.url);
+        JSONArray alternatives=new JSONArray();
+        if("Big Buck Bunny".equals(i.name)
+            &&i.url.equals("https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8")){
+            alternatives.put("https://cdn.jwplayer.com/manifests/pZxWPRg4.m3u8");
+        }
+        if("Tears of Steel".equals(i.name)
+            &&i.url.equals("https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8")){
+            alternatives.put("https://archive.org/download/TearsOfSteel/TearsOfSteel_720p_512kb.mp4");
+        }
+        if(alternatives.length()>0)
+            intent.putExtra(VortexPlayerActivity.EXTRA_MEDIA_FALLBACKS_JSON,alternatives.toString());
         if(i.isLive()){
             JSONArray playable=new JSONArray();int selected=0;
             for(CatalogStore.Item channel:items) {
@@ -686,15 +701,9 @@ public final class MainActivity extends Activity {
                     new AlertDialog.Builder(this).setTitle("Laboratório • Escolha um filme")
                         .setItems(labels,(dialog,which)->{
                             CatalogStore.Item selected=samples.get(which);
-                            new AlertDialog.Builder(this)
-                                .setTitle("Testar: "+selected.name)
-                                .setMessage("A URL respondeu no servidor, mas imagem e áudio ainda não foram homologados no dispositivo. Iniciar teste?")
-                                .setPositiveButton("Testar vídeo",(confirm,choice)->{
-                                    Intent video=new Intent(this,VortexPlayerActivity.class);
-                                    video.putExtra(VortexPlayerActivity.EXTRA_MEDIA_URL,selected.url);
-                                    startActivity(video);
-                                })
-                                .setNegativeButton("Cancelar",null).show();
+                            Intent video=new Intent(this,VortexPlayerActivity.class);
+                            video.putExtra(VortexPlayerActivity.EXTRA_MEDIA_URL,selected.url);
+                            startActivity(video);
                         }).setNegativeButton("Fechar",null).show();
                 });
             } catch(Exception ex) {
