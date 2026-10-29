@@ -161,13 +161,14 @@ Deno.serve(async(req:Request)=>{
         p_hash:item.hash,p_origin:item.origin,p_passed:verdict.ok,p_note:verdict.reason
       });
       return {checked:true,ok:verdict.ok,published:verdict.ok&&item.origin==="candidate"};
-    }catch{return {checked:false,ok:false};}
+    }catch(e){return {checked:false,ok:false,write_error:e instanceof Error?e.message.slice(0,70):"unknown"};}
   }));
   return output({
     checked:results.filter(x=>x.checked).length,
     healthy:results.filter(x=>x.ok).length,
     failed:results.filter(x=>x.checked&&!x.ok).length,
-    newly_available:results.filter(x=>x.published).length
+    newly_available:results.filter(x=>x.published).length,
+    write_errors:results.filter(x=>"write_error" in x).reduce((acc:Record<string,number>,r)=>{const k=("write_error" in r?r.write_error:"unknown")||"unknown";acc[k]=(acc[k]||0)+1;return acc;},{} as Record<string,number>)
   });
  }catch{
   return output({error:"catalog_monitor_temporarily_unavailable"},503);
