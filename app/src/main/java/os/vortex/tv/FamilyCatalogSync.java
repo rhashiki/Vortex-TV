@@ -2,6 +2,9 @@ package os.vortex.tv;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import java.io.ByteArrayOutputStream;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,6 +43,60 @@ public final class FamilyCatalogSync {
             int n=super.read(buffer,offset,Math.min(length,remaining));
             if(n>0)remaining-=n;return n;
         }
+    }
+    private static String readJson(InputStream stream) throws IOException {
+        try(InputStream in=stream;ByteArrayOutputStream out=new ByteArrayOutputStream()){
+            byte[] buf=new byte[4096];
+            int count,total=0;
+            while((count=in.read(buf))!=-1){
+                total+=count;
+                if(total>1500000)throw new IOException("Health delta too large");
+                out.write(buf,0,count);
+            }
+            return out.toString("UTF-8");
+        }
+    }
+    /** Tiny periodic refresh for searching / available badges. No 33k-entry download. */
+    public static int refreshStatuses(Context context,CatalogStore store,
+        SharedPreferences preferences,String familyCode) throws Exception {
+        if(familyCode==null||!familyCode.matches("[A-F0-9]{20}"))
+            throw new IOException("Catalog OEM access unavailable");
+        long since=preferences.getLong("family_health_since_v1",0L);
+        long after=preferences.getLong("family_health_after_v1",0L);
+        int updated=0;
+        for(int page=0;page<6;page++){
+            HttpURLConnection connection=(HttpURLConnection)new URL(
+                ENDPOINT+"?mode=health&since="+since+"&after="+after).openConnection();
+            connection.setConnectTimeout(8000);
+            connection.setReadTimeout(14000);
+            connection.setInstanceFollowRedirects(false);
+            connection.setRequestProperty("x-vortex-family-key",familyCode);
+            connection.setRequestProperty("Accept","application/json");
+            try{
+                if(connection.getResponseCode()!=200)
+                    throw new IOException("Catalog health unavailable");
+                JSONObject payload=new JSONObject(readJson(connection.getInputStream()));
+                if(payload.optInt("version")!=1)throw new IOException("Health feed version");
+                JSONArray updates=payload.optJSONArray("changes");
+                if(updates==null||updates.length()>500)
+                    throw new IOException("Health feed malformed");
+                long next=payload.optLong("next",-1L);
+                if(next<after)throw new IOException("Invalid health cursor");
+                updated+=store.applyRemoteStatuses(updates);
+                after=next;
+                if(!payload.optBoolean("has_more",false)){
+                    long serverTime=payload.optLong("server_ms",0L);
+                    if(serverTime<=0L)throw new IOException("Missing server timestamp");
+                    preferences.edit().putLong("family_health_since_v1",
+                        Math.max(0,serverTime-5000L))
+                        .putLong("family_health_after_v1",0L)
+                        .putLong("family_health_last_v1",System.currentTimeMillis()).apply();
+                    break;
+                }
+                preferences.edit().putLong("family_health_after_v1",after).apply();
+            }finally{connection.disconnect();}
+        }
+        return updated;
     }
     public interface ProgressListener {
         void onPage(int pages,int scanned,int added,int total);
@@ -99,8 +156,11 @@ public final class FamilyCatalogSync {
                     completed=true;
                     // Revisit earlier pages on the next refresh: the backend may
                     // replace sources and change "Buscando novo servidor" states.
-                    preferences.edit().putLong("family_last_sync_v1",
-                        System.currentTimeMillis()).putLong("family_cursor_v1",0L).apply();
+                    long checkpoint=System.currentTimeMillis();
+                    preferences.edit().putLong("family_last_sync_v1",checkpoint)
+                        .putLong("family_cursor_v1",0L)
+                        .putLong("family_health_since_v1",Math.max(0,checkpoint-300000L))
+                        .putLong("family_health_after_v1",0L).apply();
                     break;
                 }
             }finally{connection.disconnect();}
