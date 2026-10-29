@@ -37,7 +37,32 @@ Deno.serve(async(req:Request)=>{
   try {
     const ok=await rpc<boolean>("vortex_family_verify",{p_hash:await hashToken(code)});
     if(ok!==true)return result("Not authorized",403);
-    const u=new URL(req.url),cursor=u.searchParams.get("after")||"0";
+    const u=new URL(req.url);
+    if(u.searchParams.get("mode")==="health"){
+      const since=u.searchParams.get("since")||"0";
+      const after=u.searchParams.get("after")||"0";
+      if(!/^\d{1,16}$/.test(since)||!/^\d{1,18}$/.test(after))
+        return result("Invalid health cursor",400);
+      const sinceMs=Number(since),afterId=Number(after);
+      if(!Number.isSafeInteger(sinceMs)||!Number.isSafeInteger(afterId))
+        return result("Invalid health cursor",400);
+      const checkpoint=Date.now();
+      const changes=await rpc<Array<{id:number;media_url:string;status:string}>>(
+        "vortex_family_health_changes",{
+         p_since_ms:sinceMs,p_after:afterId,p_limit:500
+      });
+      if(!Array.isArray(changes)||changes.length>500)return result("Invalid health feed",502);
+      const updates=changes.flatMap(item=>{
+        if(!item||typeof item.media_url!=="string")return [];
+        const state=["available","searching","candidate"].includes(item.status)
+          ?item.status:"candidate";
+        return [{url:item.media_url,status:state,id:item.id}];
+      });
+      return result(JSON.stringify({version:1,server_ms:checkpoint,
+        changes:updates,next:updates.length?updates[updates.length-1].id:afterId,
+        has_more:changes.length===500}),200,{"Content-Type":"application/json; charset=utf-8"});
+    }
+    const cursor=u.searchParams.get("after")||"0";
     if(!/^\d{1,18}$/.test(cursor))return result("Invalid cursor",400);
     const after=Number(cursor);
     if(!Number.isSafeInteger(after)||after<0)return result("Invalid cursor",400);
