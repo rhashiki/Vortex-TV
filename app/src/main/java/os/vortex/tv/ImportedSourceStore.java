@@ -19,7 +19,7 @@ import os.vortex.tv.integration.M3uPlaylistParser;
  */
 public final class ImportedSourceStore extends SQLiteOpenHelper {
     private static final String DB_NAME="vortex_private_sources.db";
-    private static final int DB_VERSION=1;
+    private static final int DB_VERSION=2;
     private static final int MAX_ROWS=120000;
     public ImportedSourceStore(Context context){super(context,DB_NAME,null,DB_VERSION);}
 
@@ -30,11 +30,15 @@ public final class ImportedSourceStore extends SQLiteOpenHelper {
             +"tvg_id TEXT NOT NULL DEFAULT '', category TEXT NOT NULL DEFAULT '',"
             +"logo TEXT NOT NULL DEFAULT '', format TEXT NOT NULL DEFAULT 'auto',"
             +"source_label TEXT NOT NULL DEFAULT '', last_good_ms INTEGER NOT NULL DEFAULT 0,"
-            +"last_bad_ms INTEGER NOT NULL DEFAULT 0, failure_count INTEGER NOT NULL DEFAULT 0)");
+            +"last_bad_ms INTEGER NOT NULL DEFAULT 0, failure_count INTEGER NOT NULL DEFAULT 0,"
+            +"remote_status TEXT NOT NULL DEFAULT 'candidate')");
         db.execSQL("CREATE INDEX IF NOT EXISTS source_identity_index ON sources(identity_key)");
         db.execSQL("CREATE INDEX IF NOT EXISTS source_display_index ON sources(name)");
     }
-    @Override public void onUpgrade(SQLiteDatabase db,int oldVersion,int newVersion){}
+    @Override public void onUpgrade(SQLiteDatabase db,int oldVersion,int newVersion){
+        if(oldVersion<2)db.execSQL(
+            "ALTER TABLE sources ADD COLUMN remote_status TEXT NOT NULL DEFAULT 'candidate'");
+    }
 
     public static final class ImportResult {
         public final int scanned,added,total;
@@ -54,8 +58,11 @@ public final class ImportedSourceStore extends SQLiteOpenHelper {
         db.beginTransaction();
         try {
             SQLiteStatement stmt=db.compileStatement(
-                "INSERT OR IGNORE INTO sources(identity_key,name,url,tvg_id,category,logo,format,source_label)"
-                +" VALUES(?,?,?,?,?,?,?,?)");
+                "INSERT OR IGNORE INTO sources(identity_key,name,url,tvg_id,category,logo,format,source_label,remote_status)"
+                +" VALUES(?,?,?,?,?,?,?,?,?)");
+            SQLiteStatement status=db.compileStatement(
+                "UPDATE sources SET remote_status=?,logo=CASE WHEN ?<>'' THEN ? ELSE logo END,"
+                +"category=CASE WHEN category='' THEN ? ELSE category END WHERE url=?");
             try {
                 new M3uPlaylistParser().parseToSink(reader,item->{
                     scanned[0]++;
@@ -72,9 +79,19 @@ public final class ImportedSourceStore extends SQLiteOpenHelper {
                     stmt.bindString(6,item.logo);
                     stmt.bindString(7,item.format);
                     stmt.bindString(8,label);
+                    stmt.bindString(9,item.remoteStatus.isEmpty()?"candidate":item.remoteStatus);
                     if(stmt.executeInsert()!=-1)inserted[0]++;
+                    if(!item.remoteStatus.isEmpty()){
+                        status.clearBindings();
+                        status.bindString(1,item.remoteStatus);
+                        status.bindString(2,item.logo);
+                        status.bindString(3,item.logo);
+                        status.bindString(4,item.group);
+                        status.bindString(5,item.url);
+                        status.executeUpdateDelete();
+                    }
                 });
-            }finally{stmt.close();}
+            }finally{stmt.close();status.close();}
             db.setTransactionSuccessful();
         }catch(IllegalArgumentException ex){throw new IOException(ex.getMessage(),ex);
         }finally{db.endTransaction();}
@@ -133,6 +150,8 @@ public final class ImportedSourceStore extends SQLiteOpenHelper {
             selected.tvgId,selected.format,selected.url);
         String sql="SELECT url FROM sources WHERE identity_key=? "
             +"ORDER BY (CASE WHEN last_good_ms>last_bad_ms THEN 0 ELSE 1 END),"
+            +"CASE WHEN remote_status='available' THEN 0 "
+            +"WHEN remote_status='candidate' THEN 1 ELSE 2 END,"
             +"failure_count ASC,last_good_ms DESC,id DESC LIMIT ?";
         try(Cursor c=getReadableDatabase().rawQuery(sql,
             new String[]{key,Integer.toString(Math.max(1,Math.min(15,limit)))})){
@@ -148,6 +167,12 @@ public final class ImportedSourceStore extends SQLiteOpenHelper {
             +"AND last_good_ms>0 ORDER BY last_good_ms DESC LIMIT 1",
             new String[]{key})){
             return c.moveToFirst()?c.getString(0):null;
+        }
+    }
+    public synchronized String remoteStatus(String url){
+        try(Cursor c=getReadableDatabase().rawQuery(
+            "SELECT remote_status FROM sources WHERE url=? LIMIT 1",new String[]{url})){
+            return c.moveToFirst()?c.getString(0):"";
         }
     }
     public synchronized boolean contains(String url){
