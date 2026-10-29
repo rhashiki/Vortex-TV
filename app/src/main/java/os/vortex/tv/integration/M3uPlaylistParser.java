@@ -20,9 +20,15 @@ public final class M3uPlaylistParser {
     public static final class Channel {
         public final String name, url, tvgId, group, logo, format;
         public final boolean verified;
-        Channel(String name, String url, String tvgId, String group, String logo, String format) {
-            this.name=name; this.url=url; this.tvgId=tvgId; this.group=group;
-            this.logo=logo; this.format=format; this.verified=false;
+        public final String remoteStatus;
+        Channel(String name,String url,String tvgId,String group,String logo,String format){
+            this(name,url,tvgId,group,logo,format,"");
+        }
+        Channel(String name,String url,String tvgId,String group,String logo,String format,String status){
+            this.name=name;this.url=url;this.tvgId=tvgId;this.group=group;
+            this.logo=logo;this.format=format;this.verified=false;
+            remoteStatus=("available".equals(status)||"searching".equals(status)
+                ||"candidate".equals(status))?status:"";
         }
     }
 
@@ -75,7 +81,7 @@ public final class M3uPlaylistParser {
             if (!isHttpUrl(line)) continue;
             if (total >= MAX_CHANNELS) throw new IOException("Playlist excede limite");
             sink.accept(new Channel(title,line,attr(attrs,"tvg-id"),attr(attrs,"group-title"),
-                    attr(attrs,"tvg-logo"),kind(line)));
+                    attr(attrs,"tvg-logo"),kind(line),attr(attrs,"vortex-status")));
             total++;
         }
     }
