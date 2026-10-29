@@ -1,0 +1,908 @@
+{
+  "schema": 1,
+  "updated": "2026-10-29",
+  "source": "Lista de 100 séries fornecida pelo usuário",
+  "note": "Metadados não comprovam reprodução",
+  "series": [
+    {
+      "show_key": "simpsons",
+      "display_title": "Os Simpsons",
+      "search_title": "The Simpsons",
+      "original_year": 1989,
+      "franchise": "Os Simpsons",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req1997pokemon",
+      "display_title": "Pokémon",
+      "search_title": "Pokémon",
+      "original_year": 1997,
+      "franchise": "Pokémon",
+      "resolution_state": "metadata_linked",
+      "primary_external_id": "tvmaze:590"
+    },
+    {
+      "show_key": "southpark",
+      "display_title": "South Park",
+      "search_title": "South Park",
+      "original_year": 1997,
+      "franchise": "South Park",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req1998thepowerpuffgirls",
+      "display_title": "As Meninas Superpoderosas",
+      "search_title": "The Powerpuff Girls",
+      "original_year": 1998,
+      "franchise": "As Meninas Superpoderosas",
+      "resolution_state": "metadata_linked",
+      "primary_external_id": "tvmaze:1955"
+    },
+    {
+      "show_key": "spongebob",
+      "display_title": "Bob Esponja Calça Quadrada",
+      "search_title": "SpongeBob SquarePants",
+      "original_year": 1999,
+      "franchise": "Bob Esponja",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req1999ededdneddy",
+      "display_title": "Du, Dudu e Edu",
+      "search_title": "Ed, Edd n Eddy",
+      "original_year": 1999,
+      "franchise": "Du, Dudu e Edu",
+      "resolution_state": "metadata_linked",
+      "primary_external_id": "tvmaze:6428"
+    },
+    {
+      "show_key": "futurama",
+      "display_title": "Futurama",
+      "search_title": "Futurama",
+      "original_year": 1999,
+      "franchise": "Futurama",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "familyguy",
+      "display_title": "Uma Família da Pesada",
+      "search_title": "Family Guy",
+      "original_year": 1999,
+      "franchise": "Uma Família da Pesada",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2000jackiechanadventures",
+      "display_title": "As Aventuras de Jackie Chan",
+      "search_title": "Jackie Chan Adventures",
+      "original_year": 2000,
+      "franchise": "Jackie Chan",
+      "resolution_state": "metadata_linked",
+      "primary_external_id": "tvmaze:5709"
+    },
+    {
+      "show_key": "req2000cliffordthebigreddog",
+      "display_title": "Clifford, o Gigante Cão Vermelho",
+      "search_title": "Clifford the Big Red Dog",
+      "original_year": 2000,
+      "franchise": "Clifford",
+      "resolution_state": "metadata_linked",
+      "primary_external_id": "tvmaze:42151"
+    },
+    {
+      "show_key": "req2000doratheexplorer",
+      "display_title": "Dora, a Aventureira",
+      "search_title": "Dora the Explorer",
+      "original_year": 2000,
+      "franchise": "Dora",
+      "resolution_state": "metadata_linked",
+      "primary_external_id": "tvmaze:6489"
+    },
+    {
+      "show_key": "req2000inuyasha",
+      "display_title": "InuYasha",
+      "search_title": "Inuyasha",
+      "original_year": 2000,
+      "franchise": "InuYasha",
+      "resolution_state": "metadata_linked",
+      "primary_external_id": "tvmaze:4247"
+    },
+    {
+      "show_key": "req2000xmenevolution",
+      "display_title": "X-Men: Evolution",
+      "search_title": "X-Men: Evolution",
+      "original_year": 2000,
+      "franchise": "X-Men",
+      "resolution_state": "metadata_linked",
+      "primary_external_id": "tvmaze:1612"
+    },
+    {
+      "show_key": "req2000yugiohduelmonsters",
+      "display_title": "Yu-Gi-Oh! Duel Monsters",
+      "search_title": "Yu-Gi-Oh! Duel Monsters",
+      "original_year": 2000,
+      "franchise": "Yu-Gi-Oh!",
+      "resolution_state": "metadata_linked",
+      "primary_external_id": "tvmaze:4099"
+    },
+    {
+      "show_key": "req2001theproudfamily",
+      "display_title": "A Família Radical",
+      "search_title": "The Proud Family",
+      "original_year": 2001,
+      "franchise": "A Família Radical",
+      "resolution_state": "metadata_linked",
+      "primary_external_id": "tvmaze:18458"
+    },
+    {
+      "show_key": "req2001invaderzim",
+      "display_title": "Invasor Zim",
+      "search_title": "Invader Zim",
+      "original_year": 2001,
+      "franchise": "Invasor Zim",
+      "resolution_state": "metadata_linked",
+      "primary_external_id": "tvmaze:409"
+    },
+    {
+      "show_key": "req2001justiceleague",
+      "display_title": "Liga da Justiça",
+      "search_title": "Justice League",
+      "original_year": 2001,
+      "franchise": "Liga da Justiça",
+      "resolution_state": "metadata_linked",
+      "primary_external_id": "tvmaze:22040"
+    },
+    {
+      "show_key": "req2001thefairlyoddparents",
+      "display_title": "Os Padrinhos Mágicos",
+      "search_title": "The Fairly OddParents",
+      "original_year": 2001,
+      "franchise": "Os Padrinhos Mágicos",
+      "resolution_state": "metadata_linked",
+      "primary_external_id": "tvmaze:2565"
+    },
+    {
+      "show_key": "req2001samuraijack",
+      "display_title": "Samurai Jack",
+      "search_title": "Samurai Jack",
+      "original_year": 2001,
+      "franchise": "Samurai Jack",
+      "resolution_state": "metadata_linked",
+      "primary_external_id": "tvmaze:1603"
+    },
+    {
+      "show_key": "req2001totallyspies",
+      "display_title": "Três Espiãs Demais",
+      "search_title": "Totally Spies!",
+      "original_year": 2001,
+      "franchise": "Três Espiãs Demais",
+      "resolution_state": "metadata_linked",
+      "primary_external_id": "tvmaze:6459"
+    },
+    {
+      "show_key": "req2002theadventuresofjimmyneutronboygenius",
+      "display_title": "As Aventuras de Jimmy Neutron",
+      "search_title": "The Adventures of Jimmy Neutron, Boy Genius",
+      "original_year": 2002,
+      "franchise": "Jimmy Neutron",
+      "resolution_state": "metadata_linked",
+      "primary_external_id": "tvmaze:7457"
+    },
+    {
+      "show_key": "req2002babylooneytunes",
+      "display_title": "Baby Looney Tunes",
+      "search_title": "Baby Looney Tunes",
+      "original_year": 2002,
+      "franchise": "Looney Tunes",
+      "resolution_state": "metadata_linked",
+      "primary_external_id": "tvmaze:18495"
+    },
+    {
+      "show_key": "kimpossible",
+      "display_title": "Kim Possible",
+      "search_title": "Kim Possible",
+      "original_year": 2002,
+      "franchise": "Kim Possible",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2002codenamekidsnextdoor",
+      "display_title": "KND: A Turma do Bairro",
+      "search_title": "Codename: Kids Next Door",
+      "original_year": 2002,
+      "franchise": "KND",
+      "resolution_state": "metadata_linked",
+      "primary_external_id": "tvmaze:7302"
+    },
+    {
+      "show_key": "req2002naruto",
+      "display_title": "Naruto",
+      "search_title": "Naruto",
+      "original_year": 2002,
+      "franchise": "Naruto",
+      "resolution_state": "metadata_linked",
+      "primary_external_id": "tvmaze:495"
+    },
+    {
+      "show_key": "req2002whatsnewscoobydoo",
+      "display_title": "O Que Há de Novo, Scooby-Doo?",
+      "search_title": "What's New, Scooby-Doo?",
+      "original_year": 2002,
+      "franchise": "Scooby-Doo",
+      "resolution_state": "metadata_linked",
+      "primary_external_id": "tvmaze:7593"
+    },
+    {
+      "show_key": "req2003teenagemutantninjaturtles",
+      "display_title": "As Tartarugas Ninja",
+      "search_title": "Teenage Mutant Ninja Turtles",
+      "original_year": 2003,
+      "franchise": "As Tartarugas Ninja",
+      "resolution_state": "metadata_linked",
+      "primary_external_id": "tvmaze:736"
+    },
+    {
+      "show_key": "req2003thegrimadventuresofbillymandy",
+      "display_title": "As Terríveis Aventuras de Billy e Mandy",
+      "search_title": "The Grim Adventures of Billy & Mandy",
+      "original_year": 2003,
+      "franchise": "Billy e Mandy",
+      "resolution_state": "metadata_linked",
+      "primary_external_id": "tvmaze:7345"
+    },
+    {
+      "show_key": "req2003fullmetalalchemist",
+      "display_title": "Fullmetal Alchemist",
+      "search_title": "Fullmetal Alchemist",
+      "original_year": 2003,
+      "franchise": "Fullmetal Alchemist",
+      "resolution_state": "metadata_linked",
+      "primary_external_id": "tvmaze:4297"
+    },
+    {
+      "show_key": "req2003lilostitchtheseries",
+      "display_title": "Lilo & Stitch: A Série",
+      "search_title": "Lilo & Stitch: The Series",
+      "original_year": 2003,
+      "franchise": "Lilo & Stitch",
+      "resolution_state": "metadata_linked",
+      "primary_external_id": "tvmaze:9803"
+    },
+    {
+      "show_key": "req2003mylifeasateenagerobot",
+      "display_title": "Minha Vida de Robô Adolescente",
+      "search_title": "My Life as a Teenage Robot",
+      "original_year": 2003,
+      "franchise": "Minha Vida de Robô Adolescente",
+      "resolution_state": "metadata_linked",
+      "primary_external_id": "tvmaze:12450"
+    },
+    {
+      "show_key": "req2003teentitans",
+      "display_title": "Os Jovens Titãs",
+      "search_title": "Teen Titans",
+      "original_year": 2003,
+      "franchise": "Os Jovens Titãs",
+      "resolution_state": "metadata_linked",
+      "primary_external_id": "tvmaze:765"
+    },
+    {
+      "show_key": "req2004fostershomeforimaginaryfriends",
+      "display_title": "A Mansão Foster para Amigos Imaginários",
+      "search_title": "Foster's Home for Imaginary Friends",
+      "original_year": 2004,
+      "franchise": "A Mansão Foster",
+      "resolution_state": "metadata_linked",
+      "primary_external_id": "tvmaze:7335"
+    },
+    {
+      "show_key": "req2004bleach",
+      "display_title": "Bleach",
+      "search_title": "Bleach",
+      "original_year": 2004,
+      "franchise": "Bleach",
+      "resolution_state": "metadata_linked",
+      "primary_external_id": "tvmaze:1905"
+    },
+    {
+      "show_key": "req2004dannyphantom",
+      "display_title": "Danny Phantom",
+      "search_title": "Danny Phantom",
+      "original_year": 2004,
+      "franchise": "Danny Phantom",
+      "resolution_state": "metadata_linked",
+      "primary_external_id": "tvmaze:6301"
+    },
+    {
+      "show_key": "req2004winxclub",
+      "display_title": "O Clube das Winx",
+      "search_title": "Winx Club",
+      "original_year": 2004,
+      "franchise": "Winx Club",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2004thebackyardigans",
+      "display_title": "Os Backyardigans",
+      "search_title": "The Backyardigans",
+      "original_year": 2004,
+      "franchise": "Os Backyardigans",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2004peppapig",
+      "display_title": "Peppa Pig",
+      "search_title": "Peppa Pig",
+      "original_year": 2004,
+      "franchise": "Peppa Pig",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "americandad",
+      "display_title": "American Dad!",
+      "search_title": "American Dad!",
+      "original_year": 2005,
+      "franchise": "American Dad",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2005americandragonjakelong",
+      "display_title": "American Dragon: Jake Long",
+      "search_title": "American Dragon: Jake Long",
+      "original_year": 2005,
+      "franchise": "American Dragon",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2005avatarthelastairbender",
+      "display_title": "Avatar: A Lenda de Aang",
+      "search_title": "Avatar: The Last Airbender",
+      "original_year": 2005,
+      "franchise": "Avatar",
+      "resolution_state": "metadata_linked",
+      "primary_external_id": "tvmaze:555"
+    },
+    {
+      "show_key": "req2005ben10",
+      "display_title": "Ben 10",
+      "search_title": "Ben 10",
+      "original_year": 2005,
+      "franchise": "Ben 10",
+      "resolution_state": "metadata_linked",
+      "primary_external_id": "tvmaze:951"
+    },
+    {
+      "show_key": "req2005camplazlo",
+      "display_title": "O Acampamento de Lazlo",
+      "search_title": "Camp Lazlo",
+      "original_year": 2005,
+      "franchise": "Acampamento de Lazlo",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2006mickeymouseclubhouse",
+      "display_title": "A Casa do Mickey Mouse",
+      "search_title": "Mickey Mouse Clubhouse",
+      "original_year": 2006,
+      "franchise": "Mickey Mouse",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2006theemperorsnewschool",
+      "display_title": "A Nova Escola do Imperador",
+      "search_title": "The Emperor's New School",
+      "original_year": 2006,
+      "franchise": "A Nova Escola do Imperador",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2006deathnote",
+      "display_title": "Death Note",
+      "search_title": "Death Note",
+      "original_year": 2006,
+      "franchise": "Death Note",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2007chowder",
+      "display_title": "Chowder",
+      "search_title": "Chowder",
+      "original_year": 2007,
+      "franchise": "Chowder",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2007totaldramaisland",
+      "display_title": "Ilha dos Desafios",
+      "search_title": "Total Drama Island",
+      "original_year": 2007,
+      "franchise": "Ilha dos Desafios",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2007narutoshippuden",
+      "display_title": "Naruto Shippuden",
+      "search_title": "Naruto: Shippuden",
+      "original_year": 2007,
+      "franchise": "Naruto",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "phineas",
+      "display_title": "Phineas e Ferb",
+      "search_title": "Phineas and Ferb",
+      "original_year": 2007,
+      "franchise": "Phineas e Ferb",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2008themarvelousmisadventuresofflapjack",
+      "display_title": "As Trapalhadas de Flapjack",
+      "search_title": "The Marvelous Misadventures of Flapjack",
+      "original_year": 2008,
+      "franchise": "Flapjack",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2008ben10alienforce",
+      "display_title": "Ben 10: Força Alienígena",
+      "search_title": "Ben 10: Alien Force",
+      "original_year": 2008,
+      "franchise": "Ben 10",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2008thepenguinsofmadagascar",
+      "display_title": "Os Pinguins de Madagascar",
+      "search_title": "The Penguins of Madagascar",
+      "original_year": 2008,
+      "franchise": "Madagascar",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2008starwarstheclonewars",
+      "display_title": "Star Wars: The Clone Wars",
+      "search_title": "Star Wars: The Clone Wars",
+      "original_year": 2008,
+      "franchise": "Star Wars",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2009archer",
+      "display_title": "Archer",
+      "search_title": "Archer",
+      "original_year": 2009,
+      "franchise": "Archer",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2010regularshow",
+      "display_title": "Apenas um Show",
+      "search_title": "Regular Show",
+      "original_year": 2010,
+      "franchise": "Apenas um Show",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2010ben10ultimatealien",
+      "display_title": "Ben 10: Supremacia Alienígena",
+      "search_title": "Ben 10: Ultimate Alien",
+      "original_year": 2010,
+      "franchise": "Ben 10",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2010adventuretime",
+      "display_title": "Hora de Aventura",
+      "search_title": "Adventure Time",
+      "original_year": 2010,
+      "franchise": "Hora de Aventura",
+      "resolution_state": "metadata_linked",
+      "primary_external_id": "tvmaze:290"
+    },
+    {
+      "show_key": "req2010mylittleponyfriendshipismagic",
+      "display_title": "My Little Pony: A Amizade É Mágica",
+      "search_title": "My Little Pony: Friendship Is Magic",
+      "original_year": 2010,
+      "franchise": "My Little Pony",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2010scoobydoomysteryincorporated",
+      "display_title": "Scooby-Doo! Mistério S/A",
+      "search_title": "Scooby-Doo! Mystery Incorporated",
+      "original_year": 2010,
+      "franchise": "Scooby-Doo",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "bobsburgers",
+      "display_title": "Bob's Burgers",
+      "search_title": "Bob's Burgers",
+      "original_year": 2011,
+      "franchise": "Bob's Burgers",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "kungfulegends",
+      "display_title": "Kung Fu Panda: Lendas do Dragão Guerreiro",
+      "search_title": "Kung Fu Panda: Legends of Awesomeness",
+      "original_year": 2011,
+      "franchise": "Kung Fu Panda",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2011theamazingworldofgumball",
+      "display_title": "O Incrível Mundo de Gumball",
+      "search_title": "The Amazing World of Gumball",
+      "original_year": 2011,
+      "franchise": "Gumball",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2012thelegendofkorra",
+      "display_title": "A Lenda de Korra",
+      "search_title": "The Legend of Korra",
+      "original_year": 2012,
+      "franchise": "Avatar",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2012teenagemutantninjaturtles",
+      "display_title": "As Tartarugas Ninja",
+      "search_title": "Teenage Mutant Ninja Turtles",
+      "original_year": 2012,
+      "franchise": "As Tartarugas Ninja",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "gravityfalls",
+      "display_title": "Gravity Falls: Um Verão de Mistérios",
+      "search_title": "Gravity Falls",
+      "original_year": 2012,
+      "franchise": "Gravity Falls",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2013teentitansgo",
+      "display_title": "Os Jovens Titãs em Ação!",
+      "search_title": "Teen Titans Go!",
+      "original_year": 2013,
+      "franchise": "Os Jovens Titãs",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2013pawpatrol",
+      "display_title": "Patrulha Canina",
+      "search_title": "PAW Patrol",
+      "original_year": 2013,
+      "franchise": "Patrulha Canina",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2013sofiathefirst",
+      "display_title": "Princesinha Sofia",
+      "search_title": "Sofia the First",
+      "original_year": 2013,
+      "franchise": "Princesinha Sofia",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "rickmorty",
+      "display_title": "Rick and Morty",
+      "search_title": "Rick and Morty",
+      "original_year": 2013,
+      "franchise": "Rick & Morty",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2013stevenuniverse",
+      "display_title": "Steven Universo",
+      "search_title": "Steven Universe",
+      "original_year": 2013,
+      "franchise": "Steven Universo",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2014bojackhorseman",
+      "display_title": "BoJack Horseman",
+      "search_title": "BoJack Horseman",
+      "original_year": 2014,
+      "franchise": "BoJack Horseman",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2014jorelsbrother",
+      "display_title": "Irmão do Jorel",
+      "search_title": "Jorel's Brother",
+      "original_year": 2014,
+      "franchise": "Irmão do Jorel",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2014overthegardenwall",
+      "display_title": "O Segredo Além do Jardim",
+      "search_title": "Over the Garden Wall",
+      "original_year": 2014,
+      "franchise": "O Segredo Além do Jardim",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2014starwarsrebels",
+      "display_title": "Star Wars Rebels",
+      "search_title": "Star Wars Rebels",
+      "original_year": 2014,
+      "franchise": "Star Wars",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2015dragonballsuper",
+      "display_title": "Dragon Ball Super",
+      "search_title": "Dragon Ball Super",
+      "original_year": 2015,
+      "franchise": "Dragon Ball",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2015miraculoustalesofladybugcatnoir",
+      "display_title": "Miraculous: As Aventuras de Ladybug",
+      "search_title": "Miraculous: Tales of Ladybug & Cat Noir",
+      "original_year": 2015,
+      "franchise": "Miraculous",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2015onepunchman",
+      "display_title": "One-Punch Man",
+      "search_title": "One-Punch Man",
+      "original_year": 2015,
+      "franchise": "One-Punch Man",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2015starvstheforcesofevil",
+      "display_title": "Star vs. As Forças do Mal",
+      "search_title": "Star vs. the Forces of Evil",
+      "original_year": 2015,
+      "franchise": "Star vs. As Forças do Mal",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2015webarebears",
+      "display_title": "Ursos sem Curso",
+      "search_title": "We Bare Bears",
+      "original_year": 2015,
+      "franchise": "Ursos sem Curso",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2016theloudhouse",
+      "display_title": "A Casa Loud",
+      "search_title": "The Loud House",
+      "original_year": 2016,
+      "franchise": "A Casa Loud",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2016trollhunterstalesofarcadia",
+      "display_title": "Caçadores de Trolls",
+      "search_title": "Trollhunters: Tales of Arcadia",
+      "original_year": 2016,
+      "franchise": "Trollhunters",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2016myheroacademia",
+      "display_title": "My Hero Academia",
+      "search_title": "My Hero Academia",
+      "original_year": 2016,
+      "franchise": "My Hero Academia",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2017bigmouth",
+      "display_title": "Big Mouth",
+      "search_title": "Big Mouth",
+      "original_year": 2017,
+      "franchise": "Big Mouth",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "ducktales",
+      "display_title": "DuckTales: Os Caçadores de Aventuras",
+      "search_title": "DuckTales",
+      "original_year": 2017,
+      "franchise": "DuckTales",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2018bluey",
+      "display_title": "Bluey",
+      "search_title": "Bluey",
+      "original_year": 2018,
+      "franchise": "Bluey",
+      "resolution_state": "metadata_linked",
+      "primary_external_id": "tvmaze:41821"
+    },
+    {
+      "show_key": "req2018hilda",
+      "display_title": "Hilda",
+      "search_title": "Hilda",
+      "original_year": 2018,
+      "franchise": "Hilda",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2018craigofthecreek",
+      "display_title": "O Mundo de Greg",
+      "search_title": "Craig of the Creek",
+      "original_year": 2018,
+      "franchise": "O Mundo de Greg",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2019amphibia",
+      "display_title": "Amphibia",
+      "search_title": "Amphibia",
+      "original_year": 2019,
+      "franchise": "Amphibia",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2019demonslayerkimetsunoyaiba",
+      "display_title": "Demon Slayer: Kimetsu no Yaiba",
+      "search_title": "Demon Slayer: Kimetsu no Yaiba",
+      "original_year": 2019,
+      "franchise": "Demon Slayer",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "owlhouse",
+      "display_title": "A Casa Coruja",
+      "search_title": "The Owl House",
+      "original_year": 2020,
+      "franchise": "A Casa Coruja",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2020animaniacs",
+      "display_title": "Animaniacs — nova versão",
+      "search_title": "Animaniacs",
+      "original_year": 2020,
+      "franchise": "Animaniacs",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2020jujutsukaisen",
+      "display_title": "Jujutsu Kaisen",
+      "search_title": "Jujutsu Kaisen",
+      "original_year": 2020,
+      "franchise": "Jujutsu Kaisen",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2020jurassicworldcampcretaceous",
+      "display_title": "Jurassic World: Acampamento Jurássico",
+      "search_title": "Jurassic World: Camp Cretaceous",
+      "original_year": 2020,
+      "franchise": "Jurassic World",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2020kipoandtheageofwonderbeasts",
+      "display_title": "Kipo e os Animonstros",
+      "search_title": "Kipo and the Age of Wonderbeasts",
+      "original_year": 2020,
+      "franchise": "Kipo",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2021arcane",
+      "display_title": "Arcane",
+      "search_title": "Arcane",
+      "original_year": 2021,
+      "franchise": "Arcane",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2021invincible",
+      "display_title": "Invencível",
+      "search_title": "Invincible",
+      "original_year": 2021,
+      "franchise": "Invencível",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2022chainsawman",
+      "display_title": "Chainsaw Man",
+      "search_title": "Chainsaw Man",
+      "original_year": 2022,
+      "franchise": "Chainsaw Man",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2022thecupheadshow",
+      "display_title": "O Show do Cuphead!",
+      "search_title": "The Cuphead Show!",
+      "original_year": 2022,
+      "franchise": "Cuphead",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    },
+    {
+      "show_key": "req2022spyxfamily",
+      "display_title": "Spy × Family",
+      "search_title": "Spy x Family",
+      "original_year": 2022,
+      "franchise": "Spy x Family",
+      "resolution_state": "queued",
+      "primary_external_id": null
+    }
+  ]
+}
