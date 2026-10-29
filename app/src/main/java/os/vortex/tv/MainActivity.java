@@ -60,6 +60,17 @@ public final class MainActivity extends Activity {
     private int previousCount=-1;
     private final List<GuideChannel> unavailableGuide=new ArrayList<>();
     private TextView nativeCatalogStatus;
+    private volatile boolean nativeHealthBusy=false;
+    private final android.os.Handler statusHandler=
+        new android.os.Handler(android.os.Looper.getMainLooper());
+    private final Runnable healthRefresh=new Runnable(){
+        @Override public void run(){
+            if(!isFinishing()){
+                syncNativeCatalog(false);
+                statusHandler.postDelayed(this,10L*60L*1000L);
+            }
+        }
+    };
     private String selectedFilmGenre="Todos";
     private static final String[] FILM_GENRES={"Todos","Animação","Aventura","Fantasia","Ficção científica","Terror","Suspense","Romance","Drama","Guerra","LGBT","Documentário","Outros"};
     private static final int POSITIVE=0xFF22CDB7;
@@ -91,6 +102,18 @@ public final class MainActivity extends Activity {
         // The manual "Carregar mais filmes livres" action remains available.
     }
 
+    @Override public void onResume(){
+        super.onResume();
+        if(uiPrefs!=null&&!NativeCatalogConfig.readFamilyAccess(getApplicationContext()).isEmpty()){
+            statusHandler.removeCallbacks(healthRefresh);
+            syncNativeCatalog(false);
+            statusHandler.postDelayed(healthRefresh,10L*60L*1000L);
+        }
+    }
+    @Override public void onPause(){
+        statusHandler.removeCallbacks(healthRefresh);
+        super.onPause();
+    }
     @Override public void onConfigurationChanged(Configuration config){super.onConfigurationChanged(config);render();}
     private void showModeChooser(){
         new AlertDialog.Builder(this).setTitle("Bem-vindo ao Vortex TV")
@@ -882,6 +905,30 @@ public final class MainActivity extends Activity {
      * OEM configuration is provisioned with the private firmware image.
      */
     private volatile boolean nativeCatalogBusy=false;
+    private void syncNativeHealth(String access){
+        if(nativeHealthBusy||nativeCatalogBusy)return;
+        long now=System.currentTimeMillis();
+        long previous=uiPrefs.getLong("family_health_last_v1",0L);
+        if(previous>0L&&now>=previous&&now-previous<10L*60L*1000L)return;
+        nativeHealthBusy=true;
+        new Thread(()->{
+            int updated=0;
+            try{
+                updated=FamilyCatalogSync.refreshStatuses(
+                    getApplicationContext(),catalog,uiPrefs,access);
+            }catch(Exception ignored){
+                // Preserve locally cached catalog; never log access keys or URLs.
+            }
+            final boolean changed=updated>0;
+            runOnUiThread(()->{
+                nativeHealthBusy=false;
+                if(!isFinishing()&&changed){
+                    items=catalog.load();
+                    render();
+                }
+            });
+        },"Vortex-Source-Health").start();
+    }
     private void syncNativeCatalog(boolean manual){
         if(nativeCatalogBusy)return;
         String access=NativeCatalogConfig.readFamilyAccess(getApplicationContext());
@@ -893,7 +940,10 @@ public final class MainActivity extends Activity {
         }
         long now=System.currentTimeMillis();
         long last=uiPrefs.getLong("family_last_sync_v1",0L);
-        if(!manual&&last>0&&now>=last&&now-last<12L*60L*60L*1000L)return;
+        if(!manual&&last>0&&now>=last&&now-last<12L*60L*60L*1000L){
+            syncNativeHealth(access);
+            return;
+        }
         nativeCatalogBusy=true;
         if(nativeCatalogStatus!=null)
             nativeCatalogStatus.setText("Sincronizando catálogo Vortex...");
