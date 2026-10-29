@@ -55,6 +55,24 @@ class AnimationPriorityTest(unittest.TestCase):
         self.assertIn("video_urls_added", (ROOT/"supabase/functions/vortex-animation-series-enrich/index.ts").read_text())
         self.assertIn("playback_sources_created:0",edge)
 
+    def test_cover_enrichment_is_separate_from_streaming(self):
+        series=(ROOT/"supabase/functions/vortex-animation-series-enrich/index.ts").read_text()
+        films=(ROOT/"supabase/functions/vortex-animation-film-enrich/index.ts").read_text()
+        self.assertIn("api.tvmaze.com",series)
+        self.assertIn("season_number",series)
+        self.assertIn("parent_external_id",series)
+        self.assertIn("image?.medium",series)
+        self.assertIn("en.wikipedia.org",films)
+        self.assertIn("thumbnail?.source",films)
+        self.assertIn("streaming_urls_created:0",films)
+
+    def test_private_source_matches_not_marked_verified(self):
+        match=(ROOT/"supabase/migrations/20261028_animation_source_matching.sql").read_text()
+        self.assertIn("vortex_internal.animation_source_matches",match)
+        self.assertIn("match_animation_film_sources",match)
+        self.assertIn("source_candidate",match)
+        self.assertIn("No source is marked verified",match)
+
     def test_daily_bot_is_in_database_migration(self):
         migration=(ROOT/"supabase/migrations/20261028_media_bot_daily_processing.sql").read_text()
         self.assertIn("process_media_bot",migration)
