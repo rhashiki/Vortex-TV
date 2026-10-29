@@ -23,6 +23,7 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import os.vortex.tv.ImportedSourceStore;
+import os.vortex.tv.VortexSourceHealth;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.MimeTypes;
 import androidx.media3.common.PlaybackException;
@@ -149,7 +150,10 @@ public final class VortexPlayerActivity extends Activity {
             @Override public void onPlaybackStateChanged(int state){
                 if(state==Player.STATE_READY){
                     clearTimeout();
-                    if(history!=null)history.recordPlayback(mediaUrl,true);
+                    if(!hasReadyPlayback){
+                        if(history!=null)history.recordPlayback(mediaUrl,true);
+                        VortexSourceHealth.reportAsync(getApplicationContext(),mediaUrl,true);
+                    }
                     hasReadyPlayback=true;
                     if(signalMessage!=null)signalMessage.setVisibility(View.GONE);
                 }else if(state==Player.STATE_BUFFERING){
@@ -216,6 +220,7 @@ public final class VortexPlayerActivity extends Activity {
     private void sourceFailure(){
         clearTimeout();
         if(history!=null)history.recordPlayback(mediaUrl,false);
+        VortexSourceHealth.reportAsync(getApplicationContext(),mediaUrl,false);
         if(tryAlternative())return;
         if(signalMessage!=null)signalMessage.setText("Nenhuma fonte reproduzível");
         new AlertDialog.Builder(this)
