@@ -283,6 +283,7 @@ public final class CatalogStore {
         return privateSources.search(phrase,limit);
     }
     public boolean isPrivateImportedUrl(String url){return privateSources.contains(url);}
+    public String remoteStatus(Item item){return privateSources.remoteStatus(item.url);}
     public String lastWorkingSource(Item item){return privateSources.lastWorking(item);}
     public void recordSourceResult(String url,boolean success){
         privateSources.recordPlayback(url,success);
