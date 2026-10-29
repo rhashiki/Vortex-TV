@@ -50,7 +50,7 @@ class DirectPlayUpgrade(unittest.TestCase):
         self.assertIn('https://cdn.jwplayer.com/manifests/pZxWPRg4.m3u8',main)
     def test_version(self):
         build=(ROOT/"app/build.gradle").read_text()
-        self.assertIn('versionCode 34',build)
-        self.assertIn("versionName '0.3.4-native-ux'",build)
+        self.assertIn('versionCode 35',build)
+        self.assertIn("versionName '0.3.5-source-repair'",build)
 
 if __name__=="__main__": unittest.main()
