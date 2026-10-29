@@ -37,6 +37,18 @@ class AutomaticCatalogRepair(unittest.TestCase):
         self.assertIn('redirect:"manual"',worker)
         self.assertIn("newly_available:",worker)
         self.assertNotIn('Deno.env.get("SUPABASE_ANON_KEY")',worker)
+    def test_health_updates_avoid_full_catalog_redownload(self):
+        edge=self.code("supabase/functions/vortex-family-catalog/index.ts")
+        sync=self.code("app/src/main/java/os/vortex/tv/FamilyCatalogSync.java")
+        store=self.code("app/src/main/java/os/vortex/tv/ImportedSourceStore.java")
+        ui=self.code("app/src/main/java/os/vortex/tv/MainActivity.java")
+        self.assertIn('mode")==="health"',edge)
+        self.assertIn('vortex_family_health_changes',edge)
+        self.assertIn("public static int refreshStatuses",sync)
+        self.assertIn("family_health_since_v1",sync)
+        self.assertIn("public synchronized int applyStatusUpdates",store)
+        self.assertIn("syncNativeHealth(access)",ui)
+        self.assertIn("10L*60L*1000L",ui)
     def test_version(self):
         gradle=self.code("app/build.gradle")
         self.assertIn("versionCode 35",gradle)
