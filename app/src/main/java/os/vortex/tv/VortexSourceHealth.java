@@ -1,17 +1,10 @@
 package os.vortex.tv;
 
 import android.content.Context;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.MessageDigest;
-import java.util.HashSet;
 import java.util.Locale;
-import java.util.Set;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -66,54 +59,4 @@ public final class VortexSourceHealth {
         },"Vortex-Playback-Health").start();
     }
 
-    private static String readLimited(InputStream stream,int limit)throws Exception{
-        try(ByteArrayOutputStream output=new ByteArrayOutputStream()){
-            byte[] buffer=new byte[4096];int n,total=0;
-            while((n=stream.read(buffer))!=-1){
-                total+=n;if(total>limit)throw new java.io.IOException("Health page too large");
-                output.write(buffer,0,n);
-            }
-            return output.toString("UTF-8");
-        }
-    }
-
-    /** Atomically replace searching tags only after all pages succeed. */
-    public static int refresh(Context context,CatalogStore catalog,String familyCode)
-        throws Exception{
-        if(familyCode==null||!familyCode.matches("[A-F0-9]{20}"))
-            throw new java.io.IOException("No OEM access");
-        Set<String> hashes=new HashSet<>();
-        long cursor=0L;boolean complete=false;
-        for(int page=0;page<400;page++){
-            HttpURLConnection conn=(HttpURLConnection)new URL(
-                ENDPOINT+"?after="+cursor).openConnection();
-            conn.setConnectTimeout(7000);
-            conn.setReadTimeout(11000);
-            conn.setInstanceFollowRedirects(false);
-            conn.setRequestProperty("x-vortex-family-key",familyCode);
-            try{
-                if(conn.getResponseCode()!=200)
-                    throw new java.io.IOException("Health temporarily unavailable");
-                JSONObject body;
-                try(InputStream in=conn.getInputStream()){
-                    body=new JSONObject(readLimited(in,180000));
-                }
-                JSONArray items=body.getJSONArray("items");
-                if(items.length()>300)throw new java.io.IOException("Invalid health batch");
-                for(int i=0;i<items.length();i++){
-                    String hash=items.getJSONObject(i).optString("source_hash","");
-                    if(hash.matches("[a-f0-9]{32}"))hashes.add(hash);
-                }
-                long next=body.getLong("next");
-                boolean more=body.getBoolean("has_more");
-                if(next<cursor||(more&&next==cursor))
-                    throw new java.io.IOException("Invalid health cursor");
-                cursor=next;
-                if(!more){complete=true;break;}
-            }finally{conn.disconnect();}
-        }
-        if(!complete)throw new java.io.IOException("Health page limit");
-        catalog.replaceRemoteSearching(hashes);
-        return hashes.size();
-    }
 }
