@@ -27,8 +27,8 @@ class PlaybackDiagnosticsTests(unittest.TestCase):
         self.assertNotIn('.setMessage(',source[begin:end])
     def test_app_version(self):
         gradle=(ROOT/'app/build.gradle').read_text()
-        self.assertIn('versionCode 34',gradle)
-        self.assertIn("versionName '0.3.4-native-ux'",gradle)
+        self.assertIn('versionCode 35',gradle)
+        self.assertIn("versionName '0.3.5-source-repair'",gradle)
 
 if __name__=='__main__':
     unittest.main()
