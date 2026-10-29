@@ -97,8 +97,10 @@ public final class FamilyCatalogSync {
                 preferences.edit().putLong("family_cursor_v1",cursor).apply();
                 if("false".equals(more)){
                     completed=true;
+                    // Revisit earlier pages on the next refresh: the backend may
+                    // replace sources and change "Buscando novo servidor" states.
                     preferences.edit().putLong("family_last_sync_v1",
-                        System.currentTimeMillis()).apply();
+                        System.currentTimeMillis()).putLong("family_cursor_v1",0L).apply();
                     break;
                 }
             }finally{connection.disconnect();}
