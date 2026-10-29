@@ -1,6 +1,8 @@
 package os.vortex.tv;
 
 import android.content.Context;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -178,6 +180,31 @@ public final class ImportedSourceStore extends SQLiteOpenHelper {
             new String[]{key})){
             return c.moveToFirst()?c.getString(0):null;
         }
+    }
+    /** Apply a compact health delta without transferring 33k M3U links again. */
+    public synchronized int applyStatusUpdates(JSONArray changes){
+        if(changes==null||changes.length()>500)return 0;
+        SQLiteDatabase db=getWritableDatabase();
+        int updated=0;
+        SQLiteStatement stmt=db.compileStatement(
+            "UPDATE sources SET remote_status=? WHERE url=?");
+        db.beginTransaction();
+        try{
+            for(int i=0;i<changes.length();i++){
+                JSONObject item=changes.optJSONObject(i);if(item==null)continue;
+                String status=item.optString("status","");
+                String url=item.optString("url","");
+                if(!("available".equals(status)||"searching".equals(status)
+                    ||"candidate".equals(status))||url.length()>4096
+                    ||!M3uPlaylistParser.isHttpUrl(url))continue;
+                stmt.clearBindings();
+                stmt.bindString(1,status);
+                stmt.bindString(2,url);
+                updated+=stmt.executeUpdateDelete();
+            }
+            db.setTransactionSuccessful();
+        }finally{db.endTransaction();stmt.close();}
+        return updated;
     }
     public synchronized String remoteStatus(String url){
         try(Cursor c=getReadableDatabase().rawQuery(
