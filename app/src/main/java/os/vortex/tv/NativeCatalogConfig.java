@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 public final class NativeCatalogConfig {
     private NativeCatalogConfig(){}
     private static final String OEM_PATH="/system/etc/vortex-tv/catalog-access";
-    static String readFamilyAccess(Context context) {
+    public static String readFamilyAccess(Context context) {
         File f=new File(OEM_PATH);
         if(!f.isFile() || f.length()<20 || f.length()>96)return "";
         byte[] bytes=new byte[(int)f.length()];
