@@ -119,9 +119,14 @@ public final class ImportedSourceStore extends SQLiteOpenHelper {
         int bound=Math.min(180,Math.max(0,max));
         String sql="SELECT s.name,s.url,s.tvg_id,s.category,s.logo,s.format,s.source_label "
             +"FROM sources s JOIN "
-            +"(SELECT MAX(id) AS latest FROM sources GROUP BY identity_key "
-            +"ORDER BY latest DESC LIMIT "+bound+") x ON s.id=x.latest "
-            +"ORDER BY s.id DESC";
+            +"(SELECT identity_key,MAX(id) AS latest FROM sources GROUP BY identity_key "
+            +"ORDER BY latest DESC LIMIT "+bound+") x ON s.id=("
+            +"SELECT preferred.id FROM sources preferred WHERE preferred.identity_key=x.identity_key "
+            +"ORDER BY CASE WHEN preferred.remote_status='available' THEN 0 "
+            +"WHEN preferred.remote_status='candidate' THEN 1 ELSE 2 END,"
+            +"CASE WHEN preferred.last_good_ms>preferred.last_bad_ms THEN 0 ELSE 1 END,"
+            +"preferred.failure_count ASC,preferred.last_good_ms DESC,preferred.id DESC LIMIT 1) "
+            +"ORDER BY x.latest DESC";
         try(Cursor c=getReadableDatabase().rawQuery(sql,null)){
             while(c.moveToNext())out.add(item(c));
         }
@@ -133,10 +138,15 @@ public final class ImportedSourceStore extends SQLiteOpenHelper {
         if(text.length()<2)return out;
         text=text.replace("\\","\\\\").replace("%","\\%").replace("_","\\_");
         String sql="SELECT s.name,s.url,s.tvg_id,s.category,s.logo,s.format,s.source_label "
-            +"FROM sources s JOIN (SELECT MAX(id) AS latest FROM sources "
+            +"FROM sources s JOIN (SELECT identity_key,MAX(id) AS latest FROM sources "
             +"WHERE name LIKE ? ESCAPE '\\' OR category LIKE ? ESCAPE '\\' "
-            +"GROUP BY identity_key ORDER BY latest DESC LIMIT ?) x ON x.latest=s.id "
-            +"ORDER BY s.id DESC";
+            +"GROUP BY identity_key ORDER BY latest DESC LIMIT ?) x ON s.id=("
+            +"SELECT preferred.id FROM sources preferred WHERE preferred.identity_key=x.identity_key "
+            +"ORDER BY CASE WHEN preferred.remote_status='available' THEN 0 "
+            +"WHEN preferred.remote_status='candidate' THEN 1 ELSE 2 END,"
+            +"CASE WHEN preferred.last_good_ms>preferred.last_bad_ms THEN 0 ELSE 1 END,"
+            +"preferred.failure_count ASC,preferred.last_good_ms DESC,preferred.id DESC LIMIT 1) "
+            +"ORDER BY x.latest DESC";
         String pattern="%"+text+"%";
         try(Cursor c=getReadableDatabase().rawQuery(sql,
             new String[]{pattern,pattern,Integer.toString(Math.min(100,Math.max(1,limit)))})){
