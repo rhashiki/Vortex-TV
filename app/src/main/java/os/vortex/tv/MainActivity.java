@@ -704,7 +704,12 @@ public final class MainActivity extends Activity {
             nameParams.setMargins(d(12),d(8),d(12),d(13));
             poster.addView(posterName,nameParams);
             holder.addView(poster,new LinearLayout.LayoutParams(width,height));
-            TextView tag=text(i.genre.isEmpty()?i.group:i.genre,11,MUTED,false);
+            String remoteState=catalog.remoteStatus(i);
+            boolean searching="searching".equals(remoteState);
+            String subtitle=searching?"⟳  Buscando novo servidor":
+                (i.genre.isEmpty()?i.group:i.genre);
+            TextView tag=text(subtitle,tv?12:11,
+                searching?0xFFFFC881:MUTED,searching);
             tag.setSingleLine(true);tag.setEllipsize(TextUtils.TruncateAt.END);
             tag.setPadding(d(2),d(7),d(2),0);holder.addView(tag);
             LinearLayout.LayoutParams holderParams=new LinearLayout.LayoutParams(width,-2);
@@ -712,7 +717,9 @@ public final class MainActivity extends Activity {
             // First selection immediately plays; long-press opens details/favorites.
             poster.setOnClickListener(v->play(i));
             poster.setOnLongClickListener(v->{detail(i);return true;});
-            poster.setContentDescription(i.name+"; tocar para assistir, segurar para informações");
+            poster.setContentDescription(i.name+
+                (searching?"; Buscando novo servidor":"")+
+                "; tocar para assistir, segurar para informações");
             focusable(poster);
         }
     }
