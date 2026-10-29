@@ -284,6 +284,7 @@ public final class CatalogStore {
     }
     public boolean isPrivateImportedUrl(String url){return privateSources.contains(url);}
     public String remoteStatus(Item item){return privateSources.remoteStatus(item.url);}
+    public int applyRemoteStatuses(org.json.JSONArray changes){return privateSources.applyStatusUpdates(changes);}
     public String lastWorkingSource(Item item){return privateSources.lastWorking(item);}
     public void recordSourceResult(String url,boolean success){
         privateSources.recordPlayback(url,success);
