@@ -149,8 +149,8 @@ Deno.serve(async(req:Request)=>{
     p_token_hash:await tokenHash(token)
   });
   if(authorized!==true)return output({error:"not_authorized"},403);
-  const list=await rpc<Source[]>("vortex_monitor_pull",{p_candidates:8,p_existing:10});
-  if(!Array.isArray(list)||list.length>24)return output({error:"invalid_batch"},502);
+  const list=await rpc<Source[]>("vortex_monitor_pull",{p_candidates:8,p_existing:20});
+  if(!Array.isArray(list)||list.length>40)return output({error:"invalid_batch"},502);
   const results=await Promise.all(list.map(async item=>{
     if(!/^[a-f0-9]{32}$/.test(item.hash)
         ||(item.origin!=="catalog"&&item.origin!=="candidate"))
